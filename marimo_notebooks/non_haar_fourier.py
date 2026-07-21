@@ -19,7 +19,7 @@ def _():
     root = (Path(__file__).resolve().parents[1] / "new_dists/notebooks/non_haar_fourier.py").parents[2]
     if str(root) not in sys.path:
         sys.path.insert(0, str(root))
-    from new_dists.non_haar_fourier_sigma_mgfs.verification import run_all
+    from lambda_distributions.dists.non_haar_fourier_sigma_mgfs.verification import run_all
 
     return mo, run_all
 

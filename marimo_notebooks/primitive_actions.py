@@ -19,7 +19,7 @@ def _():
     root = (Path(__file__).resolve().parents[1] / "new_dists/notebooks/primitive_actions.py").parents[2]
     if str(root) not in sys.path:
         sys.path.insert(0, str(root))
-    from new_dists.primitive_action_sigma_mgfs.verification import run_suite
+    from lambda_distributions.dists.primitive_action_sigma_mgfs.verification import run_suite
 
     return mo, run_suite
 

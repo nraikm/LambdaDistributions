@@ -2,7 +2,7 @@
 
 \section{Sporadic groups and represented covers}\label{proof:new-dist:sporadic}
 
-\resultbox{\textbf{Canonical testing artifacts.}\par\smallskip Exact backend: \path{new_dists/sporadic_group_sigma_mgfs/verification.py}.\par Regression: \path{new_dists/sporadic_group_sigma_mgfs/test_verification.py}.\par Marimo: \path{marimo_notebooks/sporadic.py}.}
+\resultbox{\textbf{Canonical testing artifacts.}\par\smallskip Exact backend: \path{lambda_distributions/dists/sporadic_group_sigma_mgfs/verification.py}.\par Regression: \path{lambda_distributions/dists/sporadic_group_sigma_mgfs/test_verification.py}.\par Marimo: \path{marimo_notebooks/sporadic.py}.}
 
 \subsection{A representation is part of the data}
 
@@ -278,9 +278,9 @@ unity.
 
 From the repository root, run
 \begin{verbatim}
-.venv/bin/python -m new_dists.sporadic_group_sigma_mgfs.verification
+.venv/bin/python -m lambda_distributions.dists.sporadic_group_sigma_mgfs.verification
 .venv/bin/python -m pytest -q \
-  new_dists/sporadic_group_sigma_mgfs/test_verification.py
+  lambda_distributions/dists/sporadic_group_sigma_mgfs/test_verification.py
 .venv/bin/marimo edit marimo_notebooks/sporadic.py
 \end{verbatim}
 The generator data, group order, standard-generator fingerprint, representation

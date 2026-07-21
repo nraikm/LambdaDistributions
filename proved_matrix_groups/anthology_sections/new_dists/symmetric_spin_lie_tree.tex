@@ -2,7 +2,7 @@
 
 \section{Symmetric, spin-cover, Lie, Foulkes, and rooted-tree groups}\label{proof:new-dist:symmetric_spin_lie_tree}
 
-\resultbox{\textbf{Canonical testing artifacts.}\par\smallskip Exact backend: \path{new_dists/symmetric_spin_lie_tree_sigma_mgfs/verification.py}.\par Regression: \path{new_dists/symmetric_spin_lie_tree_sigma_mgfs/test_verification.py}.\par Marimo: \path{marimo_notebooks/symmetric_spin_lie_tree.py}.}
+\resultbox{\textbf{Canonical testing artifacts.}\par\smallskip Exact backend: \path{lambda_distributions/dists/symmetric_spin_lie_tree_sigma_mgfs/verification.py}.\par Regression: \path{lambda_distributions/dists/symmetric_spin_lie_tree_sigma_mgfs/test_verification.py}.\par Marimo: \path{marimo_notebooks/symmetric_spin_lie_tree.py}.}
 
 \subsection*{Scope and outcome}
 
@@ -556,9 +556,9 @@ orbits, avoiding character algebra altogether.
 From the workspace root, run
 \begin{verbatim}
 .venv/bin/python -m \
-  new_dists.symmetric_spin_lie_tree_sigma_mgfs.verification
+  lambda_distributions.dists.symmetric_spin_lie_tree_sigma_mgfs.verification
 .venv/bin/pytest -q \
-  new_dists/symmetric_spin_lie_tree_sigma_mgfs/test_verification.py
+  lambda_distributions/dists/symmetric_spin_lie_tree_sigma_mgfs/test_verification.py
 .venv/bin/marimo edit \
   marimo_notebooks/symmetric_spin_lie_tree.py
 \end{verbatim}

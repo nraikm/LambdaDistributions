@@ -2,7 +2,7 @@
 
 \section{Code-monomial matrix groups}\label{proof:new-dist:code_monomial}
 
-\resultbox{\textbf{Canonical testing artifacts.}\par\smallskip Exact backend: \path{new_dists/code_monomial_sigma_mgfs/verification.py}.\par Regression: \path{new_dists/code_monomial_sigma_mgfs/test_verification.py}.\par Marimo: \path{marimo_notebooks/code_monomial.py}.}
+\resultbox{\textbf{Canonical testing artifacts.}\par\smallskip Exact backend: \path{lambda_distributions/dists/code_monomial_sigma_mgfs/verification.py}.\par Regression: \path{lambda_distributions/dists/code_monomial_sigma_mgfs/test_verification.py}.\par Marimo: \path{marimo_notebooks/code_monomial.py}.}
 
 \subsection*{Scope and outcome}
 
@@ -367,8 +367,8 @@ are specified.
 
 From the repository root, run
 \begin{verbatim}
-.venv/bin/python -m new_dists.code_monomial_sigma_mgfs.verification
-.venv/bin/pytest -q new_dists/code_monomial_sigma_mgfs/test_verification.py
+.venv/bin/python -m lambda_distributions.dists.code_monomial_sigma_mgfs.verification
+.venv/bin/pytest -q lambda_distributions/dists/code_monomial_sigma_mgfs/test_verification.py
 .venv/bin/marimo edit marimo_notebooks/code_monomial.py
 \end{verbatim}
 The source and PDF in this directory are standalone artifacts intended for

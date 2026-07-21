@@ -2,7 +2,7 @@
 
 \section{Lattice automorphism groups}\label{proof:new-dist:lattices}
 
-\resultbox{\textbf{Canonical testing artifacts.}\par\smallskip Exact backend: \path{new_dists/lattice_sigma_mgfs/verification.py}.\par Regression: \path{new_dists/lattice_sigma_mgfs/test_verification.py}.\par Marimo: \path{marimo_notebooks/lattices.py}.}
+\resultbox{\textbf{Canonical testing artifacts.}\par\smallskip Exact backend: \path{lambda_distributions/dists/lattice_sigma_mgfs/verification.py}.\par Regression: \path{lambda_distributions/dists/lattice_sigma_mgfs/test_verification.py}.\par Marimo: \path{marimo_notebooks/lattices.py}.}
 
 \subsection*{Scope and outcome}
 
@@ -499,8 +499,8 @@ together with whatever compatibility a specified lattice tower supplies.
 
 From the repository root, run
 \begin{verbatim}
-python3 -m new_dists.lattice_sigma_mgfs.verification
-python3 -m pytest -q new_dists/lattice_sigma_mgfs/test_verification.py
+python3 -m lambda_distributions.dists.lattice_sigma_mgfs.verification
+python3 -m pytest -q lambda_distributions/dists/lattice_sigma_mgfs/test_verification.py
 marimo edit marimo_notebooks/lattices.py
 \end{verbatim}
 The LaTeX source is standalone and can be rebuilt in its folder with

@@ -2,7 +2,7 @@
 
 \section{Finite local-ring permutation actions}\label{proof:new-dist:local_ring_actions}
 
-\resultbox{\textbf{Canonical testing artifacts.}\par\smallskip Exact backend: \path{new_dists/local_ring_permutation_actions/verification.py}.\par Regression: \path{new_dists/local_ring_permutation_actions/test_verification.py}.\par Marimo: \path{marimo_notebooks/local_ring_actions.py}.}
+\resultbox{\textbf{Canonical testing artifacts.}\par\smallskip Exact backend: \path{lambda_distributions/dists/local_ring_permutation_actions/verification.py}.\par Regression: \path{lambda_distributions/dists/local_ring_permutation_actions/test_verification.py}.\par Marimo: \path{marimo_notebooks/local_ring_actions.py}.}
 
 \subsection*{Scope and outcome}
 
@@ -394,7 +394,7 @@ bounded-support arguments above provide those proofs.
 From the workspace root, run
 \begin{verbatim}
 marimo run marimo_notebooks/local_ring_actions.py
-pytest -q new_dists/local_ring_permutation_actions/test_verification.py
+pytest -q lambda_distributions/dists/local_ring_permutation_actions/test_verification.py
 \end{verbatim}
 The standalone PDF generated from this source is designed to be included
 later, without modification, by the proof anthology's \verb|\proofnote|

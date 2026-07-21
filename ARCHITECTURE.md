@@ -30,6 +30,10 @@ flowchart LR
 - `notebook_support.py` only formats values for display.
 - `sampling.py` is separate because random unitary and symplectic samples are
   not enumerated finite groups.
+- `dists/` collects the exact per-family verification backends for the new
+  distribution families (including the compact Spin/Pin checks in
+  `dists/verification.py`); each subpackage pairs a `verification.py` with a
+  `test_verification.py` regression suite.
 - Marimo files provide controls, mathematical narration, and tables.
 
 ## Project environment

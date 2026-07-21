@@ -19,7 +19,7 @@ def _():
     root = (Path(__file__).resolve().parents[1] / "new_dists/notebooks/central_extensions.py").parents[2]
     if str(root) not in sys.path:
         sys.path.insert(0, str(root))
-    from new_dists.central_extensions_projective_representations.verification import run_suite
+    from lambda_distributions.dists.central_extensions_projective_representations.verification import run_suite
 
     return mo, run_suite
 

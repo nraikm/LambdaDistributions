@@ -20,7 +20,7 @@ def _():
     if str(root) not in sys.path:
         sys.path.insert(0, str(root))
 
-    from new_dists.verification import run_all
+    from lambda_distributions.dists.verification import run_all
 
     return mo, run_all
 

@@ -2,7 +2,7 @@
 
 \section{Primitive permutation actions}\label{proof:new-dist:primitive_actions}
 
-\resultbox{\textbf{Canonical testing artifacts.}\par\smallskip Exact backend: \path{new_dists/primitive_action_sigma_mgfs/verification.py}.\par Regression: \path{new_dists/primitive_action_sigma_mgfs/test_verification.py}.\par Marimo: \path{marimo_notebooks/primitive_actions.py}.}
+\resultbox{\textbf{Canonical testing artifacts.}\par\smallskip Exact backend: \path{lambda_distributions/dists/primitive_action_sigma_mgfs/verification.py}.\par Regression: \path{lambda_distributions/dists/primitive_action_sigma_mgfs/test_verification.py}.\par Marimo: \path{marimo_notebooks/primitive_actions.py}.}
 
 \subsection*{Scope and outcome}
 
@@ -550,8 +550,8 @@ same group order as this document.
 \end{itemize}
 From the repository root, run
 \begin{verbatim}
-.venv/bin/python -m new_dists.primitive_action_sigma_mgfs.verification
-.venv/bin/pytest -q new_dists/primitive_action_sigma_mgfs/test_verification.py
+.venv/bin/python -m lambda_distributions.dists.primitive_action_sigma_mgfs.verification
+.venv/bin/pytest -q lambda_distributions/dists/primitive_action_sigma_mgfs/test_verification.py
 .venv/bin/marimo run marimo_notebooks/primitive_actions.py
 \end{verbatim}
 

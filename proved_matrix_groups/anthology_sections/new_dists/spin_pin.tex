@@ -2,7 +2,7 @@
 
 \section{Compact Spin and Pin groups}\label{proof:new-dist:spin_pin}
 
-\resultbox{\textbf{Canonical testing artifacts.}\par\smallskip Exact backend: \path{new_dists/Spin_pin/verification.py}.\par Regression: \path{tests/test_spin_pin_new_dists.py}.\par Marimo: \path{marimo_notebooks/spin_pin.py}.}
+\resultbox{\textbf{Canonical testing artifacts.}\par\smallskip Exact backend: \path{lambda_distributions/dists/verification.py}.\par Regression: \path{lambda_distributions/dists/test_verification.py}.\par Marimo: \path{marimo_notebooks/spin_pin.py}.}
 
 \subsection*{Scope and outcome}
 
@@ -477,8 +477,8 @@ with the six Casimir rows, the complete report contains 76 passing checks.
 
 From the repository root, run
 \begin{verbatim}
-.venv/bin/python new_dists/verification.py
-.venv/bin/python -m pytest -q tests/test_spin_pin_new_dists.py
+.venv/bin/python lambda_distributions/dists/verification.py
+.venv/bin/python -m pytest -q lambda_distributions/dists/test_verification.py
 .venv/bin/marimo edit marimo_notebooks/spin_pin.py
 \end{verbatim}
 The first command prints the six verification subtotals and fails with a
