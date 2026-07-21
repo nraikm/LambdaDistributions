@@ -1,0 +1,89 @@
+\documentclass[11pt]{article}
+\usepackage[left=0.82in,right=0.82in,top=0.82in,bottom=1.0in]{geometry}\usepackage{amsmath,amssymb,mathtools,booktabs,microtype,fancyhdr}
+\usepackage[dvipsnames]{xcolor}\usepackage[colorlinks=true,linkcolor=NavyBlue,urlcolor=BrickRed]{hyperref}
+\definecolor{ink}{HTML}{17212B}\definecolor{accent}{HTML}{315B7D}\definecolor{pale}{HTML}{EDF4F8}\color{ink}
+\pagestyle{fancy}\fancyhf{}\lhead{Schur functors of $USp(2n)$}\rhead{Proof and verification}\cfoot{\thepage}\setlength{\headheight}{14pt}\setlength{\parindent}{0pt}\setlength{\parskip}{5pt}
+\newcommand{\Sym}{\operatorname{Sym}}\newcommand{\Tr}{\operatorname{Tr}}\newcommand{\Exp}{\operatorname{Exp}_{\sigma}}
+\newcommand{\summarybox}[1]{\begin{center}\fcolorbox{accent}{pale}{\parbox{0.91\linewidth}{#1}}\end{center}}
+\title{\textbf{Schur-functor representations of $USp(2n)$}\\[3pt]\large Symplectic plethysm, polynomial-Gaussian traces, and matrix verification}
+\author{Proof and verification note}\date{17 July 2026}
+\begin{document}\maketitle
+\summarybox{\textbf{Outcome.} Interpreting $Sp(2n)$ as the compact group $USp(2n)$, the stable formula is the plethystic pushforward of $\Exp(e_2)$. Five representative cases in ambient dimensions 2 and 4 give 40 direct comparisons with maximum error $3.70\times10^{-15}$. A separate Haar $USp(8)$ run detects the invariant alternating form in $\Lambda^2W$ and verifies odd-degree parity.}
+
+\section{Convention and stable sigma-MGF}
+Here $Sp(2n)$ means the compact matrix group
+\begin{equation}
+ USp(2n)=\{g\in U(2n):g^TJg=J\},\qquad
+ J=\begin{pmatrix}0&I_n\\-I_n&0\end{pmatrix}.
+\end{equation}
+This convention matters: the complex algebraic group is not a Haar probability space, while its compact form is.
+
+Let $W_n=\mathbb C^{2n}$, fix $\lambda\vdash d$, and put $V_{\lambda,n}=S_\lambda(W_n)$. For each partition $\tau$,
+\begin{equation}\label{eq:coeff}
+ [m_\tau]\mathcal S^{Sp}_{\lambda,n}
+ =\dim\left(\bigotimes_i\Sym^{\tau_i}S_\lambda(W_n)\right)^{USp(2n)}
+ =\mu_{Sp(2n)}\bigl(h_\tau[s_\lambda]\bigr).
+\end{equation}
+Associativity of plethysm proves the last equality. Since the defining-representation stable sigma-MGF is $\Exp(e_2)$, applying its coefficient functional to the fixed function $h_\tau[s_\lambda]$ proves
+\begin{equation}\label{eq:push}
+ \boxed{[m_\tau]\mathcal S^{Sp}_{\lambda,\infty}
+ =\left\langle\Exp(e_2),h_\tau[s_\lambda]\right\rangle.}
+\end{equation}
+A conservative sufficient stable range is $\dim W_n=2n\ge d|\tau|$, obtained by embedding in tensor degree $d|\tau|$ and applying symplectic Brauer invariant theory.
+
+The central element $-I$ acts by $(-1)^d$ on $S_\lambda(W_n)$. Thus the exact finite-dimensional parity rule is
+\begin{equation}\label{eq:parity}
+ \boxed{[m_\tau]\mathcal S^{Sp}_{\lambda,n}=0\quad\text{if }d|\tau|\text{ is odd}.}
+\end{equation}
+
+\section{Exact trace formula and Gaussian substitution}
+Functoriality and the Frobenius expansion of $s_\lambda$ give, for every $g\in USp(2n)$,
+\begin{equation}\label{eq:trace}
+ \boxed{\Tr(S_\lambda(g)^r)=s_\lambda[X(g^r)]
+ =\sum_{\alpha\vdash d}\frac{\chi^\lambda(\alpha)}{z_\alpha}
+ \prod_{a\in\alpha}\Tr(g^{ra}).}
+\end{equation}
+This is exact whenever $\ell(\lambda)\le2n$.
+
+The joint moment convergence of finitely many symplectic trace powers is an
+external classical-group trace theorem (Diaconis--Evans, with the
+normalization below).  Let independent $A_k\sim N(0,1)$ and set
+\begin{equation}
+ Z_k^{Sp}=\sqrt{k}\,A_k-\mathbf1_{2\mid k}.
+\end{equation}
+Joint moment convergence of fixed trace powers, followed by polynomial substitution in \eqref{eq:trace}, gives
+\begin{equation}
+ \Tr(S_\lambda(g)^r)\longrightarrow Q^{Sp}_{\lambda,r}
+ =\sum_{\alpha\vdash d}\frac{\chi^\lambda(\alpha)}{z_\alpha}\prod_{a\in\alpha}Z_{ra}^{Sp}.
+\end{equation}
+For $\lambda=(1,1)$,
+$Q^{Sp}_{(1,1),1}=\tfrac12((Z_1^{Sp})^2-Z_2^{Sp})$ has mean $1$, representing the invariant symplectic form. For $\lambda=(2)$ the corresponding plus sign yields mean zero.
+
+\section{Finite matrix construction and formula cross-check}
+The sampler performs quaternionic Gram--Schmidt. If $v$ is accepted, it also inserts $-J\bar v$; with columns ordered in pairs of blocks this gives both $g^*g=I$ and $g^TJg=J$. The largest observed group residual in all reported sampling is $6.67\times10^{-15}$.
+
+For the direct route, the code constructs a Young symmetrizer $c_\lambda$ on $W_n^{\otimes d}$, computes an orthonormal basis $B$ of its image, and forms
+\begin{equation}
+ D_\lambda(g)=B^*g^{\otimes d}B.
+\end{equation}
+For the formula route, only $\Tr(g^k)$ is retained. Newton's recurrence constructs the $h_j$, and Jacobi--Trudi constructs $s_\lambda$. The comparison covers $\Tr(D_\lambda(g)^r)$ for $r=1,2,3$ and the sigma-MGF integrands $\prod_i h_{\tau_i}[D_\lambda(g)]$ for $\tau=(),(1),(2),(1,1),(3)$.
+
+\begin{center}\small\begin{tabular}{@{}llllr@{}}\toprule
+ambient dimension & tested $\lambda$ & checks & purpose & status\\\midrule
+2 & $(1)$ & trace and sigma integrands & rank-one boundary & PASS\\
+4 & $(2),(1,1),(3),(2,1)$ & trace and sigma integrands & all degree $\le3$ types & PASS\\\midrule
+\multicolumn{4}{r}{40 comparisons; maximum absolute error} & $3.70\times10^{-15}$\\\bottomrule
+\end{tabular}\end{center}
+
+The seeded Haar diagnostic uses 1,200 matrices in $USp(8)$. It estimates means $0.0031$ for $\chi_{(2)}$ (target $0$), $0.9917$ for $\chi_{(1,1)}$ (target $1$), and $0.0818$ for $\chi_{(3)}$ (target $0$). All lie within $4.5$ estimated standard errors. The last target also exercises \eqref{eq:parity}.
+
+\section{Reproducibility and interpretation}
+Run the module below from the repository root, or open \path{marimo_notebooks/schur_symplectic.py} with marimo. The exact matrix/character identities certify the finite trace formula.  The seeded Haar rows are diagnostics only; they neither prove Haar integration identities nor the $n\to\infty$ convergence theorem.
+\begin{center}\footnotesize\texttt{python -m for\_this\_guy.schur\_functor\_classical\_groups.symplectic.verification}\end{center}
+
+\section*{References}
+S. Howe, \href{https://arxiv.org/abs/2412.19295}{\emph{Random matrix statistics and zeroes of $L$-functions via probability in $\lambda$-rings}}.\\
+G. Lehrer and R. Zhang, \href{https://arxiv.org/abs/1207.5889}{\emph{The Brauer Category and Invariant Theory}}.
+\\P. Diaconis and S. N. Evans, \emph{Linear functionals of eigenvalues of
+random matrices}, Trans. Amer. Math. Soc. 353 (2001), 2615--2633.
+\end{document}

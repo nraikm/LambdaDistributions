@@ -1,0 +1,87 @@
+\documentclass[10pt]{article}
+\usepackage[margin=0.9in]{geometry}\usepackage{amsmath,amssymb,booktabs,microtype,xcolor,fancyhdr}\usepackage[hidelinks]{hyperref}
+\definecolor{navy}{RGB}{24,55,95}\pagestyle{fancy}\fancyhf{}\lhead{$E_6$ on $V_{27}$}\rhead{Proof and exact verification}\cfoot{\thepage}\setlength{\headheight}{14pt}
+\newcommand{\Sg}{\mathcal S}\newcommand{\CT}{\operatorname{CT}}
+\title{\color{navy}\textbf{The compact $E_6$ sigma-MGF on $V_{27}$}\\[1mm]\large Proof, central selection rule, and verification}
+\author{Computational proof companion}\date{17 July 2026}
+\begin{document}\maketitle
+\begin{abstract}
+For simply connected compact $E_6$ and its minuscule 27-dimensional module,
+we prove the constant-term formula, the mod-three selection rule, and the
+initial expansion $1+h_3+O_{\ge6}$.  An exact 27-weight computation verifies
+all Schur coefficients through degree three.
+\end{abstract}
+
+\section{Compact Molien--Weyl proof}
+Expanding the determinant by the Cauchy identity and integrating characters
+gives
+\[
+ \boxed{\Sg_{K,V}(\mathbf t)=\int_K\prod_a\det(I-t_a\rho(g))^{-1}dg
+ =\sum_\lambda\dim(\mathbb S_\lambda V)^K s_\lambda(\mathbf t).}
+\]
+Direct expansion in the variables also proves the requested identity
+$[m_\tau]\Sg_{K,V}=\dim(\bigotimes_i\operatorname{Sym}^{\tau_i}V)^K$.
+For $V_{27}$ all 27 weights form the orbit $W(E_6)\omega_1$, with multiplicity
+one.  Weyl integration, with $|W(E_6)|=51840$, proves
+\[
+ \boxed{\Sg_{E_6,27}=\frac1{51840}\CT_z\left[D_{E_6}(z)
+ \prod_a\prod_{\mu\in W\omega_1}(1-t_a z^\mu)^{-1}\right].}
+\]
+
+\section{Selection rule and one-copy series}
+The generator of the center $Z(E_6)\cong\mathbb Z/3$ acts on $V_{27}$ by a
+primitive cube root.  It acts on every degree-$d$ tensor construction by its
+$d$th power.  Consequently
+\[
+ [m_\tau]\Sg_{E_6,27}=0\quad\text{unless}\quad 3\mid |\tau|.
+\]
+The exceptional determinant is the unique symmetric cubic invariant.  Thus
+\[
+ \boxed{\Sg_{E_6,27}=1+h_3+O_{\ge6}},\qquad
+ \boxed{\Sg_{E_6,27}(t,0,\ldots)=\frac1{1-t^3}}.
+\]
+The module belongs to simply connected $E_6$ and does not descend to the
+adjoint quotient $E_6/Z_3$.
+
+The all-degree statement $\mathbb C[V_{27}]^{E_6}=\mathbb C[\det]$ is an
+external invariant-theory input for the minimal 27-dimensional module.  The
+notebook verifies the cubic invariant and the displayed coefficients but does
+not independently prove generation in all degrees.
+
+\section{Exact verification}
+The code generates the 72 roots, obtains $\omega_1$ by rationally solving
+$A^Tc=e_1$, and closes its Weyl orbit under simple reflections.  The resulting
+27 weights define the explicit matrix
+$M(\theta)=\operatorname{diag}(e^{i\langle\mu,\theta\rangle})\in U(27)$.
+The determinant formula and eigenvalue product are evaluated independently.
+
+For coefficients, Jacobi--Trudi produces $\chi_{\mathbb S_\lambda V}$.
+The one-sided Weyl denominator
+\[
+ \prod_{\alpha>0}(1-z^{-\alpha})=
+ \sum_{w\in W}\det(w)z^{w\rho-\rho}
+\]
+makes its integral an exact signed weight sum.  Orbit membership of
+$\rho-\mu$ is tested by reflecting it to the dominant chamber.
+The monomial-basis check gives zero in degrees one and two and
+\[
+([m_{(3)}],[m_{(2,1)}],[m_{(1,1,1)}])=(1,1,1).
+\]
+
+\begin{center}\small
+\begin{tabular}{@{}c|rrrrrrr@{}}\toprule
+$\lambda$&$\varnothing$&$(1)$&$(2)$&$(1,1)$&$(3)$&$(2,1)$&$(1,1,1)$\\\midrule
+proposed&1&0&0&0&1&0&0\\
+exact Weyl check&1&0&0&0&1&0&0\\\bottomrule
+\end{tabular}
+\end{center}
+The orbit contains exactly 27 distinct weights.  Unitarity holds to
+$4.3\times10^{-16}$, the integrand residual is below $1.8\times10^{-15}$,
+and all coefficient checks pass.
+
+\paragraph{Reproducibility.} Run \texttt{marimo\_notebooks/lie\_group\_e6.py} with marimo.
+\section*{External invariant-theory source}
+See T.~A.~Springer and F.~D.~Veldkamp, \emph{Octonions, Jordan Algebras and
+Exceptional Groups}, Springer Monographs in Mathematics (2000), for the
+Albert determinant and the $E_6$ structure group.
+\end{document}

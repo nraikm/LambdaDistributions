@@ -1,0 +1,1 @@
+"""Rooted-tree automorphism verification."""

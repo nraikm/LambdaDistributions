@@ -1,0 +1,197 @@
+\documentclass[11pt]{article}
+\usepackage[margin=0.82in]{geometry}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{booktabs,tabularx}
+\usepackage[dvipsnames]{xcolor}
+\usepackage[colorlinks=true,linkcolor=NavyBlue,urlcolor=BrickRed]{hyperref}
+\usepackage{microtype}
+\usepackage{fancyhdr}
+\usepackage{enumitem}
+
+\definecolor{ink}{HTML}{17302A}
+\definecolor{accent}{HTML}{287A62}
+\definecolor{pale}{HTML}{EDF7F3}
+\definecolor{passgreen}{HTML}{16794A}
+\color{ink}
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{Representation variants}
+\rhead{Proof and verification}
+\cfoot{\thepage}
+\setlength{\headheight}{14pt}
+\newcommand{\Sfun}{\mathcal S}
+\newcommand{\Sym}{\operatorname{Sym}}
+\newcommand{\Reg}{\operatorname{Reg}}
+\newcommand{\PASS}{\textcolor{passgreen}{\textbf{PASS}}}
+\newcommand{\summarybox}[1]{\begin{center}\fcolorbox{accent}{pale}{\parbox{0.91\linewidth}{#1}}\end{center}}
+
+\title{\textbf{Changing the Representation}\\[3pt]
+\large Exterior powers and regular representations in the master formula}
+\author{Computational verification note}
+\date{17 July 2026}
+
+\begin{document}
+\maketitle
+
+\summarybox{\textbf{Outcome.}  Two structurally different substitutions into
+the finite-group master formula were tested.  For $\Lambda^2$ of the standard
+three-dimensional $S_4$ representation, explicit compound matrices agree with
+the pairwise-eigenvalue formula.  For the regular representation of $S_3$,
+explicit $6\times6$ permutation matrices agree with the element-order formula.
+All 38 multivariate coefficients through total degree five pass, as do direct
+Reynolds projector checks.}
+
+\section{The common master formula}
+
+For any finite-dimensional representation $W$ of a finite group $G$,
+\begin{equation}
+\Sfun_{G,W}(\mathbf t)=\frac1{|G|}\sum_{g\in G}
+\prod_{a\geq1}\det(I-t_a g|_W)^{-1}.                          \tag{1}
+\end{equation}
+The coefficient at $t_1^{\tau_1}\cdots t_\ell^{\tau_\ell}$ equals
+\begin{equation}
+\dim\left(\bigotimes_{a=1}^{\ell}\Sym^{\tau_a}W\right)^G,   \tag{2}
+\end{equation}
+because the coefficient is the group average of the tensor-product character,
+which is the trace of the Reynolds projector.  Once (1) is established, a new
+representation requires only a correct description of its eigenvalues.  This
+report tests two such descriptions that use very different group data.
+
+\section{Exterior powers}
+
+If $g|_V$ has eigenvalues $\lambda_1,\ldots,\lambda_n$, then the wedge vectors
+$v_{i_1}\wedge\cdots\wedge v_{i_k}$ show that $g|_{\Lambda^kV}$ has eigenvalues
+\[
+\lambda_I=\prod_{i\in I}\lambda_i,\qquad |I|=k.
+\]
+Therefore
+\begin{equation}
+\Sfun_{G,\Lambda^kV}(\mathbf t)=\frac1{|G|}\sum_{g\in G}
+\prod_{a\geq1}\prod_{|I|=k}(1-t_a\lambda_I(g))^{-1}.         \tag{3}
+\end{equation}
+This proof needs no assumption that $G$ is a reflection group.
+
+\subsection{Concrete test: $\Lambda^2$ of the $S_4$ reflection representation}
+
+Start from the permutation representation of $S_4$ on $\mathbb C^4$ and
+restrict it to
+\[
+V=\{(x_1,x_2,x_3,x_4):x_1+x_2+x_3+x_4=0\}.
+\]
+Numerical QR orthonormalization supplies a $4\times3$ basis matrix $B$, so the
+explicit standard matrices are $B^*P_\pi B$.  The direct exterior-square
+matrices are constructed without diagonalizing: in the ordered basis
+$e_i\wedge e_j$, their entries are the $2\times2$ minors
+\begin{equation}
+(\Lambda^2g)_{(k,l),(i,j)}
+=g_{ki}g_{lj}-g_{kj}g_{li}.                                  \tag{4}
+\end{equation}
+The formula route instead diagonalizes only the original $3\times3$ standard
+matrices and forms the three pairwise eigenvalue products required by (3).
+Thus an error in the compound-matrix construction is not reproduced in the
+formula route.
+
+\section{The regular representation}
+
+Let $G$ act on its basis by left multiplication.  If $g$ has order $o(g)$,
+then its permutation of the $|G|$ basis elements has $|G|/o(g)$ cycles, each of
+length $o(g)$.  Hence
+\begin{equation}
+\det(I-tg|_{\Reg})=(1-t^{o(g)})^{|G|/o(g)}.                   \tag{5}
+\end{equation}
+If $N_m$ is the number of elements of order $m$, substitution into (1) gives
+\begin{equation}
+\Sfun_{G,\Reg}(\mathbf t)=\sum_m\frac{N_m}{|G|}
+\prod_{a\geq1}(1-t_a^m)^{-|G|/m}.                            \tag{6}
+\end{equation}
+
+For coefficient extraction, use
+\[
+[t^d](1-t^m)^{-c}=
+\begin{cases}
+\binom{c+d/m-1}{d/m},&m\mid d,\\
+0,&m\nmid d.
+\end{cases}
+\]
+For $S_3$, the order counts are
+\begin{equation}
+N_1=1,\qquad N_2=3,\qquad N_3=2.                              \tag{7}
+\end{equation}
+Equations (6)--(7) therefore give an integer-arithmetic formula for every
+multivariate coefficient.  The direct route constructs all six left-regular
+$6\times6$ permutation matrices and never consults these order counts.
+
+\section{Verification protocol}
+
+For each representation and every partition $\tau$ through total degree five:
+\begin{enumerate}[leftmargin=*,itemsep=3pt]
+\item Construct all representation matrices explicitly.
+\item Recursively compute $h_d$ from each matrix's eigenvalues and average
+$\prod_a h_{\tau_a}$ over the group.
+\item Compare with the representation-specific formula: pairwise spectra in
+(3) for $S_4$, or binomial coefficient extraction from (6) for $S_3$.
+\item Embed the normalized occupancy basis of $\Sym^2(W)$ in $W^{\otimes2}$,
+form the explicit Reynolds matrix, and compare rank with the coefficient.
+\end{enumerate}
+
+\section{Results}
+
+\begin{center}
+\begin{tabularx}{\linewidth}{@{}Xrrrrc@{}}
+\toprule
+Representation & $|G|$ & $\dim W$ & degree & checks & result\\
+\midrule
+$S_4$ on $\Lambda^2(V_{\mathrm{std}})$ & 24 & 3 & $0$--$5$ & 19 & \PASS\\
+$S_3$ on $\Reg$ & 6 & 6 & $0$--$5$ & 19 & \PASS\\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+Selected matched dimensions are
+\begin{center}
+\begin{tabular}{@{}lrrrrrr@{}}
+\toprule
+Representation & $(1)$ & $(2)$ & $(3)$ & $(2,1)$ & $(2,2)$ & $(3,2)$\\
+\midrule
+$\Lambda^2(V_{\mathrm{std}})$ of $S_4$ & 0 & 1 & 0 & 0 & 3 & 1\\
+$\Reg$ of $S_3$ & 1 & 5 & 10 & 21 & 78 & 196\\
+\bottomrule
+\end{tabular}
+\end{center}
+The large mixed coefficients in the regular case provide a useful stress test:
+agreement is not caused merely by both routes rounding small numbers to zero.
+
+For the exterior case, $\Sym^2(W)$ has dimension six and the Reynolds
+projector has rank $1$, trace $0.9999999999999992$, and idempotence error
+$8.31\times10^{-16}$.  For the regular case, $\Sym^2(W)$ has dimension $21$;
+the projector has rank $5$, trace $4.999999999999999$, and idempotence error
+$3.72\times10^{-16}$.  These ranks agree with the $(2)$ coefficient in each
+row of the table.
+
+\section{What these tests establish}
+
+The exterior test exercises a nonlinear eigenvalue transformation and a
+coordinate-level compound-matrix construction.  The regular test exercises a
+combinatorial compression from individual group elements to element-order
+counts.  Together they show that the master formula is representation-agnostic
+in precisely the claimed way: only the spectra on the chosen representation
+change.
+
+The tests are finite and numerical; the all-degree statements (3) and (6)
+follow from the preceding eigenvalue and cycle proofs.  Numerical acceptance
+requires the direct average to be within $3\times10^{-7}$ of an integer.  The
+projector residuals are at machine precision.
+
+\section{Reproducibility}
+
+Run from the repository root:
+\begin{verbatim}
+PYTHONPATH=for_this_guy/matrix_group_formula_verification \
+  .venv/bin/python \
+  for_this_guy/matrix_group_formula_verification/\
+  representation_variants/verification.py
+\end{verbatim}
+The marimo notebook allows the maximum degree to be changed interactively and
+displays every coefficient comparison and both projector diagnostics.
+
+\end{document}

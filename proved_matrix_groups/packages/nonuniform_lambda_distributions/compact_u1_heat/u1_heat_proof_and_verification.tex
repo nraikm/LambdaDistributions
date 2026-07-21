@@ -1,0 +1,147 @@
+\documentclass[10pt]{article}
+\usepackage[margin=0.84in]{geometry}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{booktabs,tabularx}
+\usepackage[dvipsnames]{xcolor}
+\usepackage[colorlinks=true,linkcolor=NavyBlue,urlcolor=BrickRed,hypertexnames=false]{hyperref}
+\usepackage{microtype,fancyhdr,enumitem}
+\definecolor{ink}{HTML}{3A293A}
+\definecolor{accent}{HTML}{A44E82}
+\definecolor{pale}{HTML}{FFF0F8}
+\definecolor{passgreen}{HTML}{16794A}
+\color{ink}
+\pagestyle{fancy}\fancyhf{}
+\lhead{$U(1)$ heat kernel}\rhead{Compact-group verification}\cfoot{\thepage}
+\setlength{\headheight}{14pt}
+\newcommand{\Sfun}{\mathcal S}
+\newcommand{\PASS}{\textcolor{passgreen}{\textbf{PASS}}}
+\newcommand{\summarybox}[1]{\begin{center}\fcolorbox{accent}{pale}{\parbox{0.91\linewidth}{#1}}\end{center}}
+\title{\textbf{Heat-Kernel $\Lambda$-Distributions on $U(1)$}\\[3pt]
+\large Casimir filtering, endpoint behavior, and alias-free quadrature}
+\author{Proof and computational verification note}
+\date{17 July 2026}
+
+\begin{document}
+\maketitle
+\summarybox{\textbf{Outcome.}  Three diagonal $U(1)$ representations of
+dimensions $1,2,3$ were checked at five heat times for all partitions through
+total degree five.  Direct quadrature against the heat kernel agrees with the
+weight/Casimir formula in all \textbf{285} cases.  The maximum absolute error
+is $5.73\times10^{-14}$.}
+
+\section{Heat measure and normalization}
+Identify $U(1)$ with $e^{i\theta}$, $0\leq\theta<2\pi$, and choose the
+Laplacian normalization for which the character $e^{iq\theta}$ has Casimir
+$q^2$.  Brownian motion with generator $\tfrac12\Delta$ has density relative
+to normalized Haar measure
+\begin{equation}
+k_t(\theta)=\sum_{q\in\mathbb Z}e^{-q^2t/2}e^{-iq\theta}.   \tag{1}
+\end{equation}
+Orthogonality immediately yields
+\begin{equation}
+\int_{U(1)}e^{iw\theta}k_t(\theta)\,d\theta/(2\pi)
+=e^{-w^2t/2}.                                               \tag{2}
+\end{equation}
+This fixes the otherwise convention-dependent factor in the Casimir exponent.
+
+Let $V$ be the diagonal representation with integer weights
+$a_1,\ldots,a_d$,
+\begin{equation}
+\rho(e^{i\theta})=\operatorname{diag}
+(e^{ia_1\theta},\ldots,e^{ia_d\theta}).                    \tag{3}
+\end{equation}
+For $W_\tau=\bigotimes_j\operatorname{Sym}^{\tau_j}V$, write
+\begin{equation}
+W_\tau=\bigoplus_{w\in\mathbb Z}M_\tau(w)\,\mathbb C_w.  \tag{4}
+\end{equation}
+Combining (2)--(4) proves the coefficient formula
+\begin{equation}
+\boxed{
+[\mathbf t^\tau]\Sfun_t
+=\sum_{w\in\mathbb Z}M_\tau(w)e^{-w^2t/2}.}               \tag{5}
+\end{equation}
+This is the compact-group heat formula in its simplest exact form: each
+irreducible weight is attenuated by its Casimir eigenvalue.
+
+\section{Endpoints and interpretation}
+At $t=0$, every exponential in (5) is one, hence
+\begin{equation}
+[\mathbf t^\tau]\Sfun_0=\dim W_\tau,
+\qquad
+\Sfun_0(\mathbf t)=\prod_j(1-t_j)^{-d}.                    \tag{6}
+\end{equation}
+This is evaluation at the identity matrix.  As $t\to\infty$, only weight zero
+survives:
+\begin{equation}
+\lim_{t\to\infty}[\mathbf t^\tau]\Sfun_t=M_\tau(0)
+=\dim W_\tau^{U(1)}.                                       \tag{7}
+\end{equation}
+Thus (5) gives a literal spectral interpolation between dimension and Haar
+invariants.  For a purely positive defining weight there are no positive-degree
+Haar invariants.  Mixed positive and negative weights, however, can cancel and
+leave nontrivial weight-zero terms.
+
+\section{Representations and verification method}
+The tested weight lists are
+\begin{center}
+\begin{tabular}{@{}lccp{7.1cm}@{}}
+\toprule
+Name & weights & dimension & purpose\\
+\midrule
+defining & $(1)$ & 1 & isolates the scalar Casimir $r^2$\\
+weight pair & $(1,-1)$ & 2 & creates many weight-zero invariants\\
+mixed & $(0,1,-2)$ & 3 & combines a fixed line with asymmetric weights\\
+\bottomrule
+\end{tabular}
+\end{center}
+For each representation, $t=0,0.25,0.8,3,20$ and all 19 partitions through
+total degree five are tested.
+
+The direct route uses 512 equally spaced angles.  At each angle it constructs
+the matrix (3), computes complete characters from the matrix power traces, and
+integrates their product against the Fourier heat kernel (1), truncated at
+$|q|\leq32$.  The formula route never evaluates an angle or matrix: it builds
+the integer multiplicities $M_\tau(w)$ and applies (5).
+
+\subsection*{Why the quadrature is especially strong}
+This is not a generic Monte Carlo comparison.  Through total degree five the
+largest character frequency is at most $5\max_j|a_j|=10$.  Multiplication by
+the truncated kernel produces frequencies at most 42.  Since 512 exceeds
+twice this bandwidth, the periodic trapezoidal rule integrates the entire
+trigonometric polynomial exactly in exact arithmetic.  At the smallest
+positive time, the first omitted heat coefficient is
+$e^{-33^2/8}<10^{-59}$.  The observed errors are therefore floating-point
+roundoff, not sampling noise or appreciable heat-kernel truncation.
+
+At $t=0$ the heat density is a delta distribution, so the code evaluates the
+identity matrix directly as in (6).  This avoids approximating a singular
+endpoint with a finite Fourier sum.
+
+\section{Results}
+\begin{center}
+\begin{tabularx}{\linewidth}{@{}lXrrc@{}}
+\toprule
+Representation and time & coefficient & quadrature & Casimir formula & result\\
+\midrule
+defining, $t=0.8$ & $(3)$ & $0.0273237224$ & $0.0273237224$ & \PASS\\
+weight pair, $t=3$ & $(2,1)$ & $0.8925233825$ & $0.8925233825$ & \PASS\\
+mixed, $t=20$ & $(2,2)$ & $5.0003631994$ & $5.0003631994$ & \PASS\\
+\bottomrule
+\end{tabularx}
+\end{center}
+The last value is already close to the integer Haar multiplicity five, while
+the small positive correction records the surviving nonzero weights at finite
+time.
+
+\section{Scope and reproducibility}
+The computation verifies the compact heat formula for $U(1)$ with several
+representation dimensions and both one-variable and mixed coefficients.  It
+does not by itself verify the branching rules proposed for $U(n)$, $SU(n)$,
+$O(n)$, or $USp(2n)$.  Those require separate highest-weight and Casimir
+normalizations.  The disconnected-group warning is also essential: Brownian
+motion from the identity in $O(n)$ remains in $SO(n)$ unless component-changing
+jumps are added.
+
+Run \path{compact_u1_heat/verification.py}, or open
+\path{marimo_notebooks/u1_heat.py} in marimo.
+\end{document}

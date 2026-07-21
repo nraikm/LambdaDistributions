@@ -1,0 +1,93 @@
+\documentclass[10pt]{article}
+\usepackage[margin=0.9in]{geometry}\usepackage{amsmath,amssymb,booktabs,microtype,xcolor,fancyhdr}\usepackage[hidelinks]{hyperref}
+\definecolor{navy}{RGB}{24,55,95}\pagestyle{fancy}\fancyhf{}\lhead{$E_8$ adjoint}\rhead{Proof and verification strategy}\cfoot{\thepage}\setlength{\headheight}{14pt}
+\newcommand{\Sg}{\mathcal S}\newcommand{\CT}{\operatorname{CT}}
+\title{\color{navy}\textbf{The compact $E_8$ adjoint sigma-MGF}\\[1mm]\large Proof and dimension-aware verification strategy}
+\author{Computational proof companion}\date{17 July 2026}
+\begin{document}\maketitle
+\begin{abstract}
+We prove the exact constant-term formula for the 248-dimensional adjoint
+module, verify its root and zero-weight data and its quadratic invariant
+exactly, and prove the alternating cubic row algebraically.  We also
+record the correct one-copy Chevalley series and explain why it does not
+determine the multivariate sigma-MGF.
+\end{abstract}
+
+\section{Exact formula}
+For every unitary compact-group representation,
+\[
+ \Sg_{K,V}=\int_K\prod_a\det(I-t_a\rho(g))^{-1}dg
+ =\sum_\lambda\dim(\mathbb S_\lambda V)^K s_\lambda(\mathbf t).
+\]
+Equivalently,
+$[m_\tau]\Sg_{K,V}=\dim(\bigotimes_i\operatorname{Sym}^{\tau_i}V)^K$.
+The adjoint $E_8$ weights are the 240 roots and zero with multiplicity eight.
+Weyl integration therefore proves
+\[
+ \boxed{\Sg_{E_8,248}=\frac1{696729600}\CT_z\left[D_{E_8}(z)
+ \prod_a(1-t_a)^{-8}\prod_{\alpha\in\Phi(E_8)}
+ (1-t_a z^\alpha)^{-1}\right].}
+\]
+
+\section{Universal adjoint tensors}
+For a compact simple Lie algebra, the Killing form $\kappa$ is a unique
+symmetric quadratic invariant.  In degree three,
+\[
+ c(x,y,z)=\kappa(x,[y,z])
+\]
+is invariant, nonzero, and fully alternating.  Moreover
+\[
+(\bigwedge^3\mathfrak g)^G\cong
+\operatorname{Hom}_G(\bigwedge^2\mathfrak g,\mathfrak g),
+\]
+and for the simple Lie algebra $\mathfrak e_8$ the bracket spans this
+Hom-space.  Chevalley restriction gives basic invariant degrees
+$2,8,12,14,18,20,24,30$, so $(\operatorname{Sym}^3\mathfrak g)^G=0$.
+Since the only invariant in $\mathfrak g^{\otimes3}$ is alternating, the
+Schur type $(2,1)$ also has multiplicity zero.  Consequently
+\[
+ \boxed{\Sg_{E_8,248}=1+h_2+e_3+O_{\ge4}.}
+\]
+Chevalley restriction gives the one-copy series
+\[
+ \boxed{\Sg(t,0,\ldots)=\prod_{d\in\{2,8,12,14,18,20,24,30\}}
+ (1-t^d)^{-1}.}
+\]
+This specialization cannot see $e_3$ and therefore does not determine the
+full sigma-MGF.
+Thus the degree-at-most-three monomial signature is
+\[
+([m_{(2)}],[m_{(1,1)}],[m_{(3)}],[m_{(2,1)}],[m_{(1,1,1)}])
+=(1,1,0,0,1).
+\]
+
+\section{Executed quadratic check and optional sparse cubic confirmation}
+The notebook generates the $E_8$ root orbit (240 vectors), appends eight zero
+weights, and constructs a $248$ by $248$ diagonal unitary torus matrix.  It
+checks the determinant integrand directly and integrates the quadratic Schur
+characters exactly with the Weyl-denominator identity.
+\begin{center}\small
+\begin{tabular}{@{}c|rrrr@{}}\toprule
+$\lambda$&$\varnothing$&$(1)$&$(2)$&$(1,1)$\\\midrule
+proposed&1&0&1&0\\
+exact Weyl check&1&0&1&0\\\bottomrule
+\end{tabular}
+\end{center}
+The computed dimension is 248, with 240 roots and eight zero weights; all
+quadratic entries pass.  Floating-point work is confined to the illustrative
+torus matrix, while invariant multiplicities use rational weights and exact
+integer sums.
+
+The cubic multiplicities
+$(\operatorname{Sym}^3,\mathbb S_{(2,1)},\bigwedge^3)=(0,0,1)$ are therefore
+proved algebraically above.  For an optional mechanical confirmation,
+construct only the zero-weight part of
+$\bigwedge^3\mathfrak e_8$ and impose the eight simple-root raising operators.
+The expected nullspace is one-dimensional and represented by $c(x,y,z)$; the
+analogous expected nullities on $\operatorname{Sym}^3$ and
+$\mathbb S_{(2,1)}$ are zero.  This sparse route avoids materializing spaces
+of dimensions on the order of $\binom{248}{3}$.  It is not reported as an
+executed computation in this artifact.
+
+\paragraph{Reproducibility.} Run \texttt{marimo\_notebooks/lie\_group\_e8.py} with marimo.
+\end{document}

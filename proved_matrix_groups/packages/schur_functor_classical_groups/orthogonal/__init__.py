@@ -1,0 +1,2 @@
+"""Orthogonal Schur-functor verification."""
+

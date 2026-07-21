@@ -1,0 +1,216 @@
+\documentclass[10pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage[margin=0.9in]{geometry}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{booktabs,array}
+\usepackage{xcolor}
+\usepackage[hidelinks]{hyperref}
+\usepackage{microtype}
+\usepackage{fancyhdr}
+\definecolor{navy}{RGB}{24,55,95}
+\definecolor{green}{RGB}{30,110,70}
+\pagestyle{fancy}
+\setlength{\headheight}{14pt}
+\fancyhf{}
+\lhead{Finite linear groups}
+\rhead{$\sigma$-MGF proof and exact verification}
+\cfoot{\thepage}
+\newcommand{\Sym}{\operatorname{Sym}}
+\newcommand{\Fix}{\operatorname{Fix}}
+\newcommand{\F}{\mathbb F}
+\newcommand{\Sg}{\mathcal S}
+\title{\color{navy}\textbf{Finite Linear-Group Permutation Actions}\\[2mm]
+\large Exact $\sigma$-MGFs, stable coefficients, and matrix verification}
+\author{Proof and computational verification companion}
+\date{17 July 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+For a finite group acting on a set $S$, we prove the determinant/cycle formula,
+its fixed-point reconstruction, and its interpretation as an orbit count on
+tuples of multisets.  We then specialize to nonzero-vector, projective-point,
+and complete-flag actions of finite linear groups.  Exact finite-field matrix
+enumerations verify all coefficients through degree three for
+$PSL_3(2)$, the degree-two vector claims for $GL_2(3)$, and the Bruhat
+obstruction in ranks two and three.  The computation also exposes a sharp
+boundary phenomenon for $SL_2(3)$.
+\end{abstract}
+
+\section{The universal finite permutation formula}
+Let $G$ act on a finite set $S$, let $V=\mathbb C[S]$, and write $P_g$ for
+the associated permutation matrix.  For a partition
+$\tau=(\tau_1,\ldots,\tau_s)$ set
+\[
+ W_\tau=\bigotimes_{b=1}^s\Sym^{\tau_b}(V).
+\]
+The symmetric-power identity
+\[
+ \det(I-tP_g)^{-1}=\sum_{r\geq0}
+ \operatorname{tr}\!\left(P_g\mid\Sym^rV\right)t^r
+\]
+implies, after averaging over $G$,
+\begin{equation}
+ [m_\tau]\Sg_{G,S}
+ =\frac1{|G|}\sum_{g\in G}\operatorname{tr}(g\mid W_\tau)
+ =\dim W_\tau^G.
+\end{equation}
+The last equality follows because $|G|^{-1}\sum_g g$ is the Reynolds
+projector.
+
+If $g$ has $c_d(g;S)$ cycles of length $d$, a single $d$-cycle has all
+$d$th roots of unity as eigenvalues and hence determinant $1-t^d$.
+Therefore
+\begin{equation}
+ \boxed{\Sg_{G,S}(t_\bullet)=\frac1{|G|}\sum_{g\in G}
+ \prod_{i\geq1}\prod_{d\geq1}(1-t_i^d)^{-c_d(g;S)}.}
+\end{equation}
+This is an exact finite formula, not an asymptotic statement.
+
+\subsection*{Fixed points determine the cycles}
+A point on a $d$-cycle is fixed by $g^r$ exactly when $d\mid r$.  Thus
+\[
+ \Fix_S(g^r)=\sum_{d\mid r}d\,c_d(g;S).
+\]
+M\"obius inversion gives
+\begin{equation}
+ \boxed{c_d(g;S)=\frac1d\sum_{r\mid d}
+ \mu(d/r)\Fix_S(g^r).}
+\end{equation}
+For $S=G/P$, $\Fix_S(g^r)$ is the value at $g^r$ of the permutation
+character $\operatorname{Ind}_P^G\mathbf1$.  Grouping (2) by conjugacy class
+then yields the stated centralizer-weighted formula.
+
+\subsection*{Direct orbit interpretation}
+A monomial basis vector of $\Sym^r\mathbb C[S]$ is a multiset of $r$ points
+of $S$.  Consequently a basis of $W_\tau$ is a tuple of such multisets, of
+respective sizes $\tau_1,\ldots,\tau_s$.  Since $G$ permutes this basis, the
+sum of the basis vectors in each orbit is one invariant basis vector.  Hence
+\begin{equation}
+ \boxed{[m_\tau]\Sg_{G,S}=\left|\{G\text{-orbits on tuples of multisets of
+ sizes }\tau_1,\ldots,\tau_s\}\right|.}
+\end{equation}
+Equation (4) supplies the independent direct route used in the computation.
+
+\section{Linear and projective specializations}
+For $S=\F_q^n\setminus\{0\}$ and $g\in GL_n(q)$,
+\begin{equation}
+ \Fix_S(g^r)=q^{\dim\ker(g^r-I)}-1.
+\end{equation}
+For projective points, a fixed line is an eigenline whose eigenvalue lies in
+$\F_q^\times$.  The eigenspaces for distinct eigenvalues contribute disjoint
+sets of lines, so
+\begin{equation}
+ \Fix_{\mathbb P^{n-1}(\F_q)}(g^r)=
+ \sum_{\lambda\in\F_q^\times}
+ \frac{q^{\dim\ker(g^r-\lambda I)}-1}{q-1}.
+\end{equation}
+Substitution of (5) or (6) into (3) and then (2) proves the proposed exact
+formulas.
+
+Over $\F_2$, every projective line has one nonzero vector and
+$GL_n(2)=SL_n(2)=PGL_n(2)=PSL_n(2)$.  Thus (5) directly gives the displayed
+$PSL_n(2)$ formula.
+
+\subsection*{Stable range}
+A configuration of total degree $D=|\tau|$ involves at most $D$ projective
+points and its span has dimension at most $D$.  When $n\geq D$, two such
+configurations are $GL_n(q)$-equivalent exactly when the induced colored
+configurations on their spans are linearly isomorphic: any isomorphism of the
+spans extends after choosing complements.  This proves coefficientwise
+stability for $GL/PGL$ projective actions.  The same argument for nonzero
+vectors is immediate.  For $SL/PSL$, the determinant of an extension can be
+corrected on an unused one-dimensional summand, which requires the strict
+range $n>D$.
+
+For projective points the stable expansion through degree three is
+\begin{equation}
+ 1+m_{(1)}+2m_{(2)}+2m_{(1,1)}
+ +4m_{(3)}+5m_{(2,1)}+6m_{(1,1,1)}+O(\deg4).
+\end{equation}
+For three distinct points, collinear and noncollinear triples give two
+different orbits; this is the extra degree-three term relative to the
+symmetric-group/Poisson pattern.
+
+For nonzero vectors, ordered pairs consist of one independent orbit and one
+dependent orbit $y=ax$ for each $a\in\F_q^\times$, giving
+\[
+ [m_{(1,1)}]\Sg=q.
+\]
+For an unordered pair, the dependent ratios other than $1$ are identified by
+$a\leftrightarrow a^{-1}$.  Together with the repeated and independent types,
+this gives
+\[
+ [m_{(2)}]\Sg=2+\left\lfloor\frac{q-1}{2}\right\rfloor.
+\]
+
+\section{Complete flags and failure of rank stability}
+For $S=G/B$, orbitals are the double cosets $B\backslash G/B$.  Bruhat
+decomposition identifies these with the Weyl group, whence
+\begin{equation}
+ [m_{(1,1)}]\Sg_{G,G/B}=|W|.
+\end{equation}
+In type $A_{n-1}$ this is $n!$, so even the degree-two coefficient cannot
+stabilize as rank grows.
+
+\section{Exact verification method}
+The accompanying marimo notebook performs the following independent steps.
+\begin{enumerate}
+ \item Enumerate every finite-field matrix and retain the required determinant
+ or invertibility condition.
+ \item Induce its permutation on nonzero vectors, normalized projective
+ representatives, or incident point--hyperplane flags.
+ \item Count orbits directly on tuples of multisets, without using character
+ or cycle formulas.
+ \item Extract the same coefficient from the actual cycle counts in (2).
+ \item Reconstruct every cycle count from fixed points of powers using (3).
+ \item At $(t_1,t_2)=(0.07,0.11)$, compare the direct matrix-determinant
+ average with the cycle-product average.
+\end{enumerate}
+The last two numerical averages both equal $1.247556190416$ for the
+$PSL_3(2)$ projective action, with difference below displayed precision.
+
+\begin{center}
+\small
+\begin{tabular}{@{}lcrrr@{}}
+\toprule
+Action & $\tau$ & direct orbits & cycle formula & claimed\\
+\midrule
+$PSL_3(2)$ on $\mathbb P^2(\F_2)$ & $(1)$ & 1&1&1\\
+ & $(2)$ &2&2&2\\
+ & $(1,1)$ &2&2&2\\
+ & $(3)$ &4&4&4\\
+ & $(2,1)$ &5&5&5\\
+ & $(1,1,1)$ &6&6&6\\
+$PSL_2(2)$ on $\mathbb P^1(\F_2)$ & $(3)$ &3&3&3\\
+$GL_2(3)$ on nonzero vectors & $(2)$ &3&3&3\\
+ & $(1,1)$ &3&3&3\\
+$SL_2(3)$ on nonzero vectors & $(1,1)$ &4&4&4\\
+$PGL_2(3)$ on projective points & $(1,1)$ &2&2&2\\
+$PSL_2(3)$ on projective points & $(1,1)$ &2&2&2\\
+$GL_2(2)$ on complete flags & $(1,1)$ &2&2&2\\
+$GL_3(2)$ on complete flags & $(1,1)$ &6&6&6\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The constructed orders are $|GL_3(2)|=168$, $|GL_2(3)|=48$, and
+$|SL_2(3)|=24$; their projective images in degree two have orders 24 and 12.
+All displayed tests pass exactly.
+
+\paragraph{Sharpness found by verification.}
+The $SL_2(3)$ value $4$ at $\tau=(1,1)$ differs from the $GL_2(3)$ value
+$3$.  Here $n=|\tau|=2$, so there is no unused complement on which to correct
+the determinant.  Independent ordered pairs split into two $SL_2(3)$ orbits
+according to their determinant.  This confirms that the proposed $SL/GL$
+agreement must retain the strict hypothesis $n>|\tau|$.
+
+\section{Scope of the conclusion}
+The matrix, orbit, fixed-point, and determinant routes agree for every
+representative case above.  These computations verify the exact mechanism and
+the low-degree stable claims; the proofs of (1)--(8), rather than finite
+sampling, establish the formulas for all finite parameters in their stated
+ranges.
+
+\end{document}

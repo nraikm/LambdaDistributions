@@ -1,0 +1,2 @@
+"""Symmetric permutation-group verification."""
+

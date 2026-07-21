@@ -1,0 +1,2 @@
+"""Code-monomial group verification."""
+

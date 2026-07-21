@@ -1,0 +1,365 @@
+\documentclass[11pt]{article}
+\usepackage[margin=0.9in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools,booktabs,longtable,array,microtype}
+\usepackage[dvipsnames]{xcolor}
+\usepackage[colorlinks=true,linkcolor=NavyBlue,urlcolor=BrickRed]{hyperref}
+\usepackage{fancyhdr,enumitem}
+
+\definecolor{ink}{HTML}{17212B}
+\definecolor{navy}{HTML}{17365D}
+\definecolor{teal}{HTML}{147D78}
+\definecolor{pale}{HTML}{EEF4F7}
+\color{ink}
+\pagestyle{fancy}\fancyhf{}
+\lhead{Power characters and bounded support}\rhead{Proof and exact verification}\cfoot{\thepage}
+\setlength{\headheight}{14pt}
+\setlength{\parindent}{0pt}\setlength{\parskip}{5pt}
+\setlist[itemize]{leftmargin=1.35em,itemsep=2pt,topsep=3pt}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\Sym}{\operatorname{Sym}}
+\newcommand{\Tr}{\operatorname{Tr}}
+\newcommand{\Fix}{\operatorname{Fix}}
+\newcommand{\ExpS}{\operatorname{Exp}_{\sigma}}
+\newcommand{\MGF}{\mathcal S}
+\newcommand{\F}{\mathbb F}
+\newcommand{\C}{\mathbb C}
+\newcommand{\E}{\mathbb E}
+\newcommand{\resultbox}[1]{\begin{center}\fcolorbox{navy}{pale}{\parbox{0.93\linewidth}{#1}}\end{center}}
+
+\title{The Power-Character and Bounded-Support Stability Theorem\\
+\large Proof, scope, and exact matrix verification}
+\author{Lambda Distributions workspace}
+\date{20 July 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+For an arbitrary finite group and honest complex representation we derive the
+sigma-MGF from character values on all powers.  For permutation actions this
+becomes an exact fixed-point and cycle formula; for coset actions it becomes a
+centralizer--subgroup-intersection formula, and for conjugation it becomes a
+centralizer formula.  We then prove coefficientwise fixed-field stability for
+bounded flags in the classical growing-rank towers.  A marimo notebook checks
+the linear, parabolic, conjugation, and stability statements by explicit
+matrices or generator orbits.  The proof is general; finite computations are
+reported only as independent exact verification.
+\end{abstract}
+
+\resultbox{\textbf{Status.} Equations \eqref{eq:molien}--\eqref{eq:cosetcycles}
+and the type-$A$ threshold \eqref{eq:typeAstable} are exact theorems.  The
+formed-space statement is coefficientwise stability with a finite
+tower-dependent threshold, not a claimed universal numerical threshold.
+Complete flags are excluded: their degree-two coefficient already grows with
+the Weyl group.}
+
+\section{Common target and universal character-power formula}
+
+Let $G$ be finite and let $\rho:G\to GL(V)$ be an honest finite-dimensional
+complex representation with character $\chi_V$.  For a partition
+$\tau=(\tau_1,\ldots,\tau_s)$ set
+\[
+ W_\tau(V)=\bigotimes_{j=1}^s\Sym^{\tau_j}V,
+ \qquad |\tau|=\sum_j\tau_j,
+\]
+and define
+\[
+ \MGF_{G,V}=\E_{g\in G}\!\left[\ExpS(X_V(g)h_1)\right]
+ =\sum_\tau\dim W_\tau(V)^G\,m_\tau.
+\]
+
+\begin{theorem}[Universal power-character formula]\label{thm:power}
+One has the exact identities
+\begin{align}
+\MGF_{G,V}
+ &=\frac1{|G|}\sum_{g\in G}\prod_{i\ge1}
+       \det(I-t_i\rho(g))^{-1},\label{eq:molien}\\
+ &=\frac1{|G|}\sum_{g\in G}\exp\!\left(
+       \sum_{r\ge1}\frac{\chi_V(g^r)}r p_r\right),\label{eq:power}\\
+ &=\sum_{[g]\subseteq G}\frac1{|C_G(g)|}\exp\!\left(
+       \sum_{r\ge1}\frac{\chi_V(g^r)}r p_r\right).\label{eq:classpower}
+\end{align}
+Thus the series is determined by conjugacy classes, class power maps, and the
+character values.  Its coefficient is
+\begin{equation}\label{eq:coefficient}
+[m_\tau]\MGF_{G,V}=\frac1{|G|}\sum_{g\in G}\prod_{j=1}^s
+\left(\sum_{\lambda\vdash\tau_j}\frac1{z_\lambda}
+\prod_{r\ge1}\chi_V(g^r)^{m_r(\lambda)}\right).
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+On $W_\tau(V)$ the Reynolds operator
+$|G|^{-1}\sum_g\rho_{W_\tau}(g)$ is an idempotent with image
+$W_\tau(V)^G$.  Its trace is therefore the invariant dimension.  Characters
+multiply on tensor products, while
+\[
+ \sum_{a\ge0}\Tr(\Sym^aA)t^a=\det(I-tA)^{-1}.
+\]
+Multiplying one copy for each variable and averaging proves
+\eqref{eq:molien}.  The formal identity
+\[
+ -\log\det(I-tA)=\sum_{r\ge1}\frac{\Tr(A^r)}r t^r
+\]
+and $\Tr(\rho(g)^r)=\chi_V(g^r)$ prove \eqref{eq:power}; grouping elements by
+class proves \eqref{eq:classpower}.  Finally
+$h_a=\sum_{\lambda\vdash a}p_\lambda/z_\lambda$ gives
+\eqref{eq:coefficient}.
+\end{proof}
+
+\begin{remark}[Character specializations]
+For a genuine Steinberg or a specified genuine Weil representation, insert
+its character into \eqref{eq:classpower}.  For a Deligne--Lusztig virtual
+character $R_T^G(\theta)$ the same expression is interpreted in the completed
+Grothendieck lambda-ring; its coefficients are virtual multiplicities and
+need not be nonnegative.  These are specializations of the theorem, not
+claims that all such character values collapse to one uniform product.
+\end{remark}
+
+\section{Permutation and parabolic quotient groups}
+
+Suppose $G$ acts on a finite set $X$, and use the honest complex permutation
+module $V=\C[X]$.  Let $c_r(g;X)$ count the $r$-cycles and put
+$F_d(g;X)=|\Fix_X(g^d)|$.
+
+\begin{proposition}[Permutation-cycle formula]\label{prop:permutation}
+For every finite action,
+\begin{align}
+c_r(g;X)&=\frac1r\sum_{d\mid r}\mu(r/d)F_d(g;X),\label{eq:mobius}\\
+\MGF_{G,X}&=\frac1{|G|}\sum_{g\in G}\prod_{i,r\ge1}
+ (1-t_i^r)^{-c_r(g;X)},\label{eq:permutation}\\
+[m_\tau]\MGF_{G,X}&=\#\left(G\backslash
+ \prod_j\Sym^{\tau_j}X\right).\label{eq:orbits}
+\end{align}
+\end{proposition}
+
+\begin{proof}
+An $r$-cycle has determinant factor $1-t^r$ and contributes all of its $r$
+points to $F_d$ precisely when $r\mid d$.  Hence
+$F_d=\sum_{r\mid d}r c_r$, and M"obius inversion gives
+\eqref{eq:mobius}.  The determinant factors give \eqref{eq:permutation}.
+The monomial basis of $W_\tau(\C[X])$ is the displayed product of multiset
+spaces, so its invariant dimension is the number of orbits, proving
+\eqref{eq:orbits}.
+\end{proof}
+
+\begin{proposition}[Coset and parabolic cycles]\label{prop:coset}
+For $X=G/H$,
+\begin{align}
+F_d(g;G/H)&=\frac{|C_G(g^d)|}{|H|}\,|(g^d)^G\cap H|,\label{eq:cosetfixed}\\
+c_r(g;G/H)&=\frac1r\sum_{d\mid r}\mu(r/d)
+ \frac{|C_G(g^d)|}{|H|}\,|(g^d)^G\cap H|.\label{eq:cosetcycles}
+\end{align}
+Substitution in \eqref{eq:permutation} gives the complete exact sigma-MGF.
+In particular this applies to $G=\mathbf G^F$ and every $F$-stable parabolic
+$P$, including projective points, Grassmannians, polar Grassmannians, and
+fixed-shape partial flags.
+\end{proposition}
+
+\begin{proof}
+The coset $xH$ is fixed by $g^d$ exactly when $x^{-1}g^dx\in H$.  Each element
+of $(g^d)^G\cap H$ has $|C_G(g^d)|$ conjugators $x$.  Divide by $|H|$ for the
+number of representatives of a coset and then apply \eqref{eq:mobius}.
+\end{proof}
+
+\section{Conjugation groups}
+
+For conjugation on $G$ itself,
+\[
+ F_d(g;G_{\mathrm{conj}})=|C_G(g^d)|.
+\]
+Therefore
+\begin{equation}\label{eq:conjcycles}
+c_r^{\mathrm{conj}}(g)=\frac1r\sum_{d\mid r}\mu(r/d)|C_G(g^d)|,
+\qquad
+\MGF_{G,\mathrm{conj}}=\frac1{|G|}\sum_g\prod_{i,r}
+(1-t_i^r)^{-c_r^{\mathrm{conj}}(g)}.
+\end{equation}
+On a fixed conjugacy class $C$, replace the fixed-point count by
+$|C\cap C_G(g^d)|$.  Hence the conjugation series is determined by
+centralizers, class intersections, and power maps.
+
+\section{Fixed-field stability for bounded flags}
+
+Fix $q$ and a flag shape
+$\mathbf d=(d_1<\cdots<d_s)$, with $d=d_s$ independent of ambient rank.  Let
+$X_n=\operatorname{Flag}_{\mathbf d}(\F_q^n)$.
+
+\begin{theorem}[Type-$A$ bounded-support stability]\label{thm:typeA}
+For every partition $\tau$ of total degree $D$,
+\begin{equation}\label{eq:typeAstable}
+[m_\tau]\MGF_{GL_n(q),X_n}\quad\text{is independent of $n$ for }n\ge dD.
+\end{equation}
+The same holds for $PGL_n(q)$.  For $SL_n(q)$ and $PSL_n(q)$ the safe range is
+$n>dD$.  The stable coefficient is
+\begin{equation}\label{eq:stablecoefficient}
+a_{\tau,\mathbf d}(q)=\sum_{r=0}^{dD}\#\left(
+GL_r(q)\backslash\mathcal C_{\tau,\mathbf d}^{\mathrm{span}}(r)\right),
+\end{equation}
+where the configuration space consists of $\tau$-colored flag multisets whose
+top subspaces span $\F_q^r$.
+\end{theorem}
+
+\begin{proof}
+A degree-$D$ configuration uses $D$ flags with multiplicity.  The sum of their
+top subspaces, called the support, has dimension at most $dD$.  Two
+configurations are $GL_n(q)$-conjugate exactly when their supported labelled
+configurations are linearly isomorphic, because every isomorphism between the
+supports extends across complements.  Once $n\ge dD$, every possible support
+already embeds, so no new orbit type can appear.  Sorting by the support
+dimension gives \eqref{eq:stablecoefficient}.  Scalar matrices act trivially,
+so the $PGL$ orbits agree.  If $n>dD$, a nonzero complementary direction can
+correct the determinant of any extension while fixing the target support;
+this gives the stated $SL$ and $PSL$ range.
+\end{proof}
+
+\begin{proposition}[Formed-space towers]\label{prop:formed}
+Fix one symplectic, unitary, odd-orthogonal, or one of the two
+even-orthogonal towers, and let $X_n$ be the totally isotropic or singular
+flags of fixed shape.  For every $\tau$ there is a finite threshold
+$N_{\mathcal T}(\mathbf d,\tau)$ after which
+$[m_\tau]\MGF_{G_n,X_n}$ is constant.
+\end{proposition}
+
+\begin{proof}
+The span of a degree-$D$ configuration again has bounded dimension.  Its orbit
+is determined by the labelled flags together with the restricted Hermitian,
+alternating, or quadratic form and the multiplicities.  In characteristic two
+the quadratic form, not merely its polar form, is retained.  There are only
+finitely many such bounded-dimensional supported types over a fixed field.
+Witt extension embeds and identifies each type once the chosen tower is large
+enough; taking the maximum of these finitely many embedding ranks gives the
+threshold.  Determinant or spinor-norm correction may require enlarging the
+unused nondegenerate complement before passing to special, derived, or
+projective groups.
+\end{proof}
+
+\begin{remark}[Why complete flags are excluded]
+For $G/B$, Bruhat decomposition gives
+$[m_{(1,1)}]\MGF_{G,G/B}=|B\backslash G/B|=|W|$.  This grows with rank, so
+bounded shape is an essential hypothesis.
+\end{remark}
+
+\section{Representation scope for finite Lie-type groups}
+
+Projective, subspace, flag, and conjugacy actions are honest complex
+permutation representations.  Formula \eqref{eq:classpower} also applies to
+every specified genuine complex character, including Steinberg and chosen
+Weil representations.  The defining-characteristic action on
+$\mathfrak g(\F_q)$ requires care:
+\begin{itemize}
+\item as a finite set with conjugation action it is an honest permutation
+representation, with
+$F_d(g)=q^{\dim_{\F_q}C_{\mathfrak g}(g^d)}$;
+\item as a linear module over $\F_q$ it is not automatically a complex
+representation, so a cross-characteristic realization or lift must be
+specified before applying \eqref{eq:power}.
+\end{itemize}
+
+\section{Group-separated exact verification}
+
+The executable companion is
+\path{marimo_notebooks/power_character_stability.py}.
+It calls a plain Python verification module, so the same checks run without a
+notebook server.
+
+\subsection{Linear group: $S_3\cong GL_2(2)$ and its Steinberg module}
+
+Every one of the six integral $2\times2$ matrices of the standard $S_3$
+representation is constructed.  For each $\tau$, the program builds the
+matrices of every $\Sym^{\tau_j}V$, takes their Kronecker product, averages the
+actual matrices, and computes the Reynolds rank.  Independently it uses only
+$\chi(g^r)$ and Newton's recurrence to evaluate \eqref{eq:coefficient}.  In
+the order
+\[
+(1),(2),(1,1),(3),(2,1),(1,1,1),
+\]
+both routes give
+\[
+(0,1,1,1,1,1).
+\]
+The largest projector-idempotence error is $5.56\times10^{-17}$.
+
+\subsection{Parabolic group: $GL_3(2)$ on $G/P$}
+
+The program enumerates all $168$ invertible $3\times3$ matrices over $\F_2$
+and their action on the seven projective points.  It separately computes all
+six conjugacy classes, the point stabilizer $P$ of order $24$, centralizers,
+and class intersections with $P$.  Formula \eqref{eq:cosetfixed} reproduces
+every needed fixed-point count and reconstructs the cycles of all $168$
+elements.  Actual permutation-matrix averages, cycle factors, and direct
+multiset-orbit traversal agree on
+\[
+(1,2,2,4,5,6).
+\]
+There are $715$ direct fixed-point equalities and $168$ full cycle
+reconstructions.
+
+\subsection{Conjugation group: $S_3$ on itself}
+
+The six conjugation permutations are built from the group law.  Direct fixed
+points agree with $|C_G(g^d)|$ for every required power, and all six cycle
+decompositions are reconstructed.  Matrix averages, \eqref{eq:conjcycles},
+and direct orbits agree on
+\[
+(3,8,11,17,32,49).
+\]
+
+\subsection{Stable type-$A$ groups}
+
+Transvections generate the actions without enumerating the large ambient
+groups.  Direct configuration-orbit traversal gives:
+\begin{center}
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+$\tau$ for projective points & $n=1$ & $n=2$ & $n=3$ & $n=4$\\
+\midrule
+$(1)$       &1&1&1&1\\
+$(2)$       &1&2&2&2\\
+$(1,1)$     &1&2&2&2\\
+$(3)$       &1&3&4&4\\
+$(2,1)$     &1&4&5&5\\
+$(1,1,1)$   &1&5&6&6\\
+\bottomrule
+\end{tabular}
+\end{center}
+The onset is exactly consistent with $n\ge|\tau|$ when $d=1$.  For
+$GL_n(2)$ on $\operatorname{Gr}_2(n)$, both $\tau=(2)$ and $(1,1)$ give three
+orbits at $n=4$ and again at $n=5$, matching the threshold $n\ge2|\tau|=4$
+and the intersection-dimension classification.
+
+\resultbox{\textbf{Verification result.} All 26 reported coefficient or
+stability rows pass.  These computations test the formulas at small
+representative dimensions with distinct failure modes; the all-rank claims
+rest on the proofs above.}
+
+\section{Reproduction}
+
+From the repository root, run
+\begin{verbatim}
+python3 -m for_this_guy.power_character_bounded_flag_stability.verification
+.venv/bin/marimo run marimo_notebooks/power_character_stability.py
+\end{verbatim}
+
+\begin{thebibliography}{9}
+\bibitem{Howe}
+S. Howe, \emph{Random matrix statistics and zeroes of $L$-functions via
+probability in lambda-rings}, \href{https://arxiv.org/abs/2412.19295}{arXiv:2412.19295}.
+
+\bibitem{Huang}
+J. Huang, \emph{Some extensions of Witt's theorem},
+\href{https://arxiv.org/abs/0705.3839}{arXiv:0705.3839}.
+
+\bibitem{Thomas}
+T. Thomas, \emph{The character of the Weil representation},
+\href{https://arxiv.org/abs/math/0610644}{arXiv:math/0610644}.
+
+\bibitem{MWZ}
+P. Magyar, J. Weyman, and A. Zelevinsky, \emph{Multiple flag varieties of
+finite type}, \href{https://arxiv.org/abs/math/9805067}{arXiv:math/9805067}.
+\end{thebibliography}
+
+\end{document}

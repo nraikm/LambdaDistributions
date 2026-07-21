@@ -1,0 +1,114 @@
+\documentclass[11pt]{article}
+\usepackage[margin=0.86in]{geometry}
+\usepackage{amsmath,amssymb,mathtools,booktabs,microtype,xcolor,fancyhdr,hyperref}
+\definecolor{navy}{HTML}{17365D}\definecolor{teal}{HTML}{147D78}
+\hypersetup{colorlinks=true,linkcolor=navy,urlcolor=teal}
+\pagestyle{fancy}\setlength{\headheight}{14pt}\fancyhf{}
+\lhead{Scalar cyclic braid images}\rhead{Proof and verification}\cfoot{\thepage}
+\newcommand{\Sgm}{\mathcal S}
+\title{\color{navy}\bfseries Scalar Cyclic Finite Braid Images\\
+\large Exact sigma--MGF coefficients in dimensions one through four}
+\author{Computational verification note}\date{17 July 2026}
+\begin{document}\maketitle
+
+\begin{abstract}
+We prove the finite-group sigma--MGF formula directly and test it on the
+scalar cyclic quotients of $B_3$.  These examples isolate the scalar-center
+selection rule while permitting arbitrary representation dimension.  Explicit
+Reynolds-projector ranks agree with both the elementwise power-trace formula
+and its conjugacy-class grouping in all tested dimensions $D=1,2,3,4$.
+\end{abstract}
+
+\section{The representation and the proposed quantity}
+Fix $m\geq2$, $D\geq1$, and $\zeta=e^{2\pi i/m}$.  Define
+\[
+ \rho(\sigma_1)=\rho(\sigma_2)=\zeta I_D.
+\]
+The matrices are unitary and satisfy
+$\rho(\sigma_1)\rho(\sigma_2)\rho(\sigma_1)
+=\rho(\sigma_2)\rho(\sigma_1)\rho(\sigma_2)$, so this is a
+$D$-dimensional representation of $B_3$.  Its image is $C_m$.
+
+For a tuple $\tau=(\tau_1,\ldots,\tau_\ell)$ let
+\[
+ W_\tau=\bigotimes_{a=1}^{\ell}\operatorname{Sym}^{\tau_a}(\mathbb C^D),
+ \qquad |\tau|=\sum_a\tau_a.
+\]
+The coefficient under test is
+\[
+ [m_\tau]\Sgm_{C_m}(\mathbf t),\qquad
+ \Sgm_{C_m}(\mathbf t)=\frac1m\sum_{j=0}^{m-1}
+ \prod_{a\geq1}\det(I-t_a\zeta^jI_D)^{-1}.
+\]
+
+\section{Proof of the formula and closed answer}
+For any finite $G\leq U(V)$, the coefficient of $t^r$ in
+$\det(I-tg)^{-1}$ is the character of $\operatorname{Sym}^rV$ at $g$.
+Multiplying the factors and applying the Reynolds character formula gives
+\[
+ [m_\tau]\Sgm_G
+ =\frac1{|G|}\sum_{g\in G}\prod_a
+ \operatorname{Tr}(g\mid\operatorname{Sym}^{\tau_a}V)
+ =\dim(W_\tau^G).
+\]
+Furthermore,
+\[
+ \det(I-tg)^{-1}=\exp\left(\sum_{k\geq1}
+ \frac{t^k}{k}\operatorname{Tr}(g^k)\right).
+\]
+Grouping the last average into conjugacy classes yields the weight
+$|[c]|/|G|=1/|C_G(c)|$, proving both proposed finite-image formulas.
+
+In the present representation, $\zeta^jI_D$ acts on all of $W_\tau$ by
+$\zeta^{j|\tau|}$.  Hence the Reynolds operator is either zero or identity:
+\[
+ \boxed{[m_\tau]\Sgm_{C_m}=\mathbf1_{m\mid|\tau|}
+ \prod_a\binom{D+\tau_a-1}{\tau_a}.}
+\]
+This proves the scalar selection rule and also determines the nonzero value,
+not merely its support.
+
+\section{Independent verification strategy}
+The program first closes the matrix group from the displayed generator and
+asserts order $m$, unitarity, and the braid relation.  It then constructs an
+orthonormal occupation basis of every $\operatorname{Sym}^{r}\mathbb C^D$
+inside $(\mathbb C^D)^{\otimes r}$.  In that basis it forms
+\[
+ P_\tau=\frac1m\sum_{g\in C_m}\bigotimes_a\operatorname{Sym}^{\tau_a}(g)
+\]
+and computes its rank.  This is the direct target calculation.
+
+The comparator never uses this projector.  It obtains the complete
+homogeneous characters from Newton's recurrence
+\[
+ r h_r(g)=\sum_{k=1}^r\operatorname{Tr}(g^k)h_{r-k}(g),\qquad h_0=1,
+\]
+then averages $\prod_a h_{\tau_a}(g)$ elementwise and, separately, by
+matrix conjugacy classes.
+
+\begin{center}
+\begin{tabular}{@{}rrrrrr@{}}\toprule
+$m$&$D$&$\tau$&$\dim W_\tau$&$\operatorname{rank}P_\tau$&formula\\\midrule
+3&1&$(1)$&1&0&0\\
+3&1&$(3)$&1&1&1\\
+3&2&$(2,1)$&6&6&6\\
+4&2&$(4)$&5&5&5\\
+4&3&$(2,2)$&36&36&36\\
+5&4&$(5)$&56&56&56\\\bottomrule
+\end{tabular}
+\end{center}
+The maximum projector idempotence/Hermiticity error in this sweep is below
+$6\times10^{-15}$.
+
+\section{Reproduction and scope}
+From the repository root run
+\begin{verbatim}
+.venv/bin/python for_this_guy/finite_braid_images/
+  cyclic_scalar/verification.py
+.venv/bin/marimo edit marimo_notebooks/braid_cyclic_scalar.py
+\end{verbatim}
+after joining each wrapped command.  The proof is valid for every $m,D,\tau$;
+the table is a small numerical regression suite, not evidence substituted for
+the proof.
+\end{document}
+

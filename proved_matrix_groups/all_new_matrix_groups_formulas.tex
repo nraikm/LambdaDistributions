@@ -1,0 +1,884 @@
+\documentclass[10pt]{article}
+\usepackage[margin=0.72in]{geometry}
+\usepackage{amsmath,amssymb,mathtools,booktabs,longtable,array,microtype}
+\usepackage[dvipsnames]{xcolor}
+\usepackage[colorlinks=true,linkcolor=NavyBlue,urlcolor=BrickRed]{hyperref}
+\usepackage{fancyhdr,enumitem}
+\definecolor{ink}{HTML}{17212B}
+\definecolor{navy}{HTML}{17365D}
+\definecolor{teal}{HTML}{147D78}
+\definecolor{pale}{HTML}{EEF4F7}
+\color{ink}
+\pagestyle{fancy}\fancyhf{}
+\lhead{Proved matrix groups}\rhead{Formula compendium}\cfoot{\thepage}
+\setlength{\headheight}{14pt}
+\setlength{\parindent}{0pt}\setlength{\parskip}{4pt}
+\setlist[itemize]{leftmargin=1.35em,itemsep=2pt,topsep=3pt}
+\newcommand{\Sym}{\operatorname{Sym}}
+\newcommand{\Tr}{\operatorname{Tr}}
+\newcommand{\Fix}{\operatorname{Fix}}
+\newcommand{\CT}{\operatorname{CT}}
+\newcommand{\ExpS}{\operatorname{Exp}_{\sigma}}
+\newcommand{\MGF}{\mathcal S}
+\newcommand{\F}{\mathbb F}
+\newcommand{\C}{\mathbb C}
+\newcommand{\E}{\mathbb E}
+\newcommand{\Aut}{\operatorname{Aut}}
+\newcommand{\GL}{\operatorname{GL}}
+\newcommand{\Cyc}{\operatorname{Cyc}}
+\newcommand{\CTu}{\operatorname{CT}_u}
+\newcommand{\resultbox}[1]{\begin{center}\fcolorbox{navy}{pale}{\parbox{0.93\linewidth}{#1}}\end{center}}
+\title{\color{navy}\bfseries All New Matrix Groups and Formulas\\[3pt]
+\large Consolidated theorem and verification compendium}
+\author{Lambda Distributions workspace}
+\date{20 July 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+This document is the cross-family index for the matrix-group results developed
+in the workspace. It records every new group family, the formula actually
+proved or corrected, its finite/stable/probabilistic status, and the principal
+verification evidence. The detailed proofs, notebooks, and group-specific PDFs
+remain in \path{proved_matrix_groups/packages} and
+\path{proved_matrix_groups/documents}. The common object is the generalized
+Molien or sigma-MGF series, but the compendium also includes two-sided unitary
+series, nonuniform measures, heat kernels, and coefficientwise limits.
+\end{abstract}
+
+\resultbox{\textbf{Global outcome.} Exact finite-group formulas were checked by
+explicit matrices, Reynolds ranks, orbit counts, or independent coefficient
+recurrences. Compact-group formulas were checked by exact Weyl constant terms,
+Lie-algebra kernels, or seeded Haar diagnostics. Claims requiring a correction
+or a qualification are marked explicitly; no noncompact group is assigned a
+normalized Haar probability.}
+
+\tableofcontents
+
+\section{Common notation and master identities}
+
+For a representation $\rho:G\to GL(V)$ and a partition
+$\tau=(\tau_1,\ldots,\tau_s)$, set
+\[
+ W_\tau(V)=\bigotimes_{a=1}^s\Sym^{\tau_a}V,
+ \qquad |\tau|=\sum_a\tau_a.
+\]
+For finite $G$, the Reynolds projector gives the exact identity
+\begin{equation}\label{eq:finite-master}
+\boxed{\MGF_{G,V}(\mathbf t)=\frac1{|G|}\sum_{g\in G}
+ \prod_i\det(I-t_i\rho(g))^{-1}
+ =\sum_\tau\dim W_\tau(V)^G\,m_\tau.}
+\end{equation}
+Equivalently,
+\[
+ \MGF_{G,V}=\frac1{|G|}\sum_g
+ \exp\!\left(\sum_{i,r\ge1}\frac{\Tr(\rho(g)^r)}r t_i^r\right).
+\]
+For compact $G$, normalized Haar integration replaces the finite average:
+\begin{equation}\label{eq:compact-master}
+\boxed{\MGF_{G,V}=\int_G\prod_i\det(I-t_i\rho(g))^{-1}dg
+ =\sum_\lambda\dim(\mathbb S_\lambda V)^G s_\lambda
+ =\sum_\tau\dim W_\tau(V)^Gm_\tau.}
+\end{equation}
+If $T$ is a maximal torus with representation weights $\mu$ and root system
+$\Phi$, Weyl integration gives
+\begin{equation}\label{eq:weyl}
+\MGF_{G,V}=\frac1{|W|}\CT_z\left[
+ \prod_{\alpha>0}(1-z^\alpha)(1-z^{-\alpha})
+ \prod_{i,\mu}(1-t_i z^\mu)^{-m(\mu)}\right].
+\end{equation}
+For a probability measure $\nu$ that is not Haar, the coefficient is instead
+the trace of its averaging operator:
+\begin{equation}\label{eq:nonuniform}
+[m_\tau]\MGF_{\nu,V}
+=\Tr\!\left(\int_G\rho_{W_\tau}(g)d\nu(g)\right).
+\end{equation}
+Thus nonuniform coefficients need not be nonnegative integers.
+
+\section{Finite abelian, monomial, dihedral, and wreath families}
+
+\subsection{Finite abelian zero-weight theorem}
+For $A=\prod_{\ell=1}^r C_{m_\ell}$ and
+$V=\bigoplus_{j=1}^d\C_{w_j}$ with weight matrix $W=(w_{\ell j})$,
+\begin{equation}\label{eq:abelian}
+\boxed{\dim W_\tau(V)^A=\#\left\{q_{bj}\ge0:
+ \sum_jq_{bj}=\tau_b,\quad
+ \sum_{b,j}w_{\ell j}q_{bj}\equiv0\pmod{m_\ell}\ \forall\ell\right\}.}
+\end{equation}
+This is simultaneously a lattice count, a finite Fourier projection, and the
+coefficient of the diagonal Molien average.
+
+\subsection{Restricted monomial groups and $G(r,p,n)$}
+For $G(r,p,n)$ on $\C^n$, $p\mid r$, the exact finite-$n$ series is
+\begin{equation}\label{eq:grp}
+\boxed{\MGF_{G(r,p,n)}=[u^n]\sum_{q=0}^{p-1}
+ \ExpS\!\left(u\sum_{j\ge0}h_{qr/p+jr}\right).}
+\end{equation}
+This contains the Weyl groups $B_n/C_n=G(2,1,n)$ and $D_n=G(2,2,n)$.
+More generally, for a code $A\le(\mathbb Z/r)^n$ stable under $H\le S_n$,
+the coefficient for $D(A)\rtimes H$ is the average over $H$ of cycle-label
+assignments whose phase-exponent vector lies in the dual code $A^\perp$.
+
+\subsection{Wreath products}
+For a finite matrix group $H\le GL(V)$ acting blockwise on $V^{\oplus n}$,
+\begin{equation}\label{eq:wreath}
+\boxed{\sum_{n\ge0}u^n\MGF_{H\wr S_n}(\mathbf t)
+=\exp\!\left(\sum_{r\ge1}\frac{u^r}{r}
+ \MGF_H(t_1^r,t_2^r,\ldots)\right).}
+\end{equation}
+The coefficientwise stable series is
+\[
+\MGF_{H\wr S_\infty}=\ExpS(\MGF_H-1),
+\qquad \MGF_{H\wr S_n}\equiv\MGF_{H\wr S_\infty}\pmod{\deg>n}.
+\]
+The key block-cycle identity is
+$\det(I-tg_C)=\det(I-t^{|C|}h_C)$.
+
+\subsection{Generalized dihedral and dicyclic groups}
+For $\operatorname{Dih}(A)=A\rtimes C_2$, the irreducibles are the two
+extensions of every self-inverse character and the two-dimensional
+$\operatorname{Ind}_A^G\chi$ for pairs $\{\chi,\chi^{-1}\}$. Substitution of
+their diagonal/reflection spectra in \eqref{eq:finite-master} is the master
+formula for arbitrary direct sums. All 33 generalized-dihedral checks passed.
+
+For the dicyclic group $\operatorname{Dic}_m$ and its two-dimensional
+irreducibles $\rho_k$, the series is the average of the $2m$ diagonal spectra
+$(\zeta^{kj},\zeta^{-kj})$ and the $2m$ antidiagonal spectra. The coefficient
+form is exactly $\dim W_\tau(\rho_k)^{\operatorname{Dic}_m}$; direct Reynolds,
+character, and weight calculations agree. The regular-representation formula
+for any finite group is
+\begin{equation}\label{eq:regular}
+\boxed{\MGF_{G,\mathrm{Reg}}=
+ \sum_{d\ge1}\frac{N_d(G)}{|G|}\ExpS\!\left(\frac{|G|}{d}p_d\right),}
+\end{equation}
+where $N_d(G)$ counts elements of order $d$.
+
+\section{Symmetric, alternating, cube, and permutation actions}
+
+\subsection{Exact $S_n$ and $A_n$ formulas}
+If $\lambda=1^{m_1}2^{m_2}\cdots\vdash n$, then the natural permutation
+series is
+\begin{equation}\label{eq:sn}
+\boxed{\MGF_{S_n}=\sum_{\lambda\vdash n}\frac1{z_\lambda}
+ \prod_{i,d}(1-t_i^d)^{-m_d(\lambda)}.}
+\end{equation}
+For $A_n$, retain the even cycle types and double their $S_n$ weights; the
+extra orbit-splitting term appears only for all-distinct labels. In stable
+range the $A_n$ and $S_n$ coefficients agree once two unused labels remain.
+
+For the sign representation,
+\[
+\MGF_{S_n,\mathrm{sgn}}=\tfrac12\left[
+\prod_i(1-t_i)^{-1}+\prod_i(1+t_i)^{-1}\right].
+\]
+For the standard module $V_n$, removing the trivial line gives
+\[
+\MGF_{S_n,V_n}=\sum_{\lambda\vdash n}\frac1{z_\lambda}
+\prod_i\left[(1-t_i)\prod_{d\in\lambda}(1-t_i^d)^{-1}\right],
+\qquad
+\MGF_{S_n,V_n}\equiv\ExpS(h_2+h_3+\cdots)\pmod{\deg>n}.
+\]
+
+\subsection{Universal permutation-action formula}
+For $G\curvearrowright X$ and vertex-cycle counts $c_d(g;X)$,
+\begin{equation}\label{eq:perm}
+\boxed{\MGF_{G,X}=\frac1{|G|}\sum_g\prod_{i,d}(1-t_i^d)^{-c_d(g;X)},
+\quad [m_\tau]\MGF_{G,X}=\#\left(G\backslash\prod_j\Sym^{\tau_j}X\right).}
+\end{equation}
+Cycles may be reconstructed from fixed points by
+\begin{equation}\label{eq:mobius}
+\boxed{c_d(g;X)=\frac1d\sum_{r\mid d}\mu(d/r)\,|\Fix_X(g^r)|.}
+\end{equation}
+This single template covers Johnson $k$-subsets, Hamming schemes
+$S_q\wr S_D$, Grassmann schemes $\operatorname{Gr}_q(N,k)$, polar and
+dual-polar spaces, finite linear/projective/flag actions, and the projective
+odd-symplectic actions below.
+
+For $S_n$ on $k$-subsets, with $A_j(\sigma)$ the coordinate cycle counts,
+\begin{equation}\label{eq:subsetfixed}
+\boxed{|\Fix(\sigma^r)|=[u^k]\prod_{j=1}^{kr}
+(1+u^{j/\gcd(j,r)})^{\gcd(j,r)A_j(\sigma)}.}
+\end{equation}
+For Hamming words, fixed words are the product of the numbers of alphabet
+symbols fixed by the label product around each coordinate cycle. Grassmann
+and polar actions replace this by the count of invariant subspaces, with the
+isotropic/singular predicate in the polar case.
+
+\subsection{The hyperoctahedral group on the binary cube}
+For $B_n=\F_2^n\rtimes S_n$ acting affinely on $X_n=\F_2^n$, conditional on
+$\pi\in S_n$ with $C(\pi)$ coordinate cycles,
+\[
+F_n(b,\pi)=|\Fix(b+\pi\cdot)|=
+\begin{cases}2^{C(\pi)},&\text{with probability }2^{-C(\pi)},\\0,&\text{otherwise.}\end{cases}
+\]
+Therefore
+\begin{equation}\label{eq:cubemoments}
+\boxed{\mathbb E[F_n^m]=\frac{(2^{m-1})^{\overline n}}{n!}
+=\binom{n+2^{m-1}-1}{n}.}
+\end{equation}
+Signed coordinate-cycle types $(a_\ell,b_\ell)$, their exact weights
+$\prod_\ell((2\ell)^{a_\ell+b_\ell}a_\ell!b_\ell!)^{-1}$, the fixed-power
+law, and \eqref{eq:mobius} give the full finite-$n$ cube series. In particular
+$[m_{(2)}]=[m_{(1,1)}]=n+1$, so these coefficients do not stabilize.
+
+\section{Finite affine, Lie-type, and exceptional finite families}
+
+\subsection{Power characters, parabolic cycles, and bounded flags}
+For every honest complex representation of a finite group, character values
+on powers give the exact class-compressed formula
+\begin{equation}\label{eq:power-character}
+\boxed{\MGF_{G,V}=\sum_{[g]\subseteq G}\frac1{|C_G(g)|}
+\exp\!\left(\sum_{r\ge1}\frac{\chi_V(g^r)}r p_r\right).}
+\end{equation}
+Thus the conjugacy classes, power maps, and character table determine the
+entire Lambda-distribution.  In particular,
+\begin{equation}\label{eq:power-coefficient}
+\boxed{[m_\tau]\MGF_{G,V}=\frac1{|G|}\sum_{g\in G}\prod_j
+\left(\sum_{\lambda\vdash\tau_j}\frac1{z_\lambda}
+\prod_{r\ge1}\chi_V(g^r)^{m_r(\lambda)}\right).}
+\end{equation}
+
+For the coset action $X=G/H$, fixed points and cycles are
+\begin{equation}\label{eq:parabolic-fixed-cycle}
+\boxed{F_d(g;G/H)=\frac{|C_G(g^d)|}{|H|}|(g^d)^G\cap H|,\qquad
+c_r(g;G/H)=\frac1r\sum_{d\mid r}\mu(r/d)F_d(g;G/H).}
+\end{equation}
+Substitution in \eqref{eq:perm} is an exact formula for every finite
+Lie-type parabolic action $G/P$, including projective, Grassmann, polar, and
+fixed-shape partial-flag actions.  For conjugation on $G$,
+\begin{equation}\label{eq:finite-conjugation-cycles}
+\boxed{c_r^{\rm conj}(g)=\frac1r\sum_{d\mid r}\mu(r/d)|C_G(g^d)|,\qquad
+\MGF_{G,\rm conj}=\frac1{|G|}\sum_g\prod_{i,r}
+(1-t_i^r)^{-c_r^{\rm conj}(g)}.}
+\end{equation}
+
+Fix $q$ and a flag shape $\mathbf d=(d_1<\cdots<d_s)$ with $d=d_s$.
+For $X_n=\operatorname{Flag}_{\mathbf d}(\F_q^n)$ and $D=|\tau|$,
+\begin{equation}\label{eq:bounded-flag-stability}
+\boxed{[m_\tau]\MGF_{GL_n(q),X_n}\text{ is independent of $n$ for }n\ge dD.}
+\end{equation}
+The same range holds for $PGL_n(q)$; $SL_n(q)$ and $PSL_n(q)$ have the safe
+range $n>dD$.  The stable coefficient is the sum, over $r\le dD$, of
+$GL_r(q)$-orbits of spanning $\tau$-colored flag multisets.  Fixed-shape
+isotropic and singular flags in each symplectic, unitary, or separate
+orthogonal tower also stabilize after a finite tower-dependent threshold,
+with the restricted form included in the supported configuration data.
+Complete flags are excluded: $[m_{(1,1)}]=|W|$ already grows with rank.
+
+Steinberg and specified genuine Weil representations are obtained by inserting
+their characters in \eqref{eq:power-character}.  A Deligne--Lusztig virtual
+character gives a completed Grothendieck-ring series whose coefficients can be
+virtual.  A defining-characteristic linear action on $\mathfrak g(\F_q)$ is
+not automatically a complex representation; its finite-set conjugation action
+is an honest permutation alternative.
+
+Exact verification used the standard/Steinberg module of
+$S_3\cong GL_2(2)$, all $168$ matrices of $GL_3(2)$ on $G/P$, conjugation by
+$S_3$, and consecutive stable ranks for projective points and $2$-planes.  All
+26 coefficient and stability rows passed; the detailed proof and marimo
+notebook are included in the proof anthology.
+
+\subsection{Affine and finite classical actions}
+For $\operatorname{AGL}_n(q)$ on $\F_q^n$,
+\begin{equation}\label{eq:agl}
+\boxed{\MGF_{n,q}=\frac1{q^n|GL_n(q)|}\sum_{A,b}
+ \prod_r Q_r(\mathbf t)^{c_r(A,b)},\qquad
+Q_r=\prod_i(1-t_i^r)^{-1}.}
+\end{equation}
+The fixed-point calculation is the linear system
+$(I-A^r)x=(I+A+\cdots+A^{r-1})b$; coefficients stabilize for
+$n\ge|\tau|-1$.
+
+For nonzero vectors and projective points of finite linear groups,
+\[
+|\Fix_{\F_q^n\setminus0}(g^r)|=q^{\dim\ker(g^r-I)}-1,
+\quad
+|\Fix_{\mathbb P^{n-1}}(g^r)|=
+\sum_{\lambda\in\F_q^\times}\frac{q^{\dim\ker(g^r-\lambda I)}-1}{q-1}.
+\]
+For complete flags, $[m_{(1,1)}]=|W|$, so rank stability already fails in
+degree two. For stable polar point actions,
+$[m_{(2)}]=[m_{(1,1)}]=3$ (coincident, perpendicular, nonperpendicular).
+
+\subsection{$PSL_2(q)$, $\Delta$ groups, and code-monomial groups}
+For $PSL_2(q)$ on $\mathbb P^1(\F_q)$, grouping identity, unipotent, split,
+and nonsplit semisimple elements gives
+\begin{align*}
+\MGF=\frac1{|G|}\Big[&\ExpS((q+1)p_1)+(q^2-1)\ExpS(p_1+(q/p)p_p)\\
+&+\frac{q(q+1)}2\sum_{\substack{m\mid(q-1)/d\\m>1}}\!\varphi(m)
+\ExpS(2p_1+((q-1)/m)p_m)\\
+&+\frac{q(q-1)}2\sum_{\substack{m\mid(q+1)/d\\m>1}}\!\varphi(m)
+\ExpS(((q+1)/m)p_m)\Big],
+\end{align*}
+where $d=\gcd(2,q-1)$. The degree-three coefficient is $4+d$; the
+cross-ratio term makes degree four grow with $q$.
+
+For the standard $SU(3)$ monomial groups,
+\begin{equation}\label{eq:delta}
+\boxed{\MGF_{\Delta(3n^2)}=\tfrac13\mathcal A_n+\tfrac23\ExpS(p_3),
+\quad
+\MGF_{\Delta(6n^2)}=\tfrac16\mathcal A_n+\tfrac13\ExpS(p_3)+\tfrac12\mathcal B_n.}
+\end{equation}
+Here $\mathcal A_n$ averages the diagonal torus $N_n$, while $\mathcal B_n$
+is the root-of-unity average of the transposition-coset factor
+$((1-\eta^at_i^2)(1+\eta^{-a}t_i))^{-1}$.
+
+The code-monomial family $D(C)\rtimes H$ obeys the dual-code cycle rule
+described after \eqref{eq:grp}. Explicit groups of orders $8,24,18$ gave 57
+exact comparisons. The $\Delta$ families gave 240 comparisons, and the
+$PSL_2(q)$ actions gave 48.
+
+\section{Braid, Pauli, extraspecial, Clifford, and Barnes--Wall groups}
+
+\subsection{Finite braid images}
+The verified images are scalar cyclic quotients of $B_3$, the permutation
+quotient $B_3\twoheadrightarrow S_3$, and the finite Ising/Jones image. For a
+scalar cyclic image $C_m$ on dimension $d$,
+\[
+[m_\tau]\MGF=\mathbf1_{m\mid|\tau|}\prod_i\binom{d+\tau_i-1}{\tau_i}.
+\]
+For the $S_3$ permutation image, the three class spectra give the exact
+$1/6$ weighted identity/transposition/three-cycle formula. The Ising lift has
+an eighth-root scalar selection rule; the projective adjoint removes scalar
+dependence and is checked separately.
+
+\subsection{Qudit Pauli and scalar-extended Pauli groups}
+Let $q=p^f$ with odd $p$, $N=q^n$, and define
+\[
+A_\tau=\prod_i\binom{N+\tau_i-1}{\tau_i},\qquad
+B_\tau=\mathbf1_{p\mid\tau_i\ \forall i}
+\prod_i\binom{N/p+\tau_i/p-1}{\tau_i/p}.
+\]
+For the finite Pauli image,
+\begin{equation}\label{eq:pauli}
+\boxed{[m_\tau]\MGF_{P_{q,n}}=
+\begin{cases}0,&p\nmid|\tau|,\\q^{-2n}A_\tau+(1-q^{-2n})B_\tau,&p\mid|\tau|.
+\end{cases}}
+\end{equation}
+For $\widetilde P_{q,n}^{(s)}=\mu_sP_{q,n}$, replace the selection rule by
+$s\mid|\tau|$. The noncentral term has a \emph{plus} sign; the proposed
+qubit minus sign was disproved by the nonintegral coefficient it produced.
+
+\subsection{Extraspecial and Clifford groups}
+For an odd-$p$ extraspecial group of exponent $p$, the Pauli formula
+\eqref{eq:pauli} applies. Exponent $p^2$ splits the noncentral sector according
+to $g^p\in Z(E)$. For extraspecial $2$-groups of type
+$\varepsilon\in\{+1,-1\}$, $N=2^n$,
+\begin{align*}
+\MGF_{E^\varepsilon}={}&2^{-2n}\Pi_2\prod_j(1-t_j)^{-N}\\
+&+(\tfrac12+\varepsilon2^{-n-1}-2^{-2n})\prod_j(1-t_j^2)^{-N/2}
++(\tfrac12-\varepsilon2^{-n-1})\prod_j(1+t_j^2)^{-N/2}.
+\end{align*}
+This distinguishes $D_8$ from $Q_8$.
+
+For a Clifford group containing all scalars, the one-sided series is exactly
+$1$. The intrinsic object is the phase-neutral two-sided series
+\[
+[m_\alpha(\mathbf s)m_\beta(\mathbf t)]\mathcal B_G^0
+=\dim(\Sym^\alpha V\otimes\Sym^\beta V^*)^G,
+\qquad |\alpha|=|\beta|.
+\]
+Its $(1^k),(1^k)$ coefficient is the frame potential
+$|G|^{-1}\sum_g|\Tr g|^{2k}$, so
+\[
+G\text{ is a unitary }k\text{-design}\iff
+\Phi_k(G)=\sum_{\lambda\vdash k,\ \ell(\lambda)\le d}(f^\lambda)^2.
+\]
+
+\subsection{Real Clifford and Barnes--Wall layers}
+For the real extraspecial Pauli group $E_m$ with $N=2^m$,
+\begin{equation}\label{eq:realpauli}
+\boxed{\begin{aligned}
+\MGF_{E_m}=\frac1{2N^2}\Big[&\prod_j(1-t_j)^{-N}+\prod_j(1+t_j)^{-N}\\
+&+(N^2+N-2)\prod_j(1-t_j^2)^{-N/2}\\
+&+(N^2-N)\prod_j(1+t_j^2)^{-N/2}\Big].
+\end{aligned}}
+\end{equation}
+For $\mathcal C_m=N_{O(2^m)}(E_m)$,
+\[
+\MGF_{\mathcal C_m}=\frac1{|O^+(2m,2)|}\sum_{A\in O^+(2m,2)}
+ \frac1{|E_m|}\sum_{e\in E_m}\prod_j\det(I-t_je\widetilde A)^{-1}.
+\]
+The one-row stable coefficient $[m_{(2k)}]$ counts binary self-dual codes of
+length $2k$ up to isomorphism. For the Barnes--Wall lattice group
+$B_m\subset\mathcal C_m$ of index two,
+\begin{equation}\label{eq:bw}
+\boxed{\MGF_{B_m}=\MGF_{\mathcal C_m}+\MGF_{\mathcal C_m}^{\varepsilon_m}.}
+\end{equation}
+The twisted term is the lattice-sensitive sector.
+
+\section{Compact classical, exceptional, and Schur-functor families}
+
+\subsection{Defining representations of $SU(n)$, $SO(n)$, $O(n)$, and tori}
+For the defining $SU(n)$ module,
+\[
+\dim W_\tau^{SU(n)}=\begin{cases}K_{(q^n),\tau},&|\tau|=nq,\\0,&n\nmid|\tau|.
+\end{cases}
+\]
+For orthogonal groups,
+\[
+\dim W_\tau^{O(n)}=\sum_{\ell(2\delta)\le n}K_{2\delta,\tau},\qquad
+\dim W_\tau^{SO(n)}=\dim W_\tau^{O(n)}+
+\sum_{\ell(\delta)\le n}K_{2\delta+(1^n),\tau}.
+\]
+The row-length restriction is essential. For a weighted torus $T^r$,
+\[
+\MGF_{T^r,V}=\CT_{z_1,\ldots,z_r}\prod_{i,j}(1-t_i z^{w_j})^{-1}.
+\]
+
+\subsection{Exceptional and adjoint compact groups}
+All use the exact Weyl constant term \eqref{eq:weyl}. Their verified
+low-degree signatures are
+\begin{align*}
+\MGF_{G_2,7}&=1+h_2+e_3+O_{\ge4},\\
+\MGF_{\operatorname{Spin}(7),8}&=1+h_2+h_4+s_{(2,2)}+e_4+O_{\ge6},\\
+\MGF_{F_4,26}&=1+h_2+h_3+O_{\ge4},\\
+\MGF_{E_6,27}&=1+h_3+O_{\ge6},\quad \MGF(t)=(1-t^3)^{-1},\\
+\MGF_{E_7,56}&=1+e_2+h_4+s_{(2,2)}+e_4+O_{\ge6},\quad \MGF(t)=(1-t^4)^{-1},\\
+\MGF_{E_8,248}&=1+h_2+e_3+O_{\ge4},\\
+\MGF_{SU(2),\mathrm{Ad}}&=1+h_2+e_3+O_{\ge4},\\
+\MGF_{SU(n),\mathrm{Ad}}&=1+h_2+h_3+e_3+O_{\ge4}\quad(n\ge3).
+\end{align*}
+The $E_6$ center imposes $3\mid|\tau|$; the centers of $E_7$ and
+$\operatorname{Spin}(7)$ kill odd total degree. For $E_8$ the one-copy degrees
+are $2,8,12,14,18,20,24,30$.
+
+\subsection{Schur functors of $U(n)$, $O(n)$, and $USp(2n)$}
+For every partition $\lambda\vdash d$,
+\begin{equation}\label{eq:schurtrace}
+\boxed{\Tr(S_\lambda(g)^r)=s_\lambda[X(g^r)]
+=\sum_{\alpha\vdash d}\frac{\chi^\lambda(\alpha)}{z_\alpha}
+\prod_{a\in\alpha}\Tr(g^{ra}).}
+\end{equation}
+For nonempty $\lambda$, the purely holomorphic $U(n)$ series is $1$; the
+nontrivial series pairs the module with its conjugate. The stable orthogonal
+and symplectic coefficients are the plethystic pushforwards
+\[
+[m_\tau]\MGF^O_{\lambda,\infty}=\langle\ExpS(h_2),h_\tau[s_\lambda]\rangle,
+\qquad
+[m_\tau]\MGF^{Sp}_{\lambda,\infty}=\langle\ExpS(e_2),h_\tau[s_\lambda]\rangle.
+\]
+In both cases $d|\tau|$ odd forces zero. The trace limits are polynomial
+substitutions in Gaussian trace variables: circular complex for $U(n)$,
+$\sqrt{k}A_k+\mathbf1_{2\mid k}$ for $O(n)$, and
+$\sqrt{k}A_k-\mathbf1_{2\mid k}$ for $USp(2n)$.
+
+\subsection{Local unitary tensor products and conjugation}
+For $G=\prod_{a=1}^kU(d_a)$ on $V=\bigotimes_a\C^{d_a}$, the one-sided
+series is $1$. The balanced coefficient vanishes unless
+$|\alpha|=|\beta|$, and in stable bidegree
+\begin{equation}\label{eq:local}
+\boxed{\mathcal B_{G,V}\equiv\sum_\lambda z_\lambda^{k-2}
+p_\lambda(\mathbf s)p_\lambda(\mathbf t).}
+\end{equation}
+Exactly,
+$b_{(m),(m)}$ is the sum of squares of generalized Kronecker coefficients;
+for two factors it counts partitions of $m$ obeying the dimension cutoffs.
+
+For conjugation of $U(n)$ on $\operatorname{End}(\C^n)$,
+\begin{equation}\label{eq:conj}
+\boxed{\MGF=\int_{U(n)}\exp\!\left(\sum_{k\ge1}\frac{p_k}{k}
+|\Tr(g^k)|^2\right)dg.}
+\end{equation}
+Finite coefficients are sums of squares of Littlewood--Richardson
+multiplicities. For $n\ge|\tau|$ they count $H_\tau$-conjugacy orbits in
+$S_{|\tau|}$, equivalently multisets of colored necklaces, giving the stable
+Euler product $\prod_N(1-\operatorname{wt}N)^{-1}$.
+
+\subsection{Proctor's odd symplectic group}
+The complex stabilizer is
+$W^*\rtimes(Sp_{2n}(\C)\times\C^\times)$ and is noncompact, so a normalized
+Haar expectation does not exist. Its full algebraic covariant-invariant
+series is $1$. The maximal compact replacements are
+\[
+\MGF_{Sp(n)\times U(1),\,W\oplus\chi}=\MGF_{Sp(n),W},\qquad
+\MGF_{Sp(n),\,W\oplus\mathbf1}=\MGF_{Sp(n),W}\prod_i(1-t_i)^{-1}.
+\]
+Over $\F_q$, the honest complex permutation module on $\mathbb P(W\oplus L)$
+obeys \eqref{eq:perm}; it has two point orbits, so $[m_{(1)}]=2$.
+
+\section{Polyhedral, sporadic, and special 24-dimensional groups}
+
+For a three-dimensional rotation through $\theta$, put
+\[
+\Phi_\theta=\prod_i\big((1-t_i)(1-2\cos\theta\,t_i+t_i^2)\big)^{-1}.
+\]
+The $A_4,S_4,A_5$ rotation series are the class-weighted averages of
+$\Phi_\theta$ with their usual angle counts. Adjoining negatives gives the
+$H_3$ reflection group; its one-variable Molien series is
+$((1-t^2)(1-t^6)(1-t^{10}))^{-1}$. The binary lifts $2T,2O,2I\le SU(2)$
+replace $\theta$ by paired half-angle spectra; $-I$ kills all odd degrees.
+The tested $A_5$ modules include the permutation, deleted-permutation, and
+three-dimensional rotation representations.
+
+For the $M_{24}$ permutation action, if a class has cycle shape
+$\prod_r r^{c_r(C)}$,
+\[
+\boxed{\MGF_{M_{24}}=\sum_C\frac{|C|}{|M_{24}|}
+\prod_{i,r}(1-t_i^r)^{-c_r(C)}.}
+\]
+Five-transitivity gives agreement with $S_{24}$ through degree five; the first
+extra orbit occurs at degree six. For the Leech representation of $Co_0$ with
+frame shape $\prod_r r^{k_r(C)}$,
+\[
+\boxed{\MGF_{Co_0}=\sum_C\frac{|C|}{|Co_0|}
+\prod_{i,r}(1-t_i^r)^{-k_r(C)},\qquad [m_\tau]=0\text{ for odd }|\tau|.}
+\]
+The signed-coordinate subgroup checks are not promoted to full-$Co_0$
+coefficients.
+
+\section{Nonuniform measures, heat flow, and limiting laws}
+
+For a finite walk $\nu=\kappa^{*r}$, representation Fourier transforms obey
+$\widehat\nu(W)=\widehat\kappa(W)^r$. For a cyclic diagonal representation,
+\[
+[m_\tau]\MGF_{\nu,V}=\sum_{q\bmod m}M_\tau(q)\widehat\nu(q).
+\]
+For a probability measure on $S_n$, the permutation series is the transformed
+cycle-count PGF
+$\mathbb E_\nu\prod_dQ_d(\mathbf t)^{C_d}$. This covers random transpositions,
+random 3-cycles, adjacent transpositions, riffle shuffles, Ewens measures, and
+general cycle weights. For Ewens parameter $\theta$,
+\[
+\MGF_{n,\theta}=\frac{[z^n]\exp(\theta\sum_{d\ge1}Q_dz^d/d)}
+{[z^n]\exp(\theta\sum_{d\ge1}z^d/d)}.
+\]
+
+For $U(1)$ heat time $t$ and a weight decomposition
+$W_\tau=\bigoplus_wM_\tau(w)\C_w$,
+\begin{equation}\label{eq:heat}
+\boxed{[m_\tau]\MGF_t=\sum_{w\in\mathbb Z}M_\tau(w)e^{-w^2t/2}.}
+\end{equation}
+This interpolates from dimension at $t=0$ to Haar invariants as
+$t\to\infty$.
+
+For fixed $k$, the $S_n$ action on $k$-subsets has the fixed-power formula
+\eqref{eq:subsetfixed}. With independent $Z_j\sim\operatorname{Poisson}(1/j)$,
+\[
+F_{k,r}^{(\infty)}=[u^k]\prod_{j=1}^{kr}
+(1+u^{j/\gcd(j,r)})^{\gcd(j,r)Z_j},
+\quad
+\MGF_\infty^{(k)}=\sum_\lambda\frac{\mathbb E\prod_aF_{k,\lambda_a}^{(\infty)}}
+{z_\lambda}p_\lambda.
+\]
+For $k\ge2$ this limit is non-Poisson; its variance is $k$.
+
+For a rooted tree whose branch isomorphism types $A$ occur with multiplicity
+$m_A$,
+\begin{equation}\label{eq:tree}
+\boxed{\MGF_T(\mathbf t)=\prod_A[u_A^{m_A}]
+\exp\!\left(\sum_{\ell\ge1}\frac{u_A^\ell}{\ell}\MGF_A(\mathbf t^\ell)\right).}
+\end{equation}
+This is exact for every finite tree. A general random-tree Lambda limit remains
+a separate probabilistic problem.
+
+\section{New-distribution formula and asymptotic ledger}
+
+This section indexes every canonical note merged from \path{new_dists/}.
+Each displayed expression is an explicit sigma-MGF (or the explicitly marked
+projective/balanced replacement), rather than only a coefficient recipe.  The
+full hypotheses, proofs, exceptional cases, and verification tables appear in
+the final part of the proof anthology.
+
+\subsection{Association-scheme permutation groups}
+For any of the Johnson, Hamming, Doob, Grassmann, polar, building, translation,
+or distance-regular actions $G\curvearrowright X$, define
+\[
+ F_r(g)=|\Fix_X(g^r)|,\qquad
+ c_d(g)=\frac1d\sum_{r\mid d}\mu(d/r)F_r(g).
+\]
+Then the explicit group/action series is
+\begin{equation}\label{eq:new-association}
+ \boxed{\MGF_{G,X}=\frac1{|G|}\sum_{g\in G}
+ \prod_{i,d\ge1}(1-t_i^d)^{-c_d(g)}.}
+\end{equation}
+For example, if $\lambda=1^{m_1}2^{m_2}\cdots\vdash v$,
+\[
+ F_r^{J(v,k)}(\lambda)=[u^k]\prod_{j\ge1}
+ (1+u^{j/\gcd(j,r)})^{m_j\gcd(j,r)},
+\quad
+ \MGF_{J(v,k)}=\sum_{\lambda\vdash v}\frac1{z_\lambda}
+ \prod_{i,d}(1-t_i^d)^{-c_d^J(\lambda)}.
+\]
+\paragraph{Asymptotics.}
+For fixed $k$ and total degree $D$, Johnson and Grassmann coefficients stabilize
+once the ambient rank is at least $kD$.  Hamming coefficients stabilize in the
+alphabet size for $q\ge D$.  If both geometric parameters grow, pair-orbit
+counts such as $\min(k,v-k)+1$, $d+1$, or $|W|$ can diverge, obstructing a raw
+coefficientwise limit.
+
+\subsection{Primitive-action families}
+For an almost-simple coset action $G/M$, the substitution
+\[
+ F_r(g)=\frac{|C_G(g^r)|\,|(g^r)^G\cap M|}{|M|}
+\]
+in \eqref{eq:new-association} is the explicit MGF.  For diagonal, product,
+twisted-wreath, holomorph-simple, and holomorph-compound actions, the same
+series holds with the family-specific fixed-power products recorded in the
+proof anthology.  In particular, for $H\wr S_n$ on $\Omega^n$,
+\[
+ F_r(h;\pi)=\prod_{C\in\Cyc(\pi)}
+ |\Fix_\Omega(h_C^{r/e_C})|^{e_C},\qquad e_C=\gcd(|C|,r).
+\]
+\paragraph{Asymptotics.}
+Almost-simple sequences require family data; product-action pair moments grow
+polynomially, while diagonal-type moments grow by centralizer powers.  These
+are generally multiset or critical-branching limits, not a universal ordinary
+compound-Poisson law.
+
+\subsection{Finite local-ring actions}
+Let $R_a=\mathcal O/\pi^a\mathcal O$ with residue field $\F_q$, and let
+$K_b(A)$ be the kernel size of $A$ over $R_b$.  The primitive-vector and
+projective-point series for $\GL_n(R_a)$ are
+\begin{align*}
+ \MGF^{\rm prim}_{n,a}
+ &=\frac1{|\GL_n(R_a)|}\sum_h\prod_{i,r}(1-t_i^r)^{-
+ \frac1r\sum_{d\mid r}\mu(r/d)[K_a(h^d-I)-K_{a-1}(h^d-I)]},\\
+ \MGF^{\rm proj}_{n,a}
+ &=\frac1{|\GL_n(R_a)|}\sum_h\prod_{i,r}(1-t_i^r)^{-
+ \frac1r\sum_{d\mid r}\mu(r/d)F_d^{\rm proj}(h)},\\
+ F_d^{\rm proj}(h)
+ &=\frac1{|R_a^\times|}\sum_{u\in R_a^\times}
+ [K_a(h^d-uI)-K_{a-1}(h^d-uI)].
+\end{align*}
+\paragraph{Asymptotics.}
+Fixed level and bounded degree give rank stability, but level growth does not:
+$[m_{(1,1)}]\MGF^{\rm prim}=q^a$ and
+$[m_{(1,1)}]\MGF^{\rm proj}=a+1$ in stable rank.
+
+\subsection{Code-monomial matrix groups}
+For $C\le(\mathbb Z/r)^N$, $P\le\Aut_{\rm perm}(C)$, and
+$G(C,P)=D(C)\rtimes P$, write
+\[
+ H_a(\mathbf t)=\frac1r\sum_{s=0}^{r-1}\zeta^{-as}
+ \prod_i(1-\zeta^st_i)^{-1}.
+\]
+The explicit weighted-cycle and dual-code forms are
+\begin{equation}\label{eq:new-code}
+ \boxed{\MGF_{C,P}=\frac1{|C||P|}\sum_{\pi,c}
+ \prod_{i,Q\in\Cyc(\pi)}
+ (1-\zeta^{\sum_{j\in Q}c_j}t_i^{|Q|})^{-1}
+ =\frac1{|P|}\sum_\pi\sum_{\substack{u\in C^\perp\\u\text{ constant on }Q}}
+ \prod_QH_{u_Q}(\mathbf t^{|Q|}).}
+\end{equation}
+For $P=1$, this is the complete weight enumerator
+$\MGF_{D(C)}=\operatorname{cwe}_{C^\perp}(H_0,\ldots,H_{r-1})$.
+\paragraph{Asymptotics.}
+Length-growing families stabilize only under bounded-support orbit and
+dual-code conditions.  Pure diagonal families already have
+$[m_r]\MGF\ge N$, and many semidirect families have a diverging
+$[m_{r,r}]$ coefficient.
+
+\subsection{Multiplicative wreath and tensor-induced representations}
+For $G_n=H\wr S_n$, an $H$-wreath type $\boldsymbol\mu$, and its power
+transform $\boldsymbol\mu^{[r]}$,
+\begin{equation}\label{eq:new-wreath-class}
+ \boxed{\MGF_{G_n,W}=\sum_{\boldsymbol\mu\vdash_Hn}
+ \frac1{Z_{\boldsymbol\mu}}
+ \exp\!\left(\sum_{r\ge1}\frac{p_r}{r}
+ \chi_W(\boldsymbol\mu^{[r]})\right).}
+\end{equation}
+For the product action on $\Omega^n$, use the fixed-power product in the
+preceding subsection and \eqref{eq:new-association}.  For $V^{\otimes n}$,
+\[
+ \chi(g^r)=\prod_{Q\in\Cyc(\pi)}
+ \chi_V(h_Q^{r/e_Q})^{e_Q},\qquad e_Q=\gcd(|Q|,r),
+\]
+inside \eqref{eq:new-wreath-class}.
+\paragraph{Asymptotics.}
+Additive block modules have compound-Poisson limits.  Product and tensor
+modules usually do not: if $R_s=\#(H\backslash\Omega^s)$ then
+$[m_{(1^s)}]=\binom{n+R_s-1}{R_s-1}$, and the analogous tensor coefficient
+uses $a_s=\dim(V^{\otimes s})^H$.
+
+\subsection{Central extensions and projective representations}
+If $1\to Z\to\widetilde G\to G\to1$ and $Z$ acts through $\mu_r$, then
+\begin{equation}\label{eq:new-central}
+ \boxed{\MGF_{\widetilde G,V}=\frac1{|G|}\sum_{g\in G}\frac1r
+ \sum_{\zeta\in\mu_r}\prod_i\det(I-\zeta t_i\rho(\widetilde g))^{-1},
+ \quad [m_\tau]=0\ \text{unless }r\mid|\tau|.}
+\end{equation}
+For a genuinely projective representation, the lift-independent object is
+\[
+ \boxed{\mathcal B^{\rm proj}_{G,[V]}(\mathbf s,\mathbf t)=
+ \CTu\int_G\prod_i\det(I-us_iU_g)^{-1}
+ \prod_j\det(I-u^{-1}t_jU_g^{-*})^{-1}\,dg.}
+\]
+This covers Schur/spin covers, extraspecial central products, Weil lifts,
+Clifford groups, determinant-one lifts, and sporadic covers.
+\paragraph{Asymptotics.}
+Finite scalar order gives congruence sectors; a continuous scalar center makes
+the one-sided series equal to $1$.  Balanced design moments may stabilize,
+while one-sided lift-dependent coefficients need not.
+
+\subsection{Braid, TQFT, and quantum-image groups}
+For a finite braid image $I$ with represented character $\chi$,
+\[
+ \boxed{\MGF_{I,V}=\sum_{[x]\subseteq I}\frac1{|C_I(x)|}
+ \exp\!\left(\sum_{r\ge1}\frac{p_r}{r}\chi(x^r)\right).}
+\]
+For a monomial image $x=D(\alpha)P_\pi$, this becomes
+$|I|^{-1}\sum_x\prod_{i,C}(1-\alpha_C(x)t_i^{|C|})^{-1}$.
+Infinite images use the normalized Haar measure on the compact closure, not a
+finite-image average.  The Ising lift has order $192$ and scalar center
+$\mu_8$, so only total degrees divisible by eight survive.
+\paragraph{Asymptotics.}
+Dense $U(d)$ closure has one-sided series $1$; stable orthogonal and
+symplectic closures are governed by contraction algebras.  Varying finite
+images or fusion dimensions have no representation-free limit.
+
+\subsection{Lattice automorphism groups}
+For a positive-definite lattice $L$, write
+$\det(I-tg)=\prod_m(1-t^m)^{a_m(g)}$.  Then
+\begin{equation}\label{eq:new-lattice}
+ \boxed{\MGF_L=\sum_{[g]\subseteq\Aut(L)}\frac1{|C_{\Aut(L)}(g)|}
+ \prod_{i,m}(1-t_i^m)^{-a_m(g)}.}
+\end{equation}
+Since $-I\in\Aut(L)$, every odd-total-degree coefficient vanishes.
+\paragraph{Asymptotics.}
+Type $A$ has a Poisson-cycle limit; signed-permutation $B/C/D$ towers have a
+stable signed-cycle law; repeated orthogonal sums have a marked
+compound-Poisson limit.  Niemeier and isolated extremal/modular lattices are
+finite collections, not intrinsic rank towers.
+
+\subsection{Sporadic groups: the explicit $M_{11}$ series}
+With $Z_\lambda=\prod_{i,r}(1-t_i^r)^{-c_r(\lambda)}$,
+\[
+ \boxed{\begin{aligned}
+ \MGF_{M_{11},\C^{11}}=\frac1{7920}\big(&Z_{1^{11}}
+ +165Z_{1^3\,2^4}+440Z_{1^2\,3^3}+990Z_{1^3\,4^2}\\
+ &+1584Z_{1\,5^2}+1320Z_{2\,3\,6}
+ +1980Z_{1\,2\,8}+1440Z_{11}\big).
+ \end{aligned}}
+\]
+The deleted permutation module $W$ has the explicit series
+\[
+ \MGF_{M_{11},W}=\prod_i(1-t_i)\MGF_{M_{11},\C^{11}}.
+\]
+\paragraph{Asymptotics.}
+There is no canonical sequence through the sporadic groups.  For a fixed
+representation the formula is a rational function and ordinary coefficient
+asymptotics apply; covers and other modules require their own represented
+character and power maps.
+
+\subsection{Solvable and finite-subgroup families}
+For the natural monomial lamplighter representation
+$L_{r,n}=\mu_r^n\rtimes C_n$, let
+$A_{r,\ell}=r^{-1}\sum_{\zeta^r=1}\prod_i(1-\zeta t_i^\ell)^{-1}$.  Then
+\[
+ \boxed{\MGF^{\rm mon}_{L_{r,n}}=\frac1n\sum_{\ell\mid n}
+ \varphi(\ell)A_{r,\ell}^{n/\ell}.}
+\]
+For $M(m,n,u)=\langle a,b\mid a^m=b^n=1,\ bab^{-1}=a^u\rangle$ in its
+induced monomial representation,
+\[
+ \boxed{\MGF_{M(m,n,u)}=\frac1{mn}\sum_{x,y}
+ \prod_{i,C\in\Cyc(y)}(1-\alpha_C(x,y)t_i^{|C|})^{-1}.}
+\]
+The affine lamplighter, Frobenius, unitriangular/Borel/parabolic, finite
+unitary/symplectic, and reflection-wreath cases use
+\eqref{eq:new-association}, the class-power formula, or
+\eqref{eq:wreath} according to the stated representation.
+\paragraph{Asymptotics.}
+The monomial lamplighter has a linearly growing $[m_{r,r}]$ coefficient; the
+affine action has necklace growth asymptotic to $r^n/n$.  Reflection wreath
+blocks have a genuine compound-Poisson limit; isolated finite subgroups do not
+form a canonical rank tower.
+
+\subsection{Compact Spin and Pin groups}
+For the type-$B_n$ spin module $\Delta_n$,
+\begin{equation}\label{eq:new-spin}
+ \boxed{\MGF_{\operatorname{Spin}(2n+1),\Delta_n}=
+ \frac1{2^nn!}\CT_z\!\left[\mathcal D_{B_n}(z)
+ \exp\!\left(\sum_{r\ge1}\frac{p_r}{r}
+ \prod_{j=1}^n(z_j^{r/2}+z_j^{-r/2})\right)\right].}
+\end{equation}
+Type $D_n$ half-spin replaces the $B_n$ denominator and character by the
+parity-selected half-spin weights.  Pin$^\pm(N)$ is the half-sum of the Spin
+integral and the appropriate odd-component integral.
+\paragraph{Asymptotics.}
+$\dim(\Delta_n^{\otimes4})^{\operatorname{Spin}(2n+1)}=n+1$; half-spin fourth
+moments also grow linearly by parity.  Hence the unnormalized spinor and
+half-spin sigma-MGFs have no finite coefficientwise large-rank limit.
+
+\subsection{Non-Haar Fourier-weighted laws}
+For an arbitrary probability measure $\nu$ on a finite or compact group,
+\begin{equation}\label{eq:new-nonhaar}
+ \boxed{\MGF_{\nu,V}=\int_G\exp\!\left(\sum_{r\ge1}\frac{p_r}{r}
+ \chi_V(g^r)\right)d\nu(g),\quad
+ [m_\tau]\MGF_{\nu^{*k},V}=\sum_{\pi\in\widehat G}
+ m_\pi(W_\tau)\Tr(\widehat\nu(\pi)^k).}
+\end{equation}
+For a central walk this reduces to
+$\sum_\pi m_\pi(W_\tau)d_\pi\theta_\pi^k$.
+\paragraph{Asymptotics.}
+For fixed $G$, the largest nontrivial Fourier eigenvalue visible in $W_\tau$
+gives the exact leading approach to Haar.  Heat kernels replace it by
+$e^{-t\kappa_\pi/2}$; growing-rank cutoff claims require a fixed metric
+normalization.
+
+\subsection{Symmetric, spin-cover, Lie, Foulkes, and tree families}
+For an $S_n$-module with Frobenius characteristic $f_n$,
+\begin{equation}\label{eq:new-frobenius}
+ \boxed{\MGF_{V_n}=\sum_{\mu\vdash n}\frac1{z_\mu}
+ \exp\!\left(\sum_{r\ge1}\frac{p_r}{r}
+ z_{\mu^{[r]}}[p_{\mu^{[r]}}]f_n\right).}
+\end{equation}
+This specializes to Specht, Schur-cover genuine, Foulkes, and free-Lie modules
+(for the latter, $f_n=n^{-1}\sum_{d\mid n}\mu(d)p_d^{n/d}$).  Rooted-tree
+leaf actions use the exact recursive cycle polynomial and the general
+permutation MGF \eqref{eq:new-association}.
+\paragraph{Asymptotics.}
+Fixed-tail Specht modules have polynomial Poisson-chaos limits.  Growing
+Foulkes shapes, free-Lie modules, and level-transitive rooted-tree actions have
+diverging low moments and no raw coefficientwise limit; arbitrary random trees
+need a separately specified probabilistic model.
+
+\section{Verification ledger and corrections}
+
+\begingroup\small
+\setlength{\LTpre}{3pt}\setlength{\LTpost}{4pt}
+\begin{longtable}{@{}p{0.25\linewidth}p{0.50\linewidth}r@{}}
+\toprule
+Family & Independent evidence & Reported checks\\\midrule
+\endhead
+Association schemes & matrices, cycle products, geometric fixed points, orbit traversal & 66\\
+Matrix-group formula suite & compact kernels, finite Reynolds averages, spectral classes, dual-code counts & 928\\
+Schur functors $U/O/USp$ & explicit Young-symmetrizer matrices versus plethystic traces & 120\\
+$\Delta(3n^2),\Delta(6n^2)$ & explicit matrices versus $Q_n/R_n$ coefficient formulas & 240\\
+Nonuniform $S_n$ & direct matrices versus cycle transform and Fourier operators & 267\\
+$U(1)$ heat flow & quadrature versus weight/Casimir attenuation & 285\\
+Hyperoctahedral cube & explicit $2^n$-dimensional matrices versus signed-cycle law & all $n\le5$\\
+Rooted trees & recursive matrix closures versus wreath recurrence & 30\\
+Generalized dihedral & Reynolds ranks versus classified spectral formula & 33\\
+Odd symplectic & compact constant terms, vanishing certificate, finite permutation groups & 76\\
+Other packages & package-specific exact/numerical suites documented in their PDFs & pass\\
+\bottomrule
+\end{longtable}
+\endgroup
+
+The consolidated work establishes the following corrections and boundaries:
+\begin{itemize}
+\item Orthogonal Schur shapes require $\ell(\lambda)\le n$.
+\item A three-dimensional rotation factor is
+$(1-t)^{-1}(1-2\cos\theta\,t+t^2)^{-1}$.
+\item The scalar-extended qubit Pauli noncentral sector has a plus sign.
+\item One-sided holomorphic series collapse to $1$ whenever a continuous
+scalar center acts nontrivially; balanced two-sided series carry the content.
+\item Proctor's complex odd symplectic group is noncompact and has no
+normalized Haar probability.
+\item Stable-range, finite-rank, numerical-Haar, and exact finite-group claims
+are kept distinct throughout.
+\end{itemize}
+
+\paragraph{Artifact map.}
+Sources live in \path{proved_matrix_groups/packages/},
+\path{proved_matrix_groups/documents/}, and \path{new_dists/}.  All repository
+marimo laboratories are centralized and cataloged under
+\path{marimo_notebooks/}; the exact backends and pytest entry points remain
+beside their group-family sources. The legacy paths
+\path{for_this_guy/} and \path{output/pdf/for_this_guy/} are compatibility
+links. This compendium indexes, but does not replace, the detailed proofs.
+
+\end{document}

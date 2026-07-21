@@ -1,0 +1,100 @@
+\documentclass[11pt]{article}
+\usepackage[margin=0.85in]{geometry}
+\usepackage{amsmath,amssymb,mathtools,booktabs,microtype,xcolor,fancyhdr,hyperref}
+\definecolor{navy}{HTML}{17365D}\definecolor{teal}{HTML}{147D78}\definecolor{red}{HTML}{9B2C2C}
+\hypersetup{colorlinks=true,linkcolor=navy,urlcolor=teal}
+\pagestyle{fancy}\setlength{\headheight}{14pt}\fancyhf{}\lhead{Scalar-extended Pauli groups}\rhead{Proof and verification}\cfoot{\thepage}
+\newcommand{\Sgm}{\mathcal S}
+\title{\color{navy}\bfseries Scalar-Extended Pauli Sigma--MGFs\\\large Proof, qubit recovery, and sign correction}
+\author{Computational verification note}\date{17 July 2026}
+\begin{document}\maketitle
+\begin{abstract}
+We prove the coefficient form of the scalar-extended Pauli formula and test
+the complete matrix groups $\mu_4P_{2,1}$, $\mu_4P_{2,2}$, and
+$\mu_6P_{3,1}$.  All 13 representative checks pass.  The calculation also
+locates a sign error in the supplied qubit-recovery prose: equation (13)
+specializes with a positive, projected noncentral sector, not a minus sign.
+\end{abstract}
+
+\section{Formula and proof}
+Let $q=p^f$, $N=q^n$, and let $s$ be divisible by $p$.  For the finite lift
+$\widetilde P_{q,n}^{(s)}=\mu_sP_{q,n}$, its distinct matrices may be indexed
+by $\alpha\in\mu_s$ and $v\in\mathbb F_q^{2n}$, so its order is $sq^{2n}$.
+For odd $p$ use the usual phase-normalized Weyl operators.  For qubits we use
+$\{I,X,Z,iXZ\}$ on each tensor factor and adjoin $\mu_4$.
+
+If $v=0$, the matrix is $\alpha I_N$.  If $v\ne0$, the $p$ spectral branches
+of the phase-normalized $W(v)$ occur with multiplicity $N/p$, and therefore
+\[
+\det(I-t\alpha W(v))=(1-\alpha^p t^p)^{N/p}.
+\]
+Averaging these two sectors proves
+\begin{equation}\label{eq:scalar}
+\Sgm_{\widetilde P}(\mathbf t)=
+q^{-2n}\frac1s\sum_{\alpha\in\mu_s}\prod_j(1-\alpha t_j)^{-N}
++(1-q^{-2n})\frac1s\sum_{\alpha\in\mu_s}
+\prod_j(1-\alpha^pt_j^p)^{-N/p}.
+\end{equation}
+Root-of-unity orthogonality forces $s\mid|\tau|$ in both sectors.  Thus,
+with
+\[
+A_\tau=\prod_i\binom{N+\tau_i-1}{\tau_i},\qquad
+B_\tau=\mathbf1_{p\mid\tau_i\ \forall i}
+\prod_i\binom{N/p+\tau_i/p-1}{\tau_i/p},
+\]
+the coefficient formula is
+\begin{equation}\label{eq:coeff}
+[m_\tau]\Sgm_{\widetilde P}=\begin{cases}
+0,&s\nmid|\tau|,\\
+q^{-2n}A_\tau+(1-q^{-2n})B_\tau,&s\mid|\tau|.
+\end{cases}
+\end{equation}
+
+\section{Qubit specialization and correction}
+For $p=q=2$, $s=4$, equation \eqref{eq:scalar} gives
+\[
+4^{-n}\Pi_4\prod_j(1-t_j)^{-2^n}
++(1-4^{-n})\frac14\sum_{\alpha\in\mu_4}
+\prod_j(1-\alpha^2t_j^2)^{-2^{n-1}}.
+\]
+The second summand is an average of determinant reciprocals and has positive
+coefficients in allowed multidegrees.  In particular, for one qubit,
+\[
+[t^4]\Sgm=\tfrac14\binom{5}{4}+\tfrac34\binom{2}{2}=2.
+\]
+The supplied “qubit recovery” paragraph instead writes a minus before the
+noncentral term, which would give $1/2$, not even an integer invariant
+dimension.  Therefore that minus sign cannot be correct.  Equation (13)
+itself, interpreted as the root-of-unity average above, is consistent with
+the direct matrices and with \eqref{eq:coeff}.
+
+\section{Verification strategy and results}
+For each matrix the verifier computes the coefficients $h_d$ of
+$\det(I-tg)^{-1}$ from its eigenvalues, then independently averages
+$\prod_i h_{\tau_i}(g)$ over every group matrix.  It compares this character
+average with \eqref{eq:coeff}.  Representative results are:
+\begin{center}
+\begin{tabular}{@{}lrrr@{}}\toprule
+group & $\tau$ & direct & formula\\\midrule
+$\mu_4P_{2,1}$ & $(2)$&0&0\\
+$\mu_4P_{2,1}$ & $(4)$&2&2\\
+$\mu_4P_{2,1}$ & $(2,2)$&3&3\\
+$\mu_4P_{2,2}$ & $(4)$&5&5\\
+$\mu_4P_{2,2}$ & $(4,4)$&85&85\\
+$\mu_6P_{3,1}$ & $(3)$&0&0\\
+$\mu_6P_{3,1}$ & $(6)$&4&4\\
+$\mu_6P_{3,1}$ & $(5,1)$&7&7\\\bottomrule
+\end{tabular}
+\end{center}
+All 13 built-in comparisons pass to $2\times10^{-8}$.  The cases $(2)$ for
+$s=4$ and $(3)$ for $s=6$ directly exercise the stronger scalar selection
+rule, while $(3,1)$ and $(5,1)$ test mixed symmetric powers.
+
+\section{Reproduction}
+\begin{verbatim}
+.venv/bin/python for_this_guy/quantum_matrix_groups/
+  scalar_extended_pauli/verification.py
+.venv/bin/marimo edit marimo_notebooks/scalar_extended_pauli.py
+\end{verbatim}
+Join each displayed command onto one shell line.
+\end{document}

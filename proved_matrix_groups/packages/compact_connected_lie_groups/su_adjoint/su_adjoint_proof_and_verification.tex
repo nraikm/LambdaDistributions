@@ -1,0 +1,69 @@
+\documentclass[10pt]{article}
+\usepackage[margin=0.9in]{geometry}\usepackage{amsmath,amssymb,booktabs,microtype,xcolor,fancyhdr}\usepackage[hidelinks]{hyperref}
+\definecolor{navy}{RGB}{24,55,95}\pagestyle{fancy}\fancyhf{}\lhead{$SU(n)$ adjoint}\rhead{Proof and small-$n$ verification}\cfoot{\thepage}\setlength{\headheight}{14pt}
+\newcommand{\Sg}{\mathcal S}\newcommand{\CT}{\operatorname{CT}}
+\title{\color{navy}\textbf{The adjoint $SU(n)$ sigma-MGF}\\[1mm]\large Proof and exact checks for $n=2,3,4$}
+\author{Computational proof companion}\date{17 July 2026}
+\begin{document}\maketitle
+\begin{abstract}
+We derive the compact Molien--Weyl formula for the adjoint representation of
+$SU(n)$ and test the manageable cases $n=2,3,4$.  Exact Schur-character
+integration confirms the quadratic Killing form, the alternating bracket
+tensor, and the symmetric cubic precisely when $n\ge3$.
+\end{abstract}
+
+\section{Formula}
+The adjoint weights of $SU(n)$ are zero with multiplicity $n-1$ and
+$e_i-e_j$ for $i\ne j$.  The general Haar/Cauchy proof yields
+\[
+ \boxed{\Sg_{SU(n),\mathrm{Ad}}=
+ \frac1{n!}\CT_z\left[D_{A_{n-1}}(z)
+ \prod_a(1-t_a)^{-(n-1)}
+ \prod_{i\ne j}(1-t_a z_i/z_j)^{-1}\right].}
+\]
+Indeed, expanding the determinant gives
+$\sum_\lambda s_\lambda(\mathbf t)\chi_{\mathbb S_\lambda\mathfrak{sl}_n}$;
+Haar integration retains exactly the invariant multiplicity.
+
+\section{Low-degree structure}
+The Killing form supplies $h_2$, and
+$\kappa(X,[Y,Z])$ supplies $e_3$ for every $n\ge2$.  For $n\ge3$ there is also
+the symmetric invariant
+\[
+ (X,Y,Z)\longmapsto\operatorname{Tr}(XYZ+XZY),
+\]
+which supplies $h_3$.  For $SU(2)$ it vanishes.  Thus, through degree three,
+\[
+ \Sg_{SU(2),\mathrm{Ad}}=1+h_2+e_3+O_{\ge4},
+\]
+and, for $n\ge3$,
+\[
+ \Sg_{SU(n),\mathrm{Ad}}=1+h_2+h_3+e_3+O_{\ge4}.
+\]
+Chevalley restriction gives
+$\Sg(t,0,\ldots)=\prod_{d=2}^n(1-t^d)^{-1}$.
+
+\section{Direct and exact verification}
+For each $n=2,3,4$, the notebook generates the $A_{n-1}$ roots, appends the
+correct zero weights, and constructs the diagonal adjoint torus matrix.
+It compares the determinant with the product over eigenvalues.  It then
+computes every partition of degrees zero through three by Jacobi--Trudi and
+applies the exact Weyl functional
+\[
+ \frac1{|W|}\CT(Df)=\CT\left(f\prod_{\alpha>0}(1-z^{-\alpha})\right).
+\]
+
+\begin{center}\small
+\begin{tabular}{@{}c|c|rrrr@{}}\toprule
+$n$&$\dim\mathfrak{sl}_n$&$[h_2]$&$[h_3]$&$[e_3]$&all other $d\le3$\\\midrule
+2&3&1&0&1&0\\
+3&8&1&1&1&0\\
+4&15&1&1&1&0\\\bottomrule
+\end{tabular}
+\end{center}
+All 21 partition-by-case comparisons pass.  The tested representation
+dimensions $3,8,15$ are large enough to distinguish the exceptional $n=2$
+behavior from the stable $n\ge3$ cubic while remaining directly inspectable.
+
+\paragraph{Reproducibility.} Run \texttt{marimo\_notebooks/lie\_group\_su\_adjoint.py} with marimo.
+\end{document}

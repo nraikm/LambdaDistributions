@@ -1,0 +1,148 @@
+\documentclass[10pt]{article}
+\usepackage[margin=0.84in]{geometry}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{booktabs,tabularx}
+\usepackage[dvipsnames]{xcolor}
+\usepackage[colorlinks=true,linkcolor=NavyBlue,urlcolor=BrickRed,hypertexnames=false]{hyperref}
+\usepackage{microtype,fancyhdr,enumitem}
+\definecolor{ink}{HTML}{19332D}
+\definecolor{accent}{HTML}{187C68}
+\definecolor{pale}{HTML}{ECF8F4}
+\definecolor{passgreen}{HTML}{16794A}
+\color{ink}
+\pagestyle{fancy}\fancyhf{}
+\lhead{Cyclic matrix groups}\rhead{Nonuniform $\Lambda$-distributions}\cfoot{\thepage}
+\setlength{\headheight}{14pt}
+\newcommand{\Sfun}{\mathcal S}
+\newcommand{\Sym}{\operatorname{Sym}}
+\newcommand{\Tr}{\operatorname{Tr}}
+\newcommand{\PASS}{\textcolor{passgreen}{\textbf{PASS}}}
+\newcommand{\summarybox}[1]{\begin{center}\fcolorbox{accent}{pale}{\parbox{0.91\linewidth}{#1}}\end{center}}
+\title{\textbf{Nonuniform $\Lambda$-Distributions on Cyclic Matrix Groups}\\[3pt]
+\large Fourier weights, convolution walks, and direct determinant checks}
+\author{Proof and computational verification note}
+\date{17 July 2026}
+
+\begin{document}
+\maketitle
+\summarybox{\textbf{Outcome.}  The averaging-operator and convolution formulas
+were checked on explicit diagonal models of $C_3,C_4,C_5$ in dimensions
+$1,2,3$.  Arbitrary nonuniform measures and four walk times were tested for
+every partition through total degree five.  All \textbf{288} comparisons pass;
+the maximum absolute error is $2.91\times10^{-14}$.  Three additional
+unexpanded determinant evaluations also pass.}
+
+\section{The general coefficient theorem}
+Let $G$ be finite, $\rho:G\to U(V)$, and let $\nu$ be a probability measure.
+For finitely many active variables define
+\begin{equation}
+\Sfun_{\nu,V}(\mathbf t)=\sum_{g\in G}\nu(g)
+ \prod_a\det(I-t_a\rho(g))^{-1}.                         \tag{1}
+\end{equation}
+The standard identity
+$\det(I-tA)^{-1}=\sum_{r\geq0}\chi_{\Sym^r V}(A)t^r$
+implies, by multiplying the series variable by variable, that
+\begin{equation}
+[\mathbf t^\tau]\Sfun_{\nu,V}
+=\sum_g\nu(g)\chi_{W_\tau}(g)
+=\Tr\!\left(\sum_g\nu(g)\rho_{W_\tau}(g)\right),
+\qquad W_\tau=\bigotimes_a\Sym^{\tau_a}V.                \tag{2}
+\end{equation}
+This proves the proposed replacement of the Haar invariant dimension by the
+trace of a nonuniform averaging operator.  Positivity of the measure does not
+force the trace to be real or integral; the $C_5$ test below deliberately
+exhibits a complex coefficient.
+
+If $\nu=\kappa^{*r}$ and the convention is that a step product is
+$X_1\cdots X_r$, then representation multiplicativity gives
+\begin{equation}
+\widehat\nu(W)=\widehat\kappa(W)^r.                        \tag{3}
+\end{equation}
+Equations (2)--(3) prove the convolution formula without a centrality
+assumption.
+
+\section{Specialization to \texorpdfstring{$C_m$}{C-m}}
+Write $C_m=\{0,\ldots,m-1\}$ additively and
+$\zeta_m=e^{2\pi i/m}$.  A diagonal representation is determined by weights
+$w_1,\ldots,w_d\pmod m$:
+\begin{equation}
+\rho(k)=\operatorname{diag}(\zeta_m^{kw_1},\ldots,
+\zeta_m^{kw_d}).                                           \tag{4}
+\end{equation}
+Let $M_\tau(q)$ denote the multiplicity of the character $k\mapsto
+\zeta_m^{kq}$ in $W_\tau$.  Extracting weights from
+\begin{equation}
+\prod_{j=1}^d(1-xz^{w_j})^{-1}
+=\sum_{r\geq0}\sum_q M_{(r)}(q)x^rz^q                    \tag{5}
+\end{equation}
+and convolving the multiplicities for the factors in $W_\tau$ gives the
+finite Fourier formula
+\begin{equation}
+[\mathbf t^\tau]\Sfun_{\nu,V}
+=\sum_{q\bmod m}M_\tau(q)\widehat\nu(q),
+\qquad
+\widehat\nu(q)=\sum_{k=0}^{m-1}\nu(k)\zeta_m^{kq}.        \tag{6}
+\end{equation}
+For a walk this becomes
+\begin{equation}
+[\mathbf t^\tau]\Sfun_{\kappa^{*r},V}
+=\sum_qM_\tau(q)\widehat\kappa(q)^r.                     \tag{7}
+\end{equation}
+Thus the abstract matrix Fourier transform reduces to a transparent scalar
+filter on each weight.
+
+\section{Independent verification routes}
+The direct route builds every matrix in (4), computes the power traces
+$p_j=\Tr(\rho(k)^j)$, and obtains complete characters from Newton's recurrence
+\begin{equation}
+h_0=1,\qquad h_r=\frac1r\sum_{j=1}^r p_jh_{r-j}.            \tag{8}
+\end{equation}
+It then averages $\prod_a h_{\tau_a}$ using the fully enumerated
+probability distribution.  The formula route never uses matrix traces: it
+constructs the integer weight multiplicities in (5) and applies (6) or (7).
+For walks, the direct distribution is obtained by repeated cyclic convolution,
+whereas the formula route raises Fourier scalars to the $r$th power.
+
+As a full target check, the code also evaluates (1) at
+$(t_1,t_2)=(0.07,-0.04)$ using matrix determinants and compares it with the
+product over the weights in (4).  These values stay safely inside every pole.
+
+\section{Cases and results}
+The representations and the nonuniform arbitrary measure are
+\begin{center}
+\begin{tabular}{@{}cccc@{}}
+\toprule
+Group & weights & dimension & $\nu(k)$ before normalization\\
+\midrule
+$C_3$ & $(1)$ & 1 & $1,2,3$\\
+$C_4$ & $(1,-1)$ & 2 & $1,2,3,4$\\
+$C_5$ & $(0,1,2)$ & 3 & $1,2,3,4,5$\\
+\bottomrule
+\end{tabular}
+\end{center}
+The walk step is $0.35\delta_0+0.40\delta_1+0.25\delta_{-1}$ and is tested
+at $r=0,1,2,5$.  There are 19 partitions through total degree five, hence
+$3\cdot(1+4)\cdot19=285$ coefficient comparisons plus three determinant
+comparisons.
+
+\begin{center}
+\begin{tabularx}{\linewidth}{@{}lXrrc@{}}
+\toprule
+Case & coefficient & direct value & formula value & result\\
+\midrule
+$C_3$, arbitrary & $\tau=(3)$ & $1.0000000000$ & $1.0000000000$ & \PASS\\
+$C_4$, walk $r=5$ & $\tau=(2,1)$ & $-0.0210525000$ & $-0.0210525000$ & \PASS\\
+$C_5$, arbitrary & $\tau=(2,2)$ & $2.1666667+0.2293970i$ & $2.1666667+0.2293970i$ & \PASS\\
+\bottomrule
+\end{tabularx}
+\end{center}
+The complex $C_5$ row is a useful diagnostic: the implementation is genuinely
+testing non-Haar averaging, not silently rounding to invariant dimensions.
+
+\section{Reproducibility and scope}
+Run \path{cyclic_groups/verification.py}, or open
+\path{marimo_notebooks/nonuniform_cyclic.py} in marimo.  The notebook exposes the
+degree cutoff and every comparison.  The finite computations verify all
+coefficients in the stated range; equations (1)--(7) are all-degree proofs.
+No sampling is used.
+\end{document}

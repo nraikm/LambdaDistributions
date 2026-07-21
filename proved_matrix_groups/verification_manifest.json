@@ -1,0 +1,25 @@
+{
+  "edition": "18 July 2026 corrected proof anthology",
+  "git_commit": null,
+  "git_status": "Git metadata is not present in this workspace snapshot",
+  "python_version": "3.13.5",
+  "dependency_lock": "uv.lock",
+  "dependency_lock_sha256": "3771a2665c166fd360d633a9d523c3d40f95b5ea52710421532d24b7075f3454",
+  "command_pattern": "PYTHONPATH=<workspace> .venv/bin/python -m pytest -q <suite> --junitxml=<suite-result.xml>",
+  "suite_count": 15,
+  "cases_run": 78,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "arithmetic_modes": [
+    "exact integer and rational arithmetic",
+    "finite-field arithmetic",
+    "floating-point diagnostics with explicit residuals and rank gaps"
+  ],
+  "rank_tolerance_rule": "2e-8 times max(1, largest Gram eigenvalue); every reported gap ratio must be at least 1e4",
+  "m24_aggregated_table_sha256": "103ba576555f01bea74df73f8e2f788b02bee4e8b20df3ed198eb005d16de044",
+  "m24_software_data_file": "packages/sporadic_matrix_groups/common.py",
+  "m24_software_data_file_sha256": "3fbc8e5cde4ac5670696ecc1c5f692a2afb2065469a83ce486aa8b28d046d579",
+  "result_file": "verification_results.xml",
+  "result_file_sha256": "42441e8a918a6fe149dbb5c262332457d48044db0e3d77e776d249f73567eaa5"
+}

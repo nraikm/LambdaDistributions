@@ -1,0 +1,2 @@
+"""Scalar cyclic braid images."""
+

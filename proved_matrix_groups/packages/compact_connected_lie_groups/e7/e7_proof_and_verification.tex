@@ -1,0 +1,94 @@
+\documentclass[10pt]{article}
+\usepackage[margin=0.9in]{geometry}\usepackage{amsmath,amssymb,booktabs,microtype,xcolor,fancyhdr}\usepackage[hidelinks]{hyperref}
+\definecolor{navy}{RGB}{24,55,95}\pagestyle{fancy}\fancyhf{}\lhead{$E_7$ on $V_{56}$}\rhead{Proof and verification strategy}\cfoot{\thepage}\setlength{\headheight}{14pt}
+\newcommand{\Sg}{\mathcal S}\newcommand{\CT}{\operatorname{CT}}
+\title{\color{navy}\textbf{The compact $E_7$ sigma-MGF on $V_{56}$}\\[1mm]\large Proof and dimension-aware verification strategy}
+\author{Computational proof companion}\date{17 July 2026}
+\begin{document}\maketitle
+\begin{abstract}
+For simply connected compact $E_7$ on its minuscule 56, we prove the
+Molien--Weyl expression and parity rule, exactly verify the full quadratic
+expansion with explicit torus matrices, and state the degree-four expansion
+using cited invariant theory.  We also give a sparse quartic verification
+algorithm; the present artifact does not report that computation as executed.
+\end{abstract}
+
+\section{Formula and parity}
+The Cauchy identity and Haar projection prove
+\[
+ \Sg_{K,V}=\int_K\prod_a\det(I-t_a\rho(g))^{-1}dg
+ =\sum_\lambda\dim(\mathbb S_\lambda V)^K s_\lambda(\mathbf t).
+\]
+The equivalent monomial coefficient is
+$[m_\tau]\Sg_{K,V}=\dim(\bigotimes_i\operatorname{Sym}^{\tau_i}V)^K$.
+The 56 weights of $V_{56}$ form one Weyl orbit.  Hence
+\[
+ \boxed{\Sg_{E_7,56}=\frac1{2903040}\CT_z\left[D_{E_7}(z)
+ \prod_a\prod_{\mu\in W\omega_7}(1-t_a z^\mu)^{-1}\right].}
+\]
+The nontrivial central element acts as $-I$, so every odd-total-degree
+coefficient vanishes.  This statement concerns simply connected $E_7$; the
+56 does not descend to $E_7/Z_2$.
+
+\section{Low-degree tensors}
+Let $\omega\in\bigwedge^2V^*$ be the invariant symplectic form and let
+$q\in\operatorname{Sym}^4V^*$ be the Cartan--Freudenthal quartic.  At degree
+four, the three pairwise contractions made from two copies of $\omega$
+decompose under $S_4$ as the Schur types $(2,2)$ and $(1,1,1,1)$.  The quartic
+$q$ supplies type $(4)$.  The one-copy statement
+$\mathbb C[V_{56}]^{E_7}=\mathbb C[q]$ and the exhaustion of degree-four
+tensor invariants by the symplectic pairings and $q$ are external
+invariant-theory inputs; see Brown \cite{brown}.  Using those inputs,
+\[
+ \boxed{\Sg_{E_7,56}=1+e_2+h_4+s_{(2,2)}+e_4+O_{\ge6}},
+ \qquad \boxed{\Sg(t,0,\ldots)=\frac1{1-t^4}}.
+\]
+The one-variable specialization kills $e_2,s_{(2,2)},e_4$ and retains the
+quartic generator.
+In particular $([m_{(2)}],[m_{(1,1)}])=(0,1)$, while the predicted degree-four
+row is
+\[
+([m_{(4)}],[m_{(3,1)}],[m_{(2,2)}],[m_{(2,1,1)}],[m_{(1,1,1,1)}])
+=(1,1,2,2,4).
+\]
+
+\section{Executed quadratic verification and optional quartic confirmation}
+The notebook generates the 126 roots and the 56-weight orbit, constructs
+$M(\theta)=\operatorname{diag}(e^{i\langle\mu,\theta\rangle})$, and verifies
+the determinant integrand.  Jacobi--Trudi characters are integrated exactly
+using
+\[
+ \frac1{|W|}\CT(Df)=\CT\left(f\prod_{\alpha>0}(1-z^{-\alpha})\right).
+\]
+The complete quadratic computation is
+\begin{center}\small
+\begin{tabular}{@{}c|rrrr@{}}\toprule
+$\lambda$&$\varnothing$&$(1)$&$(2)$&$(1,1)$\\\midrule
+proposed&1&0&0&1\\
+exact Weyl check&1&0&0&1\\\bottomrule
+\end{tabular}
+\end{center}
+All entries pass.  The matrix unitarity residual is $4.2\times10^{-16}$ and
+the determinant/eigenvalue residual is $8.6\times10^{-14}$.
+
+\paragraph{Status of the degree-four row.}
+The row follows from the cited invariant-theory decomposition.  The notebook
+output displayed here verifies only degrees at most two.  A fully mechanical
+confirmation may be obtained as follows, but is not executed in this
+artifact.  Do not form dense matrices on
+$V^{\otimes4}$ (dimension $56^4$).  Instead: (i) generate the weight-sparse
+root-operator action on each of $\operatorname{Sym}^4V$, $\mathbb S_{(2,2)}V$,
+and $\bigwedge^4V$; (ii) retain only zero-weight basis vectors; (iii) solve the
+sparse raising-operator nullspace; and (iv) check dimensions $1,1,1$.
+Equivalently, stream the three Schur characters through the same exact Weyl
+functional.  An executed result must report the zero-weight dimensions,
+exact raising-kernel ranks, arithmetic mode, and output hash.
+
+\paragraph{Reproducibility.} Run \texttt{marimo\_notebooks/lie\_group\_e7.py} with marimo.
+\begin{thebibliography}{9}
+\bibitem{brown} R.~B.~Brown, ``Groups of type $E_7$,'' \emph{J. Reine Angew.
+Math.} \textbf{236} (1969), 79--102.
+\bibitem{adams} J.~F.~Adams, \emph{Lectures on Exceptional Lie Groups},
+Chicago Lectures in Mathematics (1996).
+\end{thebibliography}
+\end{document}

@@ -1,0 +1,111 @@
+# Consolidated marimo notebooks
+
+This directory contains all 88 non-archived marimo apps in the repository,
+including proof laboratories, exact verification dashboards, legacy focused apps,
+and general interactive labs. This is the canonical location for editing and running
+them. Each notebook is named after the matrix group or family it verifies: for
+example `lie_group_e6.py` is the compact E6 verification notebook and
+`alternating.py` is the alternating-group verification from the
+*Matrix group Lambda-distributions* paper. Launch commands from the repository
+root, for example:
+
+```bash
+uv run marimo edit marimo_notebooks/association_schemes.py
+uv run marimo run marimo_notebooks/regular_representations.py
+```
+
+The historical paths below are retained only as lightweight compatibility entry points
+for old imports and commands; canonical notebook source lives here. Exact headless
+backends and pytest files remain beside their proof families. `manifest.json` provides
+the same mapping in machine-readable form.
+
+| Canonical notebook | Historical entry point |
+| --- | --- |
+| `marimo_notebooks/a5_representations.py` | `proved_matrix_groups/packages/matrix_group_formula_verification/a5_representations/a5_representations_verification.py` |
+| `marimo_notebooks/affine_groups.py` | `proved_matrix_groups/packages/generalized_molien_affine_wreath/affine_groups/notebook.py` |
+| `marimo_notebooks/affine_wreath_products.py` | `proved_matrix_groups/packages/generalized_molien_affine_wreath/wreath_products/notebook.py` |
+| `marimo_notebooks/alternating.py` | `verify_alternating_group.py` |
+| `marimo_notebooks/alternating_exact.py` | `proved_matrix_groups/packages/finite_group_exact_formulas/alternating/alternating_verification.py` |
+| `marimo_notebooks/association_schemes.py` | `new_dists/notebooks/association_schemes.py` |
+| `marimo_notebooks/barnes_wall.py` | `proved_matrix_groups/packages/barnes_wall_lattice_automorphism_groups/barnes_wall/notebook.py` |
+| `marimo_notebooks/binary_polyhedral.py` | `proved_matrix_groups/packages/matrix_group_formula_verification/binary_polyhedral/binary_polyhedral_verification.py` |
+| `marimo_notebooks/braid_cyclic_scalar.py` | `proved_matrix_groups/packages/finite_braid_images/cyclic_scalar/notebook.py` |
+| `marimo_notebooks/braid_ising_clifford.py` | `proved_matrix_groups/packages/finite_braid_images/ising_clifford/notebook.py` |
+| `marimo_notebooks/braid_s3_permutation.py` | `proved_matrix_groups/packages/finite_braid_images/s3_permutation/notebook.py` |
+| `marimo_notebooks/braid_tqft.py` | `new_dists/notebooks/braid_tqft.py` |
+| `marimo_notebooks/central_extensions.py` | `new_dists/notebooks/central_extensions.py` |
+| `marimo_notebooks/classical_compact.py` | `proved_matrix_groups/packages/matrix_group_formula_verification/classical_compact/notebook.py` |
+| `marimo_notebooks/clifford_groups.py` | `proved_matrix_groups/packages/quantum_matrix_groups/clifford_groups/notebook.py` |
+| `marimo_notebooks/co0_leech.py` | `proved_matrix_groups/packages/sporadic_matrix_groups/co0_leech/notebook.py` |
+| `marimo_notebooks/code_monomial.py` | `new_dists/notebooks/code_monomial.py` |
+| `marimo_notebooks/cyclic.py` | `cyclic.py` |
+| `marimo_notebooks/cyclic_complex_1d.py` | `verify_cyclic_sigma_mgf_complex_1d.py` |
+| `marimo_notebooks/cyclic_monomial_walkthrough.py` | `notebooks/cyclic_monomial_walkthrough.py` |
+| `marimo_notebooks/cyclic_real_2d.py` | `verify_cyclic_sigma_mgf_real_2d.py` |
+| `marimo_notebooks/cyclic_weight_distribution.py` | `notebooks/cyclic_weight_distribution_verification.py` |
+| `marimo_notebooks/dicyclic.py` | `dicyclic.py` |
+| `marimo_notebooks/dicyclic_exact.py` | `proved_matrix_groups/packages/finite_group_exact_formulas/dicyclic/dicyclic_verification.py` |
+| `marimo_notebooks/dihedral.py` | `dihedral.py` |
+| `marimo_notebooks/extraspecial_groups.py` | `proved_matrix_groups/packages/quantum_matrix_groups/extraspecial_groups/notebook.py` |
+| `marimo_notebooks/extraspecial_real_pauli.py` | `proved_matrix_groups/packages/barnes_wall_lattice_automorphism_groups/extraspecial_real_pauli/notebook.py` |
+| `marimo_notebooks/finite_abelian.py` | `proved_matrix_groups/packages/finite_abelian_zero_weight_formula/finite_abelian_verification.py` |
+| `marimo_notebooks/finite_linear_groups.py` | `proved_matrix_groups/packages/finite_lie_type_permutation_actions/linear_groups_verification.py` |
+| `marimo_notebooks/finite_polar_groups.py` | `proved_matrix_groups/packages/finite_lie_type_permutation_actions/polar_groups_verification.py` |
+| `marimo_notebooks/formula_checks.py` | `notebooks/formula_checks.py` |
+| `marimo_notebooks/g_r_p_n.py` | `proved_matrix_groups/packages/exact_finite_n_molien/g_r_p_n/g_r_p_n_verification.py` |
+| `marimo_notebooks/generalised_symmetric.py` | `verify_generalised_symmetric.py` |
+| `marimo_notebooks/generalized_dihedral.py` | `proved_matrix_groups/packages/generalized_dihedral_master_theorem/generalized_dihedral_verification.py` |
+| `marimo_notebooks/generalized_molien_extensions.py` | `proved_matrix_groups/packages/generalized_molien_extensions/notebook.py` |
+| `marimo_notebooks/grassmann_scheme.py` | `proved_matrix_groups/packages/association_scheme_permutation_representations/grassmann/notebook.py` |
+| `marimo_notebooks/h3_reflection.py` | `proved_matrix_groups/packages/matrix_group_formula_verification/h3_reflection/notebook.py` |
+| `marimo_notebooks/h3_reflection_verification.py` | `proved_matrix_groups/packages/matrix_group_formula_verification/h3_reflection/h3_reflection_verification.py` |
+| `marimo_notebooks/hamming_scheme.py` | `proved_matrix_groups/packages/association_scheme_permutation_representations/hamming/notebook.py` |
+| `marimo_notebooks/hyperoctahedral_cube.py` | `proved_matrix_groups/packages/finite_group_sigma_mgf/hyperoctahedral_cube/notebook.py` |
+| `marimo_notebooks/johnson_scheme.py` | `proved_matrix_groups/packages/association_scheme_permutation_representations/johnson/notebook.py` |
+| `marimo_notebooks/lambda_lab.py` | `notebooks/lambda_lab.py` |
+| `marimo_notebooks/lattices.py` | `new_dists/notebooks/lattices.py` |
+| `marimo_notebooks/lie_group_e6.py` | `proved_matrix_groups/packages/compact_connected_lie_groups/e6/e6_verification.py` |
+| `marimo_notebooks/lie_group_e7.py` | `proved_matrix_groups/packages/compact_connected_lie_groups/e7/e7_verification.py` |
+| `marimo_notebooks/lie_group_e8.py` | `proved_matrix_groups/packages/compact_connected_lie_groups/e8/e8_verification.py` |
+| `marimo_notebooks/lie_group_f4.py` | `proved_matrix_groups/packages/compact_connected_lie_groups/f4/f4_verification.py` |
+| `marimo_notebooks/lie_group_g2.py` | `proved_matrix_groups/packages/compact_connected_lie_groups/g2/g2_verification.py` |
+| `marimo_notebooks/lie_group_spin7.py` | `proved_matrix_groups/packages/compact_connected_lie_groups/spin7/spin7_verification.py` |
+| `marimo_notebooks/lie_group_su_adjoint.py` | `proved_matrix_groups/packages/compact_connected_lie_groups/su_adjoint/su_adjoint_verification.py` |
+| `marimo_notebooks/local_ring_actions.py` | `new_dists/notebooks/local_ring_actions.py` |
+| `marimo_notebooks/local_unitary_tensor_products.py` | `proved_matrix_groups/packages/local_unitary_tensor_products/notebook.py` |
+| `marimo_notebooks/m24_permutation.py` | `proved_matrix_groups/packages/sporadic_matrix_groups/m24_permutation/notebook.py` |
+| `marimo_notebooks/multiplicative_wreath.py` | `new_dists/notebooks/multiplicative_wreath.py` |
+| `marimo_notebooks/non_haar_fourier.py` | `new_dists/notebooks/non_haar_fourier.py` |
+| `marimo_notebooks/nonuniform_cyclic.py` | `proved_matrix_groups/packages/nonuniform_lambda_distributions/cyclic_groups/notebook.py` |
+| `marimo_notebooks/nonuniform_symmetric.py` | `proved_matrix_groups/packages/nonuniform_lambda_distributions/symmetric_groups/notebook.py` |
+| `marimo_notebooks/pauli.py` | `pauli.py` |
+| `marimo_notebooks/pauli_heisenberg.py` | `proved_matrix_groups/packages/quantum_matrix_groups/pauli_heisenberg/notebook.py` |
+| `marimo_notebooks/permutation_actions.py` | `proved_matrix_groups/packages/finite_group_sigma_mgf/permutation_actions/notebook.py` |
+| `marimo_notebooks/polar_scheme.py` | `proved_matrix_groups/packages/association_scheme_permutation_representations/polar/notebook.py` |
+| `marimo_notebooks/power_character_stability.py` | `proved_matrix_groups/packages/power_character_bounded_flag_stability/notebook.py` |
+| `marimo_notebooks/primitive_actions.py` | `new_dists/notebooks/primitive_actions.py` |
+| `marimo_notebooks/proctor_odd_symplectic.py` | `proved_matrix_groups/packages/proctor_odd_symplectic_group/notebook.py` |
+| `marimo_notebooks/real_clifford.py` | `proved_matrix_groups/packages/barnes_wall_lattice_automorphism_groups/real_clifford/notebook.py` |
+| `marimo_notebooks/regular_representations.py` | `proved_matrix_groups/packages/finite_group_sigma_mgf/regular_representations/notebook.py` |
+| `marimo_notebooks/representation_variants.py` | `proved_matrix_groups/packages/matrix_group_formula_verification/representation_variants/notebook.py` |
+| `marimo_notebooks/representation_variants_verification.py` | `proved_matrix_groups/packages/matrix_group_formula_verification/representation_variants/representation_variants_verification.py` |
+| `marimo_notebooks/restricted_monomial.py` | `proved_matrix_groups/packages/matrix_group_formula_verification/restricted_monomial/notebook.py` |
+| `marimo_notebooks/restricted_monomial_verification.py` | `proved_matrix_groups/packages/matrix_group_formula_verification/restricted_monomial/restricted_monomial_verification.py` |
+| `marimo_notebooks/rooted_tree_automorphisms.py` | `proved_matrix_groups/packages/limiting_lambda_claims/rooted_tree_automorphisms/notebook.py` |
+| `marimo_notebooks/scalar_extended_pauli.py` | `proved_matrix_groups/packages/quantum_matrix_groups/scalar_extended_pauli/notebook.py` |
+| `marimo_notebooks/schur_orthogonal.py` | `proved_matrix_groups/packages/schur_functor_classical_groups/orthogonal/notebook.py` |
+| `marimo_notebooks/schur_symplectic.py` | `proved_matrix_groups/packages/schur_functor_classical_groups/symplectic/notebook.py` |
+| `marimo_notebooks/schur_unitary.py` | `proved_matrix_groups/packages/schur_functor_classical_groups/unitary/notebook.py` |
+| `marimo_notebooks/sigma_mgf_groups.py` | `sigma-mgfs/Groups.py` |
+| `marimo_notebooks/sigma_mgfs.py` | `sigma-mgfs/Sigma-mgfs.py` |
+| `marimo_notebooks/solvable_finite.py` | `new_dists/notebooks/solvable_finite.py` |
+| `marimo_notebooks/spin_pin.py` | `new_dists/notebooks/spin_pin.py` |
+| `marimo_notebooks/sporadic.py` | `new_dists/notebooks/sporadic.py` |
+| `marimo_notebooks/symmetric_exact.py` | `proved_matrix_groups/packages/finite_group_exact_formulas/symmetric/symmetric_verification.py` |
+| `marimo_notebooks/symmetric_k_subsets.py` | `proved_matrix_groups/packages/limiting_lambda_claims/symmetric_k_subsets/notebook.py` |
+| `marimo_notebooks/symmetric_representations.py` | `proved_matrix_groups/packages/finite_group_sigma_mgf/symmetric_group_representations/notebook.py` |
+| `marimo_notebooks/symmetric_spin_lie_tree.py` | `new_dists/notebooks/symmetric_spin_lie_tree.py` |
+| `marimo_notebooks/tori.py` | `proved_matrix_groups/packages/matrix_group_formula_verification/tori/notebook.py` |
+| `marimo_notebooks/u1_heat.py` | `proved_matrix_groups/packages/nonuniform_lambda_distributions/compact_u1_heat/notebook.py` |
+| `marimo_notebooks/unitary_conjugation.py` | `proved_matrix_groups/packages/unitary_conjugation_endomorphisms/unitary_conjugation_verification.py` |
+| `marimo_notebooks/wreath_product.py` | `proved_matrix_groups/packages/exact_finite_n_molien/wreath_products/wreath_product_verification.py` |

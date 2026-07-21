@@ -1,0 +1,303 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{booktabs,array}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{enumitem}
+\usepackage{microtype}
+\usepackage{fancyhdr}
+\usepackage[colorlinks=true,linkcolor=MidnightBlue,urlcolor=MidnightBlue]{hyperref}
+
+\definecolor{ink}{HTML}{17324D}
+\definecolor{accent}{HTML}{0F766E}
+\definecolor{soft}{HTML}{EEF6F5}
+\hypersetup{pdftitle={Finite Abelian Zero-Weight Formula},
+  pdfauthor={Computational verification note}}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}{Proposition}
+\newcommand{\CT}{\operatorname{CT}}
+\newcommand{\Sym}{\operatorname{Sym}}
+\newcommand{\Exp}{\operatorname{Exp}}
+\newcommand{\one}{\mathbf 1}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{ink}Finite abelian zero-weight formula}
+\fancyhead[R]{\small\color{ink}Proof and verification}
+\fancyfoot[C]{\thepage}
+\setlength{\headheight}{14pt}
+\fancypagestyle{plain}{%
+  \fancyhf{}%
+  \fancyhead[L]{\small\color{ink}Finite abelian zero-weight formula}%
+  \fancyhead[R]{\small\color{ink}Proof and verification}%
+  \fancyfoot[C]{\thepage}%
+}
+\fancypagestyle{titlepage}{%
+  \fancyhf{}%
+  \fancyfoot[C]{\thepage}%
+  \renewcommand{\headrulewidth}{0pt}%
+}
+
+\title{\color{ink}\bfseries Finite Abelian Representations:\\
+The Zero-Weight Formula and a Direct Matrix Verification}
+\author{Proof and reproducible verification strategy}
+\date{July 17, 2026}
+
+\begin{document}
+\maketitle
+\thispagestyle{titlepage}
+
+\begin{abstract}
+For a finite abelian group acting diagonally, the coefficient of the monomial
+symmetric function $m_\tau$ in the sigma moment-generating function is the
+number of monomial basis vectors whose total character is trivial.  This note
+proves the resulting simultaneous-congruence formula, derives the diagonal
+Molien average and finite constant-term form, and records a direct matrix test.
+The accompanying marimo notebook constructs the represented group, builds the
+full tensor product of symmetric powers, forms the Reynolds projector, and
+compares its rank with an exact lattice count and a numerical character average.
+\end{abstract}
+
+\section{Setup and the represented matrix group}
+
+Let
+\[
+ A=C_{m_1}\times\cdots\times C_{m_r},\qquad
+ M=\widehat A\cong
+ \mathbb Z/m_1\mathbb Z\oplus\cdots\oplus\mathbb Z/m_r\mathbb Z.
+\]
+Every complex representation of $A$ splits into one-dimensional characters.
+Choose a weight basis and write
+\[
+ V=\bigoplus_{j=1}^{d}\mathbb C_{w_j},\qquad
+ w_j=(w_{1j},\ldots,w_{rj})\in M.
+\]
+The weights are the columns of an integer matrix $W=(w_{\ell j})\in
+\mathbb Z^{r\times d}$, understood row by row modulo $m_\ell$.  For
+$a=(a_1,\ldots,a_r)$, the corresponding matrix is
+\begin{equation}\label{eq:represented-group}
+ \rho(a)=\operatorname{diag}_{1\le j\le d}
+ \left(\exp\left(2\pi i\sum_{\ell=1}^{r}
+ \frac{a_\ell w_{\ell j}}{m_\ell}\right)\right).
+\end{equation}
+Thus the concrete matrix group is obtained by letting
+$0\le a_\ell<m_\ell$ in \eqref{eq:represented-group}.  If $\rho$ has a
+kernel, several abstract elements give the same matrix.  These repetitions
+must be retained in an average over $A$.
+
+For a partition or finite tuple $\tau=(\tau_1,\ldots,\tau_s)$, put
+\[
+ T_\tau(V)=\bigotimes_{b=1}^{s}\Sym^{\tau_b}V.
+\]
+The empty tuple gives $T_\varnothing(V)=\mathbb C$.
+
+\section{The simultaneous-congruence formula}
+
+\begin{theorem}[Zero-weight formula]\label{thm:main}
+With the notation above,
+\begin{equation}\label{eq:count}
+ \dim T_\tau(V)^A=
+ \#\left\{(q_{bj})\in\mathbb Z_{\ge0}^{s\times d}:
+ \begin{array}{ll}
+ \displaystyle\sum_{j=1}^{d}q_{bj}=\tau_b
+   & (1\le b\le s),\\[4pt]
+ \displaystyle\sum_{b=1}^{s}\sum_{j=1}^{d}
+ w_{\ell j}q_{bj}\equiv0\pmod {m_\ell}
+   & (1\le\ell\le r)
+ \end{array}\right\}.
+\end{equation}
+Equivalently, for $q_b=(q_{b1},\ldots,q_{bd})^T$ and
+$D=\operatorname{diag}(m_1,\ldots,m_r)$,
+\begin{equation}\label{eq:lattice}
+ \dim T_\tau(V)^A=
+ \#\left\{(q_1,\ldots,q_s):
+ q_b\in\mathbb Z_{\ge0}^{d},\quad
+ \one^Tq_b=\tau_b,\quad
+ W(q_1+\cdots+q_s)\in D\mathbb Z^r\right\}.
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+The monomials
+\[
+ e_1^{q_{b1}}\cdots e_d^{q_{bd}},\qquad
+ q_{bj}\ge0,\quad \sum_jq_{bj}=\tau_b,
+\]
+form a basis of $\Sym^{\tau_b}V$.  Tensoring these bases over $b$ gives a
+basis of $T_\tau(V)$ indexed by the arrays in the first line of
+\eqref{eq:count}.  Since $e_j$ has character $w_j$, the basis vector indexed
+by $(q_{bj})$ has total character
+\[
+ \sum_{b=1}^{s}\sum_{j=1}^{d}q_{bj}w_j\in M.
+\]
+It is fixed by every element of $A$ exactly when that character is zero.  In
+coordinates this is precisely the second line of \eqref{eq:count}.  Because
+the displayed monomial basis is a weight basis, the invariant subspace is
+spanned by exactly those basis vectors of weight zero.  Counting them proves
+\eqref{eq:count}; collecting the $q_b$ and writing divisibility by each
+$m_\ell$ as membership in $D\mathbb Z^r$ gives \eqref{eq:lattice}.
+\end{proof}
+
+\section{Relation to the sigma-MGF and Molien averaging}
+
+Let $t_1,t_2,\ldots$ be the alphabet used for the sigma-MGF.  Inserting the
+diagonal eigenvalues of \eqref{eq:represented-group} into the generalized
+Molien average gives
+\begin{equation}\label{eq:mgf}
+ \mathbb E_A\!\left[\Exp_\sigma(X_Ah_1)\right]
+ =\frac1{|A|}\sum_{a\in A}
+ \prod_{i\ge1}\prod_{j=1}^{d}
+ \frac{1}{1-t_i\chi_{w_j}(a)}.
+\end{equation}
+For fixed, distinct alphabet indices, the coefficient of
+$t_{i_1}^{\tau_1}\cdots t_{i_s}^{\tau_s}$ in the product for $a$ is
+\[
+ \prod_{b=1}^{s}h_{\tau_b}
+ \bigl(\chi_{w_1}(a),\ldots,\chi_{w_d}(a)\bigr)
+ =\operatorname{tr}\bigl(T_\tau(\rho(a))\bigr).
+\]
+The expression in \eqref{eq:mgf} is symmetric in the $t_i$, so this is also
+the coefficient of $m_\tau$.  Therefore
+\begin{equation}\label{eq:molien-coefficient}
+ [m_\tau]\,\mathbb E_A\!\left[\Exp_\sigma(X_Ah_1)\right]
+ =\frac1{|A|}\sum_{a\in A}
+ \prod_{b=1}^{s}h_{\tau_b}
+ \bigl(\chi_{w_1}(a),\ldots,\chi_{w_d}(a)\bigr)
+ =\dim T_\tau(V)^A.
+\end{equation}
+The final equality follows from the Reynolds projector
+\[
+ P_A=\frac1{|A|}\sum_{a\in A}T_\tau(\rho(a)).
+\]
+Indeed, $P_A$ is the projection onto $T_\tau(V)^A$, hence
+$\operatorname{tr}P_A=\operatorname{rank}P_A=\dim T_\tau(V)^A$.
+
+There is also a clean constant-term statement.  Work in the group algebra
+with $z_\ell^{m_\ell}=1$ and put
+$z^{w_j}=\prod_\ell z_\ell^{w_{\ell j}}$.  If $\CT_A$ extracts the coefficient
+of the identity character, then
+\begin{align}
+ \mathbb E_A\!\left[\Exp_\sigma(X_Ah_1)\right]
+ &=\CT_A\prod_{i\ge1}\prod_{j=1}^{d}(1-t_i z^{w_j})^{-1},\\
+ [m_\tau]\,\mathbb E_A\!\left[\Exp_\sigma(X_Ah_1)\right]
+ &=\CT_A\prod_{b=1}^{s}h_{\tau_b}
+ (z^{w_1},\ldots,z^{w_d}).
+\end{align}
+Character orthogonality identifies this operator with the finite Fourier
+projector
+\[
+ \CT_A F=\frac1{|A|}\sum_{a\in A}
+ F\bigl(\zeta_{m_1}^{a_1},\ldots,\zeta_{m_r}^{a_r}\bigr).
+\]
+
+\section{Verification strategy}
+
+The accompanying notebook uses three routes with different failure modes.
+
+\begin{enumerate}[leftmargin=*,label=\textbf{\arabic*.}]
+\item \textbf{Direct represented matrices.}
+It constructs all $|A|=\prod_\ell m_\ell$ matrices in
+\eqref{eq:represented-group}.  It first checks the identity, unitarity, and
+homomorphism laws numerically for every pair of represented elements.  In the
+monomial basis, the diagonal of
+$\Sym^n(\rho(a))$ is indexed by weak compositions $q$ of $n$ and has entry
+$\prod_j\rho(a)_{jj}^{q_j}$.  Kronecker products give the full matrices on
+$T_\tau(V)$.  Their average is $P_A$; its numerical rank and trace give the
+target quantity directly.  The residual $\lVert P_A^2-P_A\rVert_F$ checks
+that the average is a projection.
+
+\item \textbf{Exact zero-weight enumeration.}
+It enumerates the same weak compositions using integer arithmetic only and
+counts those for which every row of $W(q_1+\cdots+q_s)$ is divisible by the
+corresponding $m_\ell$.  This is a literal implementation of
+\eqref{eq:lattice}; no complex roots of unity are used.
+
+\item \textbf{Character/Molien average.}
+It computes
+\[
+ \frac1{|A|}\sum_{a\in A}
+ \prod_b\operatorname{tr}\bigl(\Sym^{\tau_b}(\rho(a))\bigr)
+\]
+in floating-point complex arithmetic.  The result must be within $10^{-8}$ of
+the exact count.  This route avoids the large Kronecker matrices while still
+testing the Fourier projection independently of the modular test.
+\end{enumerate}
+
+A case passes when the projector rank, its rounded trace, the exact count, and
+the rounded Molien average agree, and both the numerical discrepancy and
+idempotence residual are below $10^{-8}$.
+
+\section{Representative results and size choice}
+
+The default case is
+\[
+ A=C_3\times C_4,\qquad
+ W=\begin{pmatrix}1&0&2\\0&1&3\end{pmatrix},\qquad
+ d=3,\qquad \tau=(3,2).
+\]
+Here $|A|=12$ and
+\[
+\dim T_{(3,2)}(V)=
+\binom{3+3-1}{3}\binom{2+3-1}{2}=10\cdot6=60.
+\]
+\clearpage
+\thispagestyle{fancy}
+The notebook constructs twelve $60\times60$ target matrices.  It obtains
+\[
+ \operatorname{rank}P_A=2,\qquad
+ \text{zero-weight count}=2,\qquad
+ \text{Molien average}=2+3.8\times10^{-15}i,
+\]
+with maximum displayed numerical discrepancy $8.21\times10^{-15}$.
+
+The automated suite broadens the coverage as follows.
+\begin{center}
+\small
+\begin{tabular}{@{}lrrrrc@{}}
+\toprule
+Representation & $|A|$ & $d$ & largest $\tau$ & max. target dim. & checks \\
+\midrule
+$C_2$, trivial plus sign & 2 & 2 & $(3,2)$ & 12 & 5 \\
+$C_4$, nonfaithful & 4 & 3 & $(2,1)$ & 18 & 4 \\
+$C_2\times C_2$, all characters & 4 & 4 & $(2,1)$ & 40 & 4 \\
+$C_3\times C_4$, mixed weights & 12 & 3 & $(3,2)$ & 60 & 5 \\
+$C_2\times C_3$, repeated weights & 6 & 4 & $(2,2)$ & 100 & 4 \\
+\midrule
+\multicolumn{5}{r}{Total} & 22 \\
+\bottomrule
+\end{tabular}
+\end{center}
+All 22 checks pass.  The cases include the empty partition, trivial weights,
+repeated weights, a nonfaithful representation, one and two cyclic factors,
+and tensor products with repeated and unequal degrees.
+
+In general the target dimension is
+\begin{equation}\label{eq:target-dim}
+ N=\prod_{b=1}^{s}\binom{\tau_b+d-1}{\tau_b}.
+\end{equation}
+Dense direct projection requires $O(N^2)$ memory and approximately
+$O(|A|N^2)$ arithmetic, while literal congruence enumeration visits $N$
+monomial basis vectors.  The notebook caps the dense target dimension at
+$N=1000$ and uses $N=60$ by default.  For larger dimensions, the Molien trace
+average or an exact convolution of residue distributions on
+$\prod_\ell\mathbb Z/m_\ell\mathbb Z$ is the appropriate replacement for a
+dense projector.
+
+\section{Reproduction}
+
+From the repository root, launch the notebook with
+\begin{verbatim}
+.venv/bin/marimo edit \
+  marimo_notebooks/finite_abelian.py
+\end{verbatim}
+The controls accept comma-separated moduli and partition parts.  Rows of $W$
+are comma-separated and separated from one another by semicolons.  For
+example, the default matrix is entered as
+\begin{verbatim}
+1, 0, 2; 0, 1, 3
+\end{verbatim}
+The automated table is evaluated whenever the notebook runs.
+
+\end{document}

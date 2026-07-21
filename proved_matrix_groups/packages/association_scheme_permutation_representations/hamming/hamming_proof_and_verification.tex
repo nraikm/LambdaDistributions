@@ -1,0 +1,101 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,booktabs,microtype}
+\usepackage{xcolor}
+\usepackage[colorlinks=true,linkcolor=blue,urlcolor=blue]{hyperref}
+\newcommand{\Sym}{\operatorname{Sym}}
+\newcommand{\cS}{\mathcal S}
+\title{Hamming Schemes: Wreath-Product Permutation Formula\\Proof and Exact Verification}
+\author{Executable companion note}
+\date{17 July 2026}
+\begin{document}
+\maketitle
+\begin{abstract}
+We prove and test the generalized Molien formula for the full Hamming graph
+automorphism group $S_q\wr S_D=S_q^D\rtimes S_D$ acting on $Q^D$.  The tests
+construct every wreath-product element, not merely pure coordinate
+permutations, and compare matrix, cycle, and orbit calculations through total
+degree three.
+\end{abstract}
+
+\section{Permutation Molien and orbit theorem}
+For any finite action $G\curvearrowright X$ with vertex-cycle counts
+$c_\ell(g)$,
+\begin{equation}\label{eq:master}
+\cS_{G,X}(\mathbf t)=\frac1{|G|}\sum_{g\in G}
+\prod_{i,\ell}(1-t_i^\ell)^{-c_\ell(g)}.
+\end{equation}
+This follows because an $\ell$-cycle block satisfies
+$\det(I-tP_\ell)=1-t^\ell$.  Moreover,
+\begin{equation}\label{eq:orbit}
+[m_\tau]\cS_{G,X}=\#\left(G\backslash
+\prod_j\Sym^{\tau_j}(X)\right),
+\end{equation}
+since $\Sym^d(\mathbb C[X])$ has its monomial basis indexed by $d$-multisets
+of vertices.  This gives a proof route independent of determinant algebra.
+
+\section{Fixed words in the full wreath product}
+Write $g=(\sigma_1,\ldots,\sigma_D;\pi)$.  For a fixed power $g^r$, follow a
+coordinate around a cycle $C=(i_1,\ldots,i_s)$ of its coordinate permutation.
+The successive alphabet relabelings compose to a permutation $h_{C,r}\in S_q$.
+A fixed word is determined on $C$ by one symbol fixed by $h_{C,r}$, and
+different coordinate cycles are independent.  Therefore
+\begin{equation}\label{eq:fixed}
+F_r^H(g)=\prod_{C\in\operatorname{Cyc}(\pi^r)}
+|\operatorname{Fix}_Q(h_{C,r})|.
+\end{equation}
+The exact vertex-cycle counts are then
+\begin{equation}\label{eq:mobius}
+c_\ell^H(g)=\frac1\ell\sum_{d\mid\ell}\mu(\ell/d)F_d^H(g).
+\end{equation}
+Substitution in \eqref{eq:master} proves the proposed Hamming formula.  For
+pure coordinate permutations the label products are identities, reducing
+\eqref{eq:fixed} to $q^{c(\pi^r)}$.
+
+Two ordered pairs of words are equivalent exactly when they have equal
+Hamming distance.  Hence vertex transitivity and the distances $0,\ldots,D$
+give
+\[
+[m_{(1)}]=1,\qquad [m_{(2)}]=[m_{(1,1)}]=D+1.
+\]
+
+\section{Independent computational checks}
+The implementation explicitly constructs every word permutation and its
+$q^D\times q^D$ matrix $P$.  It computes complete symmetric characters from
+actual matrix traces,
+\[
+d h_d(P)=\sum_{r=1}^d\operatorname{tr}(P^r)h_{d-r}(P),\quad h_0=1,
+\]
+and averages $\prod_jh_{\tau_j}(P)$.  A second route extracts coefficients
+from \eqref{eq:master}; a third explicitly traverses the orbits in
+\eqref{eq:orbit}.  Separately, the coordinate maps and alphabet labels are
+powered by composition, \eqref{eq:fixed} is evaluated, and \eqref{eq:mobius}
+is required to reproduce the actual vertex cycles for every group element.
+
+\section{Exact results}
+Values are ordered by
+$\tau=(1),(2),(1,1),(3),(2,1),(1,1,1)$.
+\begin{center}
+\begin{tabular}{@{}lrrl@{}}
+\toprule
+Action & $|G|$ & $|X|$ & common coefficient vector\\
+\midrule
+$S_2\wr S_2$ on $Q^2$ & 8 & 4 & $(1,3,3,4,7,10)$\\
+$S_2\wr S_3$ on $Q^3$ & 48 & 8 & $(1,4,4,7,13,20)$\\
+$S_3\wr S_2$ on $Q^2$ & 72 & 9 & $(1,3,3,7,11,15)$\\
+\bottomrule
+\end{tabular}
+\end{center}
+All 18 matrix/cycle/orbit comparisons and every fixed-word reconstruction
+pass.  For $(q,D)=(3,2)$ at $(t_1,t_2)=(0.037,0.061)$, the determinant and
+cycle averages are $1.1254339873575003$ and $1.1254339873575000$; the absolute
+error is $2.22\times10^{-16}$.
+
+\section{Reproduction}
+Run
+\begin{verbatim}
+marimo run marimo_notebooks/hamming_scheme.py
+\end{verbatim}
+from the repository root.  The table in the notebook exposes every exact
+comparison and the global fixed-point reconstruction result.
+\end{document}

@@ -1,0 +1,124 @@
+\documentclass[11pt]{article}
+\usepackage[margin=0.82in]{geometry}
+\usepackage{amsmath,amssymb,booktabs,microtype,xcolor,fancyhdr,hyperref}
+\definecolor{navy}{HTML}{17365D}\definecolor{teal}{HTML}{147D78}
+\hypersetup{colorlinks=true,linkcolor=navy,urlcolor=teal}
+\pagestyle{fancy}\setlength{\headheight}{14pt}\fancyhf{}
+\lhead{$Co_0$ Leech representation}\rhead{Proof and verification}\cfoot{\thepage}
+\newcommand{\Sgm}{\mathcal S}
+\title{\color{navy}\bfseries The $Co_0$ Leech-Space Sigma--MGF\\
+\large Frame-shape proof, central parity, and a 24-dimensional stress test}
+\author{Computational verification note}\date{17 July 2026}
+\begin{document}\maketitle
+
+\begin{abstract}
+We prove the frame-shape class formula for the natural $24$-dimensional
+complexified Leech-lattice representation of $Co_0$ and the vanishing of all
+odd total-degree coefficients.  Since direct enumeration of $Co_0$ is not a
+reasonable notebook computation, we test the determinant mechanism at the
+correct dimension on the explicit signed-coordinate subgroup
+$\{\pm P_g:g\in M_{24}\}$.  Direct invariant counts and exact class expansion
+agree through degree six.  The distinction between this stress test and a
+full $Co_0$ class-table evaluation is kept explicit.
+\end{abstract}
+
+\section{Frame-shape formula}
+Let $V=\Lambda_{\rm Leech}\otimes_{\mathbb Z}\mathbb C$.  If a conjugacy-class
+representative $g\in Co_0$ has frame shape
+$\pi_g=\prod_{r\geq1}r^{k_r(g)}$, by definition
+\[
+\det(xI-g)=\prod_{r\geq1}(x^r-1)^{k_r(g)},\qquad
+\sum_r r k_r(g)=24.
+\]
+Substitute $x=t^{-1}$ and multiply by $t^{24}$ to obtain
+\[
+\det(I-tg)=\prod_{r\geq1}(1-t^r)^{k_r(g)}.
+\]
+The generalized Molien formula, grouped by conjugacy class, is therefore
+\begin{equation}\label{eq:co0}
+\boxed{\Sgm_{Co_0,V}(\mathbf t)=
+\sum_{C\subseteq Co_0}\frac{|C|}{|Co_0|}
+\prod_{i,r}(1-t_i^r)^{-k_r(C)}.}
+\end{equation}
+Negative frame exponents cause no difficulty: each class contribution is a
+rational function whose product is the characteristic determinant.
+
+\section{Central parity theorem}
+The central element $-I$ belongs to $Co_0$.  On
+$\operatorname{Sym}^{\tau}V=\bigotimes_j\operatorname{Sym}^{\tau_j}V$ it
+acts by $(-1)^{|\tau|}$.  A fixed vector in odd total degree would satisfy
+$v=-v$, hence vanish.  Thus
+\begin{equation}\label{eq:parity}
+\boxed{[m_\tau]\Sgm_{Co_0,V}=0\quad\text{whenever }|\tau|\text{ is odd}.}
+\end{equation}
+In particular $[m_{(1)}]=0$, unlike the $M_{24}$ permutation representation,
+whose all-ones vector is fixed.  The two 24-dimensional series therefore
+differ in their first positive degree.
+
+This proof is representation theoretic and does not require any frame-shape
+table.  As a data-integrity check on a full table, the class contributions in
+every odd degree must cancel exactly.
+
+\section{A tractable subgroup at the true dimension}
+In the standard coordinate construction of the Leech lattice, its monomial
+automorphism group contains $M_{24}$ coordinate permutations and the central
+sign.  We use
+\[
+H=\{\pm P_g:g\in M_{24}\}\leq Co_0.
+\]
+The notebook explicitly constructs three $24\times24$ integer orthogonal
+generators $P_a,P_b,-I$, using the ATLAS permutations $a,b$ documented in the
+companion $M_{24}$ note.  This is large enough to exercise the actual ambient
+dimension while retaining an exact aggregated class computation.
+
+If $g$ has cycle counts $c_r(g)$, then
+\[
+\det(I-tP_g)=\prod_r(1-t^r)^{c_r(g)},\qquad
+\det(I+tP_g)=\prod_r(1-(-t)^r)^{c_r(g)}.
+\]
+Averaging the two signs projects onto even total degree.  Hence
+\begin{equation}\label{eq:signed}
+\Sgm_H(t)=\frac1{2|M_{24}|}\sum_{g\in M_{24}}
+\left\{\prod_r(1-t^r)^{-c_r(g)}+
+\prod_r(1-(-t)^r)^{-c_r(g)}\right\}.
+\end{equation}
+
+\section{Independent verification}
+For even $k$, $-I$ acts trivially on $\operatorname{Sym}^kV$, so the $H$-fixed
+space has a basis indexed by $M_{24}$ orbits of degree-$k$ multisets.  For odd
+$k$, \eqref{eq:parity} makes the dimension zero.  This gives a direct
+generator-orbit algorithm independent of the class expansion
+\eqref{eq:signed}.  Exact results are:
+\begin{center}
+\begin{tabular}{@{}crrc@{}}\toprule
+$k$ & direct invariant dimension & signed class formula & parity\\\midrule
+1&0&0&odd\\
+2&2&2&even\\
+3&0&0&odd\\
+4&5&5&even\\
+5&0&0&odd\\
+6&12&12&even\\\bottomrule
+\end{tabular}
+\end{center}
+The degree-six value also exercises the first point at which the underlying
+$M_{24}$ multiset orbits differ from those of $S_{24}$.
+
+\section{What this does and does not verify}
+The proof of \eqref{eq:co0} is exact for full $Co_0$, and the proof of
+\eqref{eq:parity} establishes every odd-degree zero for full $Co_0$.  The
+matrix sweep validates determinant expansion, sign cancellation, and direct
+invariant counting in dimension $24$ on a genuine subgroup.  It does not
+claim that the even coefficients $2,5,12$ are full-$Co_0$ coefficients; fixed
+spaces can shrink when the acting group grows.  A full numerical evaluation
+of \eqref{eq:co0} requires the complete $Co_0$ frame-shape and class-size
+table, which is deliberately not reconstructed from partial data.
+
+Run
+\begin{verbatim}
+.venv/bin/python for_this_guy/sporadic_matrix_groups/
+  co0_leech/verification.py
+.venv/bin/marimo edit marimo_notebooks/co0_leech.py
+\end{verbatim}
+after joining wrapped lines.  For background on the Leech representation and
+Conway fixed lattices, see \url{https://arxiv.org/abs/1505.06420}.
+\end{document}

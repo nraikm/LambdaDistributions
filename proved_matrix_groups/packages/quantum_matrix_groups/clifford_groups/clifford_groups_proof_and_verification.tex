@@ -1,0 +1,164 @@
+\documentclass[11pt]{article}
+\usepackage[margin=0.82in]{geometry}
+\usepackage{amsmath,amssymb,mathtools,booktabs,microtype,xcolor,fancyhdr,hyperref,array}
+\definecolor{navy}{HTML}{17365D}\definecolor{teal}{HTML}{147D78}\definecolor{soft}{HTML}{F2F6F8}
+\hypersetup{colorlinks=true,linkcolor=navy,urlcolor=teal}
+\pagestyle{fancy}\setlength{\headheight}{14pt}\fancyhf{}
+\lhead{Clifford groups}\rhead{Balanced sigma--MGFs}\cfoot{\thepage}
+\newcommand{\Sgm}{\mathcal S}\newcommand{\Bmgf}{\mathcal B}
+\title{\color{navy}\bfseries Clifford Groups and Balanced Sigma--MGFs\\
+\large Proof, phase correction, and explicit one- and two-qubit verification}
+\author{Computational verification note}\date{17 July 2026}
+\begin{document}\maketitle
+
+\begin{abstract}
+The ordinary one-sided sigma--MGF does not detect unitary-design order.  We
+prove the correct two-sided coefficient statement, isolate a further phase
+subtlety, and verify the design-detecting coefficient by closing explicit
+projective Clifford matrix groups in dimensions $2$ and $4$.  The computed
+frame potentials agree with Haar through degree three and differ at degree
+four: $(1,2,5,15)$ versus $(1,2,5,14)$ in dimension two, and
+$(1,2,6,29)$ versus $(1,2,6,24)$ in dimension four.
+\end{abstract}
+
+\section{One-sided series and the scalar obstruction}
+For a finite lift $\widetilde G\leq U(V)$, put
+\[
+\Sgm_{\widetilde G,V}(\mathbf t)=\frac1{|\widetilde G|}\sum_{g\in\widetilde G}
+ \prod_{i\geq1}\det(I-t_i g)^{-1}.
+\]
+For a compact group $K\leq U(V)$, define instead
+\[
+\Sgm_{K,V}(\mathbf t)=\int_K\prod_{i\geq1}\det(I-t_i k)^{-1}\,dk
+\]
+with normalized Haar measure.
+Expanding each determinant gives
+\[
+[m_\tau]\Sgm_{\widetilde G,V}=\dim\left(\bigotimes_j
+\operatorname{Sym}^{\tau_j}V\right)^{\widetilde G}.
+\]
+If the compact group contains the full scalar circle, every positive-degree
+one-sided coefficient vanishes.  Hence
+\[
+\boxed{\Sgm_{K,V}=1.}
+\]
+for $U(2^n)$ and for the full normalizer $N_{U(2^n)}(P_n)$.  A finite scalar
+lift instead obeys only the congruence imposed by its finite scalar center and
+may have nonzero lift-dependent coefficients.
+
+\section{The two-sided series, correctly phase neutralized}
+For a specified finite lift $\widetilde G\leq U(V)$ define
+\[
+\Bmgf_{\widetilde G}(\mathbf s,\mathbf t)
+=\frac1{|\widetilde G|}\sum_{g\in\widetilde G}
+ \prod_i\det(I-s_i g)^{-1}\prod_j\det(I-t_j\bar g)^{-1}.
+\]
+Character expansion and averaging prove
+\begin{equation}\label{eq:two-sided}
+[m_\alpha(\mathbf s)m_\beta(\mathbf t)]\Bmgf_{\widetilde G}
+=\dim\left(\operatorname{Sym}^{\alpha}V\otimes
+\operatorname{Sym}^{\beta}V^*\right)^{\widetilde G}.
+\end{equation}
+
+There is a useful refinement.  Replacing a representative $g$ by $zg$
+multiplies the coefficient integrand by $z^{|\alpha|-|\beta|}$.  Thus the
+entire two-sided series is not intrinsically projective.  Its
+\emph{phase-neutral projection}
+\begin{equation}\label{eq:neutral}
+\Bmgf_G^0=\sum_{|\alpha|=|\beta|}
+[m_\alpha m_\beta]\Bmgf_{\widetilde G}\,m_\alpha m_\beta
+\end{equation}
+is independent of representatives.  Equivalently it is the constant term in
+$z$ after $(\mathbf s,\mathbf t)\mapsto(z\mathbf s,z^{-1}\mathbf t)$.
+For the full normalizer, continuous scalar integration performs exactly this
+projection.  All design coefficients used below lie in \eqref{eq:neutral}.
+
+\section{The design-detecting coefficient}
+For $(1^k)=(1,\ldots,1)$, one has
+$\operatorname{Sym}^{(1^k)}V=V^{\otimes k}$.  Hence \eqref{eq:two-sided}
+gives
+\begin{align}
+[m_{(1^k)}(\mathbf s)m_{(1^k)}(\mathbf t)]\Bmgf_G^0
+&=\dim\operatorname{End}_G(V^{\otimes k})\\
+&=\frac1{|G|}\sum_{g\in G}|\operatorname{Tr}g|^{2k}.
+\label{eq:frame}
+\end{align}
+The last quantity is the $k$th unitary frame potential.
+
+Let $P_G^{(k)}$ be the average of
+$g^{\otimes k}\otimes\bar g^{\otimes k}$.  It is the orthogonal projection
+onto the corresponding $G$-fixed space.  Since $G\subseteq U(d)$, the Haar
+fixed space is contained in the $G$-fixed space.  Equality of the coefficient
+in \eqref{eq:frame} with the Haar coefficient is equality of the two ranks;
+the nested spaces, and therefore their orthogonal projections, are equal.
+This proves
+\[
+\boxed{G\text{ is a unitary }k\text{-design}\iff
+\Phi_k(G)=\Phi_k(U(d)).}
+\]
+Schur--Weyl duality supplies the exact Haar reference
+\[
+\Phi_k(U(d))=\sum_{\substack{\lambda\vdash k\\\ell(\lambda)\leq d}}
+(f^\lambda)^2,
+\]
+which reduces to $k!$ when $d\geq k$.
+
+\section{Independent matrix verification}
+The program constructs
+\[
+H=2^{-1/2}\begin{pmatrix}1&1\\1&-1\end{pmatrix},\qquad
+S=\begin{pmatrix}1&0\\0&i\end{pmatrix}
+\]
+and, for two qubits, their tensor placements together with CNOT.  Matrices
+are multiplied until closure, with equality taken modulo global phase.  The
+resulting orders are asserted to be $24$ and $11{,}520$.  No class table or
+design theorem is used in the numerical average.  The Haar comparator is
+computed independently by the hook-length formula in the Schur--Weyl sum.
+
+\begin{center}
+\begin{tabular}{@{}ccrrrr@{}}\toprule
+$n$&$d$&$|\overline{\mathrm{Cliff}}_n|$&$k$&direct $\Phi_k$&Haar\\\midrule
+1&2&24&1&1&1\\
+ &&&2&2&2\\
+ &&&3&5&5\\
+ &&&4&15&14\\\addlinespace
+2&4&11,520&1&1&1\\
+ &&&2&2&2\\
+ &&&3&6&6\\
+ &&&4&29&24\\\bottomrule
+\end{tabular}
+\end{center}
+Thus the first total degree at which the canonical phase-neutral coefficient
+can disagree is four, and the frame coefficient does disagree there.
+This is precisely the Clifford $3$-design/$4$-design transition established
+in \cite{zhu3design,graceful}.
+The notebook establishes the displayed frame-potential values only for the
+one- and two-qubit projective groups through $k=4$.  The all-qubit 3-design
+and failure-of-4-design statements are external theorems supplied by those
+references.
+
+As a separate regression test, closing the ordinary one-qubit lift generated
+by $H,S$ gives $192$ matrices and scalar center $\mu_8I$.  Its one-sided
+coefficients for $\tau=(1),(2),(4)$ vanish, while those for $(8)$ and $(4,4)$
+are $1$ and $2$.  This confirms both lift dependence and the scalar selection
+rule $8\mid|\tau|$.
+
+\section{Reproduction and scope}
+Run
+\begin{verbatim}
+.venv/bin/python for_this_guy/quantum_matrix_groups/
+  clifford_groups/verification.py
+.venv/bin/marimo edit marimo_notebooks/clifford_groups.py
+\end{verbatim}
+after joining each wrapped command onto one line.  The sweep verifies the
+multiqubit statement for $n=1,2$ and $k\leq4$; the cited theorems supply the
+all-$n$ result.  It makes no inference about odd-prime qudit Clifford groups.
+
+\begin{thebibliography}{9}
+\bibitem{zhu3design} H.~Zhu, ``Multiqubit Clifford groups are unitary
+3-designs,'' \url{https://arxiv.org/abs/1510.02619}.
+\bibitem{graceful} H.~Zhu, R.~Kueng, M.~Grassl, and D.~Gross,
+``The Clifford group fails gracefully to be a unitary 4-design,''
+\url{https://arxiv.org/abs/1609.08172}.
+\end{thebibliography}
+\end{document}

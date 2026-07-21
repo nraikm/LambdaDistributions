@@ -1,0 +1,105 @@
+\documentclass[11pt]{article}
+\usepackage[margin=0.84in]{geometry}
+\usepackage{amsmath,amssymb,mathtools,booktabs,microtype,xcolor,fancyhdr,hyperref}
+\definecolor{navy}{HTML}{17365D}\definecolor{teal}{HTML}{147D78}
+\hypersetup{colorlinks=true,linkcolor=navy,urlcolor=teal}
+\pagestyle{fancy}\setlength{\headheight}{14pt}\fancyhf{}
+\lhead{Barnes--Wall family I}\rhead{Extraspecial real Pauli group}\cfoot{\thepage}
+\newcommand{\MGF}{\mathfrak M}
+\title{\color{navy}\bfseries The Extraspecial Layer of Barnes--Wall Symmetry\\
+\large Proof of the four-sector sigma--MGF and direct matrix verification}
+\author{Computational verification note}\date{17 July 2026}
+\begin{document}\maketitle
+
+\begin{abstract}
+For the plus-type extraspecial real Pauli group
+$E_m\cong 2_+^{1+2m}$ on $V_m=\mathbb C^{2^m}$, we derive the complete
+four-sector determinant average.  An independent program constructs every
+matrix $\pm X^aZ^b$ and checks 24 one-row and mixed coefficients in
+dimensions $2,4,8$.  All comparisons are exact integers and all pass.
+\end{abstract}
+
+\section{Representation and coefficient target}
+Put $N=2^m$.  On the basis $\{e_x:x\in\mathbb F_2^m\}$ define
+\[
+ X(a)e_x=e_{x+a},\qquad Z(b)e_x=(-1)^{b\cdot x}e_x.
+\]
+Then
+\[
+ E_m=\{\pm X(a)Z(b):a,b\in\mathbb F_2^m\},\qquad |E_m|=2N^2.
+\]
+For a partition $\tau=(\tau_1,\ldots,\tau_r)$, determinant expansion gives
+\begin{equation}\label{eq:target}
+ [m_\tau]\MGF_{E_m,m}
+ =\frac1{|E_m|}\sum_{g\in E_m}\prod_i
+ h_{\tau_i}(\operatorname{spec}g),
+\end{equation}
+where $\sum_{d\geq0}h_d(\operatorname{spec}g)t^d=
+\det(I-tg)^{-1}$.  This is exactly
+$\dim(\bigotimes_i\operatorname{Sym}^{\tau_i}V_m)^{E_m}$.
+
+\section{The four spectral sectors}
+The central elements $I,-I$ have determinants $(1-t)^N,(1+t)^N$.
+For $g=\pm X(a)Z(b)$ one has
+\[
+ g^2=(-1)^{a\cdot b}I.
+\]
+Off the center, the trace is zero.  Hence an involution has $N/2$ eigenvalues
+of each sign, while an element squaring to $-I$ has $N/2$ eigenvalues each
+of $i$ and $-i$.  Their determinants are respectively
+$(1-t^2)^{N/2}$ and $(1+t^2)^{N/2}$.
+
+The quadratic form $q(a,b)=a\cdot b$ is plus type.  It has
+$(N^2+N)/2$ zeros, including $(0,0)$.  Accounting for both central lifts
+therefore gives
+\[
+ \#\{g\notin Z(E_m):g^2=I\}=N^2+N-2,
+ \qquad \#\{g:g^2=-I\}=N^2-N.
+\]
+The counts sum with the two central elements to $2N^2$.  Averaging proves
+\begin{equation}\label{eq:formula}
+\boxed{\begin{aligned}
+\MGF_{E_m,m}(\mathbf t)=\frac1{2N^2}\Big[&
+\prod_j(1-t_j)^{-N}+\prod_j(1+t_j)^{-N}\\
+&+(N^2+N-2)\prod_j(1-t_j^2)^{-N/2}\\
+&+(N^2-N)\prod_j(1+t_j^2)^{-N/2}\Big].
+\end{aligned}}
+\end{equation}
+Because $-I\in E_m$, the first two terms cancel in odd total degree and the
+other two contain only even powers.  Thus every odd-total-degree coefficient
+vanishes.
+
+\section{Independent coefficient extraction}
+The verifier does not classify matrices after construction.  For each
+explicit matrix it computes the eigenvalues, obtains $h_d$ recursively from
+the product generating function, forms the integrand in \eqref{eq:target},
+and averages.  The formula side separately extracts coefficients from the
+four factors in \eqref{eq:formula} using binomial coefficients.
+Before coefficient extraction, every matrix is independently checked to have
+real entries and to satisfy $g^{\mathsf T}g=I$.
+
+\begin{center}
+\begin{tabular}{@{}c@{\quad}c@{\quad}c@{\quad}c@{\qquad}r@{\qquad}r@{}}\toprule
+$m$&$N$&$|E_m|$&$\tau$&direct&formula\\\midrule
+1&2&8&$(3,1)$&2&2\\
+1&2&8&$(2,2)$&3&3\\
+2&4&32&$(4)$&5&5\\
+2&4&32&$(4,2)$&23&23\\
+3&8&128&$(3,1)$&15&15\\
+3&8&128&$(6)$&29&29\\
+3&8&128&$(4,2)$&190&190\\\bottomrule
+\end{tabular}
+\end{center}
+The full sweep uses eight partitions at each rank, including the odd case
+$(1)$ and the mixed cases $(1,1),(3,1),(2,2),(4,2)$.  All 24 pass.
+
+\section{Reproduction}
+\begin{verbatim}
+.venv/bin/python for_this_guy/barnes_wall_lattice_automorphism_groups/
+  extraspecial_real_pauli/verification.py
+.venv/bin/marimo edit marimo_notebooks/extraspecial_real_pauli.py
+\end{verbatim}
+Join each wrapped command onto one shell line.  The computation is exhaustive
+at the stated ranks; no random sampling or precomputed character table is
+used.
+\end{document}

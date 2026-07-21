@@ -1,0 +1,2 @@
+"""Unitary Schur-functor verification."""
+

@@ -1,0 +1,322 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,booktabs,microtype}
+\usepackage{xcolor}
+\usepackage[colorlinks=true,linkcolor=blue,urlcolor=blue]{hyperref}
+\allowdisplaybreaks
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}[theorem]{Proposition}
+\newcommand{\F}{\mathbb F}
+\newcommand{\C}{\mathbb C}
+\newcommand{\E}{\mathbb E}
+\newcommand{\Prob}{\mathbb P}
+\newcommand{\Fix}{\operatorname{Fix}}
+\newcommand{\Tr}{\operatorname{Tr}}
+\newcommand{\Sym}{\operatorname{Sym}}
+\newcommand{\Exp}{\operatorname{Exp}}
+\newcommand{\stirling}[2]{\genfrac{[}{]}{0pt}{}{#1}{#2}}
+
+\title{The Hyperoctahedral Group on the Binary Cube\\
+Fixed Points, the Full $\sigma$-MGF, and Exact Verification}
+\author{Executable companion note}
+\date{17 July 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Let $B_n=C_2^n\rtimes S_n$ act affinely on $X_n=\F_2^n$ and let
+$V_n=\C[X_n]$.  We prove the proposed fixed-point distribution and moment
+formulas, derive the exact signed-cycle-type expression for the full
+$\sigma$-MGF, and describe an independent exhaustive verification.  The
+program constructs every $2^n\times2^n$ permutation matrix, computes the
+target directly, traverses the relevant monomial-basis orbits, and compares
+both results with the signed-cycle formula for $1\leq n\leq5$.  All checks
+pass; the largest case has $|B_5|=3840$ matrices of size $32\times32$.
+\end{abstract}
+
+\section{The action and the target}
+Write elements of $B_n$ as $g=(b,\pi)$, where $b\in\F_2^n$ and
+$\pi\in S_n$, and set
+\[
+g\cdot x=b+\pi x,\qquad x\in X_n.
+\]
+On the basis $\{e_x:x\in X_n\}$ of $V_n$, the corresponding matrix is
+\begin{equation}\label{eq:matrix}
+P_g e_x=e_{g\cdot x}.
+\end{equation}
+Thus $P_g$ is a $2^n\times2^n$ permutation matrix.  If $c_d(g)$ denotes the
+number of $d$-cycles of $g$ on the cube vertices, the generalized permutation
+Molien identity gives
+\begin{equation}\label{eq:molien}
+\mathcal H_n(\mathbf t)
+=\E_{g\in B_n}\prod_{d\geq1}Q_d(\mathbf t)^{c_d(g)},
+\qquad
+Q_d(\mathbf t)=\prod_{a\geq1}(1-t_a^d)^{-1}.
+\end{equation}
+Indeed, a $d$-cycle permutation block has determinant
+$\det(I-tP_d)=1-t^d$.  Equivalently,
+\[
+\mathcal H_n(\mathbf t)
+=\E_g\prod_{a\geq1}\det(I-t_aP_g)^{-1},
+\]
+which is the intended $\Exp_\sigma$ expression.
+
+For a partition $\tau=(\tau_1,\ldots,\tau_s)$, its monomial coefficient has
+the useful orbit interpretation
+\begin{equation}\label{eq:orbit-coeff}
+[m_\tau]\mathcal H_n
+=\dim\left(\bigotimes_{j=1}^s\Sym^{\tau_j}(V_n)\right)^{B_n}
+=\#\left(B_n\backslash\prod_{j=1}^s\Sym^{\tau_j}(X_n)\right).
+\end{equation}
+Here $\Sym^r(X_n)$ means the set of $r$-multisets of vertices.  This supplies
+a direct calculation independent of determinant algebra.
+
+\section{The fixed-point law}
+Define
+\[
+F_n(g)=\Tr(P_g)=\#\Fix_{X_n}(g).
+\]
+
+\begin{theorem}[Exact conditional law]\label{thm:fixed-law}
+For uniform $b\in\F_2^n$ and fixed $\pi\in S_n$, let $C(\pi)$ be the number
+of coordinate cycles of $\pi$.  Then
+\[
+F_n(b,\pi)=
+\begin{cases}
+2^{C(\pi)},&\text{with probability }2^{-C(\pi)},\\
+0,&\text{with probability }1-2^{-C(\pi)}.
+\end{cases}
+\]
+\end{theorem}
+
+\begin{proof}
+On a coordinate cycle $(i_1,\ldots,i_\ell)$, the fixed equation
+$x=b+\pi x$ becomes a cyclic system
+\[
+x_{i_1}=b_{i_1}+x_{i_\ell},\quad
+x_{i_2}=b_{i_2}+x_{i_1},\quad\ldots\quad
+x_{i_\ell}=b_{i_\ell}+x_{i_{\ell-1}}.
+\]
+Adding in $\F_2$ shows that it is solvable only if
+$\sum_{j=1}^{\ell}b_{i_j}=0$.  This condition is also sufficient: after one
+coordinate is chosen, the remaining coordinates are forced.  Consequently
+each coordinate cycle imposes one independent parity condition on $b$ and,
+when solvable, contributes two solutions.  There are $C(\pi)$ independent
+conditions and $2^{C(\pi)}$ solutions.
+\end{proof}
+
+Let $\stirling{n}{k}$ be the unsigned Stirling number of the first kind.  Since
+there are $\stirling{n}{k}$ permutations with $k$ cycles, Theorem
+\ref{thm:fixed-law} yields
+\begin{equation}\label{eq:distribution}
+\Prob(F_n=2^k)=\frac{\stirling{n}{k}}{n!\,2^k},
+\qquad 1\leq k\leq n.
+\end{equation}
+The remaining probability is at zero.  Using
+$\sum_k\stirling{n}{k}x^k=x(x+1)\cdots(x+n-1)$ gives
+\begin{equation}\label{eq:positive-probability}
+\Prob(F_n>0)
+=\frac{(1/2)^{\overline n}}{n!}
+=\frac{\Gamma(n+\tfrac12)}{\sqrt\pi\,\Gamma(n+1)}
+=\frac{\binom{2n}{n}}{4^n}
+\sim\frac1{\sqrt{\pi n}}.
+\end{equation}
+Hence $F_n\to0$ in probability.
+
+For every integer $m\geq1$, conditioning on $\pi$ instead gives
+\[
+\E_b[F_n^m\mid\pi]
+=2^{-C(\pi)}2^{mC(\pi)}=2^{(m-1)C(\pi)}.
+\]
+Another application of the Stirling generating polynomial proves
+\begin{equation}\label{eq:moments}
+\boxed{\quad
+\E[F_n^m]
+=\frac{(2^{m-1})^{\overline n}}{n!}
+=\binom{n+2^{m-1}-1}{n}.
+\quad}
+\end{equation}
+In particular $\E F_n=1$, $\E F_n^2=n+1$,
+$\E F_n^3=\binom{n+3}{3}$, and $\operatorname{Var}(F_n)=n$.  Thus convergence
+in probability to zero coexists with divergent moments of every order
+$m\geq2$.
+
+There is also a direct Burnside proof of \eqref{eq:moments}.  Represent an
+ordered $m$-tuple of cube vertices by an $m\times n$ binary matrix.  Coordinate
+permutations permute its columns, while a flip in one cube coordinate adds
+$\mathbf1=(1,\ldots,1)$ to the corresponding column.  Each column is therefore
+remembered only as an element of
+$\F_2^m/\langle\mathbf1\rangle$, a set of size $2^{m-1}$.  The orbit is a
+multiset of $n$ such column types, so
+\[
+\#(B_n\backslash X_n^m)=\binom{n+2^{m-1}-1}{n}=\E[F_n^m].
+\]
+Combining this with \eqref{eq:orbit-coeff} gives
+\begin{equation}\label{eq:moment-coeff}
+[m_{(1^m)}]\mathcal H_n=\binom{n+2^{m-1}-1}{n}.
+\end{equation}
+
+\section{Signed cycle types and the full cycle index}
+A signed coordinate-cycle type is a pair of sequences
+$(a_\ell,b_\ell)_{\ell\geq1}$, where $a_\ell$ counts length-$\ell$
+coordinate cycles with total flip parity zero and $b_\ell$ counts those with
+total flip parity one.  They satisfy
+\[
+\sum_{\ell\geq1}\ell(a_\ell+b_\ell)=n.
+\]
+For a uniform element of $B_n$, the probability of this type is
+\begin{equation}\label{eq:type-probability}
+w(a,b)=\prod_{\ell\geq1}
+\frac1{(2\ell)^{a_\ell+b_\ell}a_\ell!b_\ell!}.
+\end{equation}
+This follows from the usual $S_n$ cycle-type probability and the fact that
+the accumulated parity on every coordinate cycle is an independent fair bit.
+
+Let
+\[
+R_r(a,b)=\#\Fix_{X_n}(g^r)
+\]
+for any element of signed type $(a,b)$.  A positive length-$\ell$ cycle
+contributes $2^{\gcd(\ell,r)}$ fixed choices.  For a negative cycle, write the
+affine map as $T(x)=Rx+e_0$, with $R$ a cyclic rotation.  If
+$d=\gcd(\ell,r)$, the permutation $R^r$ has $d$ coordinate orbits.  On each
+orbit, the translation in $T^r$ has parity $r/d$.  The fixed equation is
+therefore solvable exactly when $r/d$ is even; when solvable it has $2^d$
+solutions.  Independence between coordinate cycles proves
+\begin{equation}\label{eq:fixed-powers}
+R_r(a,b)=
+\begin{cases}
+\displaystyle
+2^{\sum_{\ell\geq1}(a_\ell+b_\ell)\gcd(\ell,r)},
+&\displaystyle
+\frac r{\gcd(\ell,r)}\text{ is even for every }\ell\text{ with }b_\ell>0,
+\\[8pt]
+0,&\text{otherwise}.
+\end{cases}
+\end{equation}
+
+Because $R_r=\sum_{d\mid r}d\,c_d$, Möbius inversion recovers the exact
+vertex-cycle counts:
+\begin{equation}\label{eq:mobius}
+c_d(a,b)=\frac1d\sum_{r\mid d}\mu(d/r)R_r(a,b).
+\end{equation}
+Substituting \eqref{eq:type-probability}--\eqref{eq:mobius} into
+\eqref{eq:molien} proves the full finite-$n$ formula
+\begin{equation}\label{eq:full-formula}
+\boxed{
+\mathcal H_n(\mathbf t)=
+\sum_{\substack{(a_\ell),(b_\ell)\\
+\sum_\ell\ell(a_\ell+b_\ell)=n}}
+w(a,b)\prod_{d\geq1}Q_d(\mathbf t)^{c_d(a,b)}.
+}
+\end{equation}
+This is exact, not an asymptotic or a truncation.
+
+At total degree two, the orbit interpretation gives a transparent check.
+The group is transitive on vertices, and pairs of vertices are classified by
+their Hamming distance $0,1,\ldots,n$.  Therefore
+\begin{equation}\label{eq:degree-two}
+\mathcal H_n
+=1+m_{(1)}+(n+1)\bigl(m_{(2)}+m_{(1,1)}\bigr)+\cdots.
+\end{equation}
+In particular, the coefficients do not stabilize as $n\to\infty$.
+
+\section{Independent verification strategy}
+The companion program avoids using the statement being tested as its only
+computational route.
+
+\paragraph{Literal matrix computation.}
+For every one of the $2^n n!$ pairs $(b,\pi)$, the program builds the vertex
+permutation and the matrix \eqref{eq:matrix}.  It checks that the matrices are
+distinct permutation matrices.  For a partition $\tau$, it computes complete
+symmetric characters from actual matrix traces using Newton's recurrence
+\begin{equation}\label{eq:newton}
+d\,h_d(P_g)=\sum_{r=1}^d\Tr(P_g^r)h_{d-r}(P_g),
+\qquad h_0=1,
+\end{equation}
+and averages $\prod_jh_{\tau_j}(P_g)$ exactly.
+
+\paragraph{Direct orbit computation.}
+The monomial basis in \eqref{eq:orbit-coeff} is constructed literally.  A
+breadth-first traversal using the $n$ coordinate flips and $n-1$ adjacent
+coordinate transpositions counts its orbits.  This computation does not use
+traces, determinants, signed types, or the proposed formula.
+
+\paragraph{Signed-type computation.}
+All nonnegative solutions $(a_\ell,b_\ell)$ of the size constraint are
+generated without enumerating group elements.  Their rational weights
+\eqref{eq:type-probability} are checked to sum to one.  Equations
+\eqref{eq:fixed-powers} and \eqref{eq:mobius} then produce vertex cycles and
+the coefficient predicted by \eqref{eq:full-formula}.
+
+The tests also compare the entire convergent function, not only a finite
+Taylor truncation.  At $(t_1,t_2)=(0.037,0.061)$ they evaluate
+\[
+\frac1{|B_n|}\sum_g
+\frac1{\det(I-t_1P_g)\det(I-t_2P_g)}
+\]
+by dense determinants, by actual vertex cycles, and by the signed-type sum.
+
+\section{Exact results}
+The following coefficient vectors are ordered as
+\[
+\tau=(1),(2),(1,1),(3),(2,1),(1,1,1).
+\]
+Every entry agrees across literal matrices, direct orbit traversal, and the
+signed-type formula.
+\begin{center}
+\begin{tabular}{@{}rrrrl@{}}
+\toprule
+$n$ & $|B_n|$ & $\dim V_n$ & $\Prob(F_n>0)$ & common coefficient vector\\
+\midrule
+1 & 2    & 2  & $1/2$   & $(1,2,2,2,3,4)$\\
+2 & 8    & 4  & $3/8$   & $(1,3,3,4,7,10)$\\
+3 & 48   & 8  & $5/16$  & $(1,4,4,7,13,20)$\\
+4 & 384  & 16 & $35/128$& $(1,5,5,11,22,35)$\\
+5 & 3840 & 32 & $63/256$& $(1,6,6,16,34,56)$\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+For $n=1,\ldots,5$, the program additionally verifies, element by element,
+the conditional parity law and reconstructs every vertex-cycle count from
+\eqref{eq:fixed-powers}--\eqref{eq:mobius}.  It checks moments $m=1,2,3,4$,
+giving 20 exact moment comparisons, and the six displayed coefficients,
+giving 30 three-way coefficient comparisons.  In the largest numerical case,
+the matrix determinant average is
+\[
+1.1620117926716296,
+\]
+and its maximum discrepancy from the cycle and signed-type evaluations is
+$1.74\times10^{-14}$, consistent with floating-point roundoff.  All integer
+and rational comparisons are exact.
+
+The range $n\leq5$ is a practical exhaustive choice: it includes all 3840
+elements at $n=5$ and orbit spaces as large as $|X_5|^3=32768$, while the
+group order grows as $2^n n!$.  The proof and signed-type algorithm remain
+valid for every $n$; only brute-force matrix enumeration is deliberately
+bounded.
+
+\section{Reproduction}
+From the repository root, run
+\begin{verbatim}
+marimo run marimo_notebooks/hyperoctahedral_cube.py
+\end{verbatim}
+The notebook allows inspection of individual matrices and signed types and
+shows every comparison table.  The noninteractive regression test is
+\begin{verbatim}
+pytest -q tests/test_hyperoctahedral_cube.py
+\end{verbatim}
+
+\section{Conclusion}
+The proposed formulas are correct.  A random cube symmetry has no fixed
+vertex with probability tending to one, but its rare nonzero fixed sets are
+large enough that $\E F_n=1$ and all higher moments diverge.  The signed-cycle
+power formula determines every vertex cycle and hence the complete
+$\sigma$-MGF through \eqref{eq:full-formula}.  Exhaustive matrix, orbit, and
+signed-type computations agree throughout the representative range
+$1\leq n\leq5$.
+
+\end{document}

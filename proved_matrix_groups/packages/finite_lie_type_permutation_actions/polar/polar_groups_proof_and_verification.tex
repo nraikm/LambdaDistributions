@@ -1,0 +1,201 @@
+\documentclass[10pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage[margin=0.9in]{geometry}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{booktabs,array}
+\usepackage{xcolor}
+\usepackage[hidelinks]{hyperref}
+\usepackage{microtype}
+\usepackage{fancyhdr}
+\definecolor{navy}{RGB}{24,55,95}
+\pagestyle{fancy}
+\setlength{\headheight}{14pt}
+\fancyhf{}
+\lhead{Finite polar groups}
+\rhead{Point actions and exact verification}
+\cfoot{\thepage}
+\newcommand{\Sym}{\operatorname{Sym}}
+\newcommand{\Fix}{\operatorname{Fix}}
+\newcommand{\F}{\mathbb F}
+\newcommand{\Sg}{\mathcal S}
+\title{\color{navy}\textbf{Finite Polar-Space Permutation Actions}\\[2mm]
+\large Unitary, symplectic, and orthogonal $\sigma$-MGFs}
+\author{Proof and computational verification companion}
+\date{17 July 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+This note specializes the exact permutation $\sigma$-MGF to isotropic and
+singular point actions of finite unitary, symplectic, and orthogonal groups.
+Witt extension proves the stable three-orbit classification of pairs.  The
+companion marimo notebook constructs $Sp_4(2)$, $O_4^+(2)$, and $U_4(2)$ as
+finite-field matrix groups, induces their point actions, and independently
+compares direct orbit counts, cycle products, fixed-point reconstruction, and
+matrix determinants.  Every tested coefficient agrees exactly.
+\end{abstract}
+
+\section{Exact formula for a polar action}
+Let a finite classical group $G$ act on a finite set $S$ of isotropic or
+singular one-spaces.  For $g\in G$, let $c_d(g;S)$ denote the number of
+$d$-cycles of its action on $S$.  The permutation-matrix eigenvalues on a
+$d$-cycle are the $d$th roots of unity, so
+\begin{equation}
+ \boxed{\Sg_{G,S}(t_\bullet)=\frac1{|G|}\sum_{g\in G}
+ \prod_{i,d\geq1}(1-t_i^d)^{-c_d(g;S)}.}
+\end{equation}
+Moreover,
+\begin{equation}
+ \Fix_S(g^r)=\sum_{d\mid r}d\,c_d(g;S),\qquad
+ c_d(g;S)=\frac1d\sum_{r\mid d}\mu(d/r)\Fix_S(g^r).
+\end{equation}
+Thus one may compute (1) purely from the number of isotropic or singular
+eigenlines of every power $g^r$.  Equivalently, for a parabolic point
+stabilizer $P$, this fixed-point count is
+$(\operatorname{Ind}_P^G\mathbf1)(g^r)$.
+
+For $\tau=(\tau_1,\ldots,\tau_s)$, expanding the determinants gives
+\begin{equation}
+ [m_\tau]\Sg_{G,S}=\dim\left(
+ \bigotimes_{b=1}^s\Sym^{\tau_b}\mathbb C[S]\right)^G.
+\end{equation}
+The tensor product has a basis consisting of tuples of multisets of points.
+Because $G$ permutes this basis, (3) is exactly the number of $G$-orbits on
+such tuples.  This orbit count is the independent direct computation used
+below.
+
+\section{Why the degree-two coefficient is three}
+For two isotropic or singular points in a nondegenerate polar space of
+sufficient Witt rank, there are three possible geometric types:
+\begin{enumerate}
+ \item the two points coincide;
+ \item they are distinct and perpendicular;
+ \item they are distinct and nonperpendicular.
+\end{enumerate}
+Each relation is preserved by every isometry.  Conversely, an isometry
+between either pair of generated subspaces extends to the ambient space by
+Witt's extension theorem.  Hence each type is one orbit.  This applies to
+both ordered pairs and unordered 2-multisets, proving
+\begin{equation}
+ \boxed{[m_{(2)}]\Sg=[m_{(1,1)}]\Sg=3.}
+\end{equation}
+It follows that the stable expansion begins
+\[
+ \Sg=1+m_{(1)}+3m_{(2)}+3m_{(1,1)}+O(\deg3).
+\]
+The extra perpendicularity relation already distinguishes these limits from
+the Poisson/symmetric-group series in degree two.
+
+\paragraph{Proposition (coefficientwise stability within a fixed polar tower).}
+Fix the field, one classical type, and a total degree $D$.  For each tuple of
+multisets of singular or isotropic points of total degree $D$, retain the
+labelled span together with the restricted form and the multiplicities of the
+labelled one-spaces; in characteristic-two orthogonal cases retain the
+restricted quadratic form rather than only its polar bilinear form.  Two
+configurations in the same ambient nondegenerate polar space are conjugate
+precisely when these labelled formed spaces are isometric, because an
+isometry of their spans extends by Witt's lemma.
+
+Only finitely many labelled formed spaces of dimension at most $D$ exist over
+the fixed finite field.  Let $m_0(D)$ be the maximum, over the types that occur
+somewhere in the chosen tower, of the least Witt rank in which the type
+embeds.  Every coefficient of total degree $D$ is therefore constant for Witt
+rank at least $m_0(D)$.  Orthogonal plus, minus, and odd-dimensional towers
+are treated separately.  This proves existence of a stable threshold but
+does not claim that the displayed bound is sharp.  The degree-two value three
+was proved directly above and does not depend on this proposition.
+
+\section{The three exact matrix constructions}
+All arithmetic in the program is exact integer arithmetic.
+
+\paragraph{$Sp_4(2)$.}
+We enumerate $GL_4(2)$ and retain exactly the matrices preserving
+\[
+ B(x,y)=x_1y_2+x_2y_1+x_3y_4+x_4y_3.
+\]
+The resulting group has order $720$.  In characteristic two every one-space
+is isotropic, giving a permutation action on the 15 nonzero vectors (equally,
+the 15 projective points).
+
+\paragraph{$O_4^+(2)$.}
+We retain the matrices preserving the hyperbolic quadratic form
+\[
+ Q(x)=x_1x_2+x_3x_4.
+\]
+The resulting group has order $72$ and acts on its 9 nonzero singular vectors.
+
+\paragraph{$U_4(2)$.}
+We implement $\F_4=\F_2[\alpha]/(\alpha^2+\alpha+1)$ and the Hermitian form
+\[
+ h(x,y)=\sum_{j=1}^4\overline{x_j}y_j,\qquad \overline z=z^2.
+\]
+Every ordered orthonormal basis is enumerated recursively, producing exactly
+\[
+ |U_4(2)|=2^6\prod_{i=1}^4(2^i-(-1)^i)=77{,}760
+\]
+matrices.  Normalizing each nonzero vector by its first nonzero coordinate
+gives 45 isotropic projective points.  The scalar center has order three, so
+the faithful induced permutation image has order $25{,}920$.
+
+\section{Verification strategy and results}
+For each action, the notebook:
+\begin{enumerate}
+ \item constructs the full finite-field matrix group and induced permutation;
+ \item directly enumerates orbits on ordered point pairs and 2-multisets;
+ \item extracts the same coefficients from the cycle product in (1);
+ \item reconstructs cycle counts from fixed points of powers using (2); and
+ \item numerically compares direct permutation-matrix determinants with the
+ cycle products at $(t_1,t_2)=(0.07,0.11)$.
+\end{enumerate}
+The regression module also compares a degree-three labelled-formed-space
+orbit count in two consecutive ranks of each implemented tower.  This tests
+the restricted-form encoding; it is not used as a proof of the proposition.
+
+\begin{center}
+\begin{tabular}{@{}lcrrr@{}}
+\toprule
+Action & $\tau$ & direct orbits & cycle formula & claimed\\
+\midrule
+$Sp_4(2)$ on 15 isotropic points & $(2)$ &3&3&3\\
+ & $(1,1)$ &3&3&3\\
+$O_4^+(2)$ on 9 singular points & $(2)$ &3&3&3\\
+ & $(1,1)$ &3&3&3\\
+$U_4(2)$ on 45 isotropic points & $(2)$ &3&3&3\\
+ & $(1,1)$ &3&3&3\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Every equality in the table is exact.  All cycle counts in the tested
+$Sp_4(2)$ and projective $U_4(2)$ actions are also recovered exactly from
+fixed points of powers.  For the symplectic action, the direct determinant
+average and cycle-product average both equal $1.304867127368$, with zero
+difference at the displayed floating-point precision.
+
+\section{Representations requiring additional choices}
+The Weil-representation paragraph is governed by the general identity
+\[
+ \det(I-t\rho(g))^{-1}=\exp\left(
+ \sum_{r\geq1}\frac{\chi_\rho(g^r)}{r}t^r\right),
+\]
+but it does not specify one numerical representation.  A reproducible matrix
+test requires a choice of $q$ and $n$, an additive character, a linearization,
+and whether $\rho$ is the full Weil representation or a constituent.  Even
+characteristic requires a different construction.  Accordingly, no arbitrary
+choice was silently inserted into the verification.
+
+Likewise, the exceptional/Suzuki/Ree formula is an exact template for a
+specified pair $(G(q),P(q))$, not a single representation.  A numerical test
+requires the concrete group, field size, and parabolic action.  Once supplied,
+the same fixed-point, cycle, determinant, and orbit pipeline applies without
+change.
+
+\paragraph{Conclusion.}
+The three classical polar families realize exactly the predicted three pair
+types in small but stable-rank examples.  The agreement of full matrix-group
+enumeration, direct configuration orbits, cycle extraction, M\"obius
+reconstruction, and determinants validates both the formula and the proposed
+verification method.
+
+\end{document}

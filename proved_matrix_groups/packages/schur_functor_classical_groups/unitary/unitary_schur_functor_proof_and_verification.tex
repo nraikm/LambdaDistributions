@@ -1,0 +1,103 @@
+\documentclass[11pt]{article}
+\usepackage[left=0.82in,right=0.82in,top=0.82in,bottom=1.0in]{geometry}
+\usepackage{amsmath,amssymb,mathtools,booktabs,tabularx,microtype,fancyhdr}
+\usepackage[dvipsnames]{xcolor}
+\usepackage[colorlinks=true,linkcolor=NavyBlue,urlcolor=BrickRed]{hyperref}
+\definecolor{ink}{HTML}{17212B}\definecolor{accent}{HTML}{315B7D}\definecolor{pale}{HTML}{EDF4F8}\definecolor{passgreen}{HTML}{16794A}
+\color{ink}\pagestyle{fancy}\fancyhf{}\lhead{Schur functors of $U(n)$}\rhead{Proof and verification}\cfoot{\thepage}\setlength{\headheight}{14pt}
+\setlength{\parindent}{0pt}\setlength{\parskip}{5pt}
+\newcommand{\Sym}{\operatorname{Sym}}\newcommand{\Tr}{\operatorname{Tr}}\newcommand{\Exp}{\operatorname{Exp}_{\sigma}}
+\newcommand{\summarybox}[1]{\begin{center}\fcolorbox{accent}{pale}{\parbox{0.91\linewidth}{#1}}\end{center}}
+\title{\textbf{Schur-functor representations of $U(n)$}\\[3pt]\large Exact trace identities, the holomorphic obstruction, and reproducible matrix tests}
+\author{Proof and verification note}\date{17 July 2026}
+\begin{document}\maketitle
+\summarybox{\textbf{Outcome.} The finite-dimensional plethystic trace formula is correct. For five pairs $(n,\lambda)$, including $\lambda=(2,1)$, 40 direct Schur-matrix comparisons pass with maximum error $2.98\times10^{-15}$. The important qualification is exact: for nonempty $\lambda$, the purely holomorphic $U(n)$ sigma-MGF is $1$. The nontrivial statement is the joint law with the conjugate. Three seeded Haar diagnostics also pass.}
+
+\section{Statement with the unitary correction}
+Let $W_n=\mathbb C^n$, let $U\in U(n)$, fix $\lambda\vdash d$, and put $V_{\lambda,n}=S_\lambda(W_n)$. If $X(U)$ is the eigenvalue alphabet of $U$, then the eigenvalue alphabet of $S_\lambda(U)$ is the plethysm $s_\lambda[X(U)]$. Hence, for every $r\ge1$,
+\begin{equation}\label{eq:trace}
+ \boxed{\Tr(S_\lambda(U)^r)=p_r[s_\lambda][X(U)]=s_\lambda[X(U^r)].}
+\end{equation}
+For a partition $\tau$, the coefficient integrand of the sigma-MGF is
+\begin{equation}\label{eq:int}
+ \prod_i h_{\tau_i}[s_\lambda][X(U)].
+\end{equation}
+Associativity of plethysm gives $h_\tau[s_\lambda[X]]=(h_\tau[s_\lambda])[X]$, so Haar integration yields
+\begin{equation}
+ [m_\tau]\mathcal S^U_{\lambda,n}
+ =\dim\left(\bigotimes_i\Sym^{\tau_i}S_\lambda(W_n)\right)^{U(n)}.
+\end{equation}
+
+\textbf{Proposition (central-character obstruction).} If $d>0$, then
+\begin{equation}\label{eq:hol}
+ \boxed{\mathcal S^U_{\lambda,n}=1.}
+\end{equation}
+Indeed, $zI$ acts on $S_\lambda(W_n)$ by $z^d$ and on the tensor product above by $z^{d|\tau|}$. For $|\tau|>0$ this character is not identically one on $U(1)$, so its fixed space is zero. This is an exact finite-$n$ proof, not an asymptotic statement.
+
+The nontrivial object uses a conjugate alphabet. In the stable range its coefficient is
+\begin{equation}
+ [m_\tau\bar m_\nu]\mathcal J^U_{\lambda,\infty}
+ =\left\langle \Exp(h_1\bar h_1),\,h_\tau[s_\lambda]\,\overline{h_\nu[s_\lambda]}\right\rangle.
+\end{equation}
+This is the plethystic pushforward of the defining-representation joint law.
+
+\textbf{Stable-range qualification.}  Let $|\lambda|=d$ and consider a
+balanced coefficient indexed by outer partitions $\alpha,\beta$, with
+$d|\alpha|=d|\beta|=:m$.  Embed its coefficient space into
+$W_n^{\otimes m}\otimes(W_n^*)^{\otimes m}$.  The first fundamental theorem
+for $GL_n$ says that contraction tensors indexed by $S_m$ span the invariants,
+and the second fundamental theorem says that they are linearly independent
+when $n\geq m$.  Therefore the stable plethystic formula is valid whenever
+\[
+n\geq m=d|\alpha|=d|\beta|.
+\]
+If the two degrees are unequal, the coefficient is exactly zero for every $n$
+by the scalar-center argument.
+
+\section{Explicit polynomial-Gaussian law}
+The Frobenius formula gives
+\begin{equation}
+ s_\lambda=\sum_{\alpha\vdash d}\frac{\chi^\lambda(\alpha)}{z_\alpha}p_\alpha,
+ \qquad z_\alpha=\prod_j j^{m_j(\alpha)}m_j(\alpha)!.
+\end{equation}
+Substituting $p_k[X(U^r)]=\Tr(U^{rk})$ in \eqref{eq:trace} gives the exact identity
+\begin{equation}\label{eq:frob}
+ \Tr(S_\lambda(U)^r)=\sum_{\alpha\vdash d}\frac{\chi^\lambda(\alpha)}{z_\alpha}
+ \prod_{a\in\alpha}\Tr(U^{ra}).
+\end{equation}
+For fixed powers, $\Tr(U^k)$ converges jointly in moments to independent circular complex Gaussians $Z_k$ satisfying $\mathbb E Z_k=\mathbb E Z_k^2=0$ and $\mathbb E|Z_k|^2=k$. Polynomial substitution in \eqref{eq:frob} therefore gives
+\begin{equation}
+ \Tr(S_\lambda(U)^r)\longrightarrow
+ Q^U_{\lambda,r}=\sum_{\alpha\vdash d}\frac{\chi^\lambda(\alpha)}{z_\alpha}\prod_{a\in\alpha}Z_{ra}.
+\end{equation}
+For example, $Q^U_{(2),1}=\tfrac12(Z_1^2+Z_2)$ and $Q^U_{(1,1),1}=\tfrac12(Z_1^2-Z_2)$. Pure holomorphic moments vanish, while mixed moments generally do not.
+
+\section{Independent finite-dimensional verification}
+For each test the code draws a seeded Haar unitary by complex Gaussian QR factorization. It constructs a standard Young symmetrizer $c_\lambda$ on $W_n^{\otimes d}$, obtains an orthonormal basis $B$ of its image by singular-value decomposition, and forms the actual matrix
+\begin{equation}
+ D_\lambda(U)=B^*U^{\otimes d}B.
+\end{equation}
+This route does not use symmetric-function trace identities. The comparison route computes $p_k=\Tr(U^{rk})$, obtains $h_j$ from Newton's recurrence
+\begin{equation}
+ jh_j=\sum_{k=1}^j p_kh_{j-k},\qquad h_0=1,
+\end{equation}
+and evaluates $s_\lambda=\det(h_{\lambda_i-i+j})$ by Jacobi--Trudi. It compares both \eqref{eq:trace} for $r=1,2,3$ and \eqref{eq:int} for $\tau=(),(1),(2),(1,1),(3)$.
+
+\begin{center}\begin{tabular}{@{}llllr@{}}\toprule
+$n$ & tested $\lambda$ & direct checks & largest purpose & status\\\midrule
+2 & $(1),(2)$ & trace and sigma integrands & low-rank boundary & PASS\\
+3 & $(1,1),(3),(2,1)$ & trace and sigma integrands & mixed Young symmetry & PASS\\\midrule
+\multicolumn{4}{r}{40 comparisons; maximum absolute error} & $2.98\times10^{-15}$\\\bottomrule
+\end{tabular}\end{center}
+
+\clearpage
+The seeded $U(8)$ Haar run uses 1,200 matrices. It estimates $\mathbb E\chi_{(2)}=0.0222+0.0343i$, $\mathbb E\chi_{(2)}^2=0.0322-0.0404i$, and $\mathbb E\chi_{(1,1)}=-0.0059+0.0148i$, all within $4.5$ estimated standard errors of the exact target zero. These statistical rows check the implementation but do not replace the central-character proof.
+
+\section{Scope and reproducibility}
+The exact trace formula holds whenever $S_\lambda(\mathbb C^n)$ is defined ($\ell(\lambda)\le n$). Coefficient stabilization is a separate assertion: the balanced unitary threshold is $n\geq d|\alpha|=d|\beta|$, while the orthogonal/symplectic Brauer bound is stated in their respective notes.  Unitary holomorphic vanishing is exact for every allowed $n$. Run the verification module below from the repository root, or open \path{marimo_notebooks/schur_unitary.py} with marimo.
+\begin{center}\footnotesize\texttt{python -m for\_this\_guy.schur\_functor\_classical\_groups.unitary.verification}\end{center}
+
+\section*{References}
+S. Howe, \href{https://arxiv.org/abs/2412.19295}{\emph{Random matrix statistics and zeroes of $L$-functions via probability in $\lambda$-rings}}.\\
+G. Lehrer and R. Zhang, \href{https://arxiv.org/abs/1207.5889}{\emph{The Brauer Category and Invariant Theory}}.
+\end{document}

@@ -1,0 +1,122 @@
+\documentclass[11pt]{article}
+\usepackage[margin=0.85in]{geometry}
+\usepackage{amsmath,amssymb,mathtools,booktabs,microtype,xcolor,fancyhdr,hyperref}
+\definecolor{navy}{HTML}{17365D}\definecolor{teal}{HTML}{147D78}
+\hypersetup{colorlinks=true,linkcolor=navy,urlcolor=teal}
+\pagestyle{fancy}\setlength{\headheight}{14pt}\fancyhf{}\lhead{Qudit Pauli and finite Heisenberg groups}\rhead{Proof and verification}\cfoot{\thepage}
+\newcommand{\Sgm}{\mathcal S}
+\newcommand{\E}{\mathbb E}
+\newcommand{\F}{\mathbb F}
+\title{\color{navy}\bfseries Qudit Pauli and Finite-Heisenberg Sigma--MGFs\\\large Proof, matrix construction, and direct checks}
+\author{Computational verification note}\date{17 July 2026}
+\begin{document}\maketitle
+
+\begin{abstract}
+For odd characteristic we prove the two-spectrum formula for the defining
+Schrödinger representation and check it by constructing every matrix in
+$P_{3,1}$, $P_{5,1}$, $P_{9,1}$, and $H_3(\F_9)$.  The tests evaluate the
+target invariant dimension directly, not from the spectral classification
+used in the proof.  All 17 representative coefficient comparisons pass.
+\end{abstract}
+
+\section{Statement}
+Let $q=p^f$ with $p$ odd, $V=\mathbb C[\F_q^n]$, and $N=q^n$.  Fix a
+nontrivial additive character $\psi:\F_q\to\mu_p$.  With
+\[
+X(a)e_x=e_{x+a},\qquad Z(b)e_x=\psi(b\cdot x)e_x,
+\qquad W(a,b)=\psi\!\left(\tfrac12a\cdot b\right)X(a)Z(b),
+\]
+put $P_{q,n}=\{\zeta W(a,b):\zeta\in\mu_p\}$.  For a partition
+$\tau=(\tau_1,\ldots,\tau_\ell)$ define
+\[
+A_\tau=\prod_i\binom{N+\tau_i-1}{\tau_i},\qquad
+B_\tau=\begin{cases}
+\displaystyle\prod_i\binom{N/p+\tau_i/p-1}{\tau_i/p},&p\mid\tau_i\ \forall i,\\
+0,&\text{otherwise.}
+\end{cases}
+\]
+Then the claimed generalized Molien coefficient is
+\begin{equation}\label{eq:coefficient}
+[m_\tau]\Sgm_{P_{q,n}}=
+\begin{cases}
+0,&p\nmid |\tau|,\\
+q^{-2n}A_\tau+(1-q^{-2n})B_\tau,&p\mid |\tau|.
+\end{cases}
+\end{equation}
+Equivalently,
+\begin{equation}\label{eq:series}
+\Sgm_{P_{q,n}}(\mathbf t)=
+\frac{q^{-2n}}p\sum_{\zeta\in\mu_p}\prod_j(1-\zeta t_j)^{-N}
++(1-q^{-2n})\prod_j(1-t_j^p)^{-N/p}.
+\end{equation}
+
+\section{Proof}
+There are $p$ central matrices $\zeta I_N$, a fraction $q^{-2n}$ of the
+group.  Their average is the first term of \eqref{eq:series}.  Now take
+$(a,b)\ne(0,0)$.  For $1\le k<p$, $W(a,b)^k$ has trace zero: if $ka\ne0$
+it is a translation with zero diagonal; otherwise its diagonal trace is a
+nontrivial additive-character sum.  Also $W(a,b)^p=I$.  Fourier inversion of
+the multiplicities of the $p$th roots of unity therefore gives multiplicity
+$N/p$ for every root.  Hence
+\[
+\det(I-tW(a,b))=(1-t^p)^{N/p}.
+\]
+A scalar in $\mu_p$ only permutes this spectrum, proving \eqref{eq:series}.
+Expanding the central factors gives $A_\tau$ and forces $p\mid|\tau|$;
+expanding the noncentral factors gives $B_\tau$.  This proves
+\eqref{eq:coefficient}.
+
+For the finite Heisenberg group $H_{2n+1}(\F_q)$, the Schrödinger matrix is
+$\rho_\psi(a,b,z)=\psi(z)W(a,b)$.  When $f>1$, $\ker\psi$ has size $q/p$,
+so each matrix in $P_{q,n}$ has exactly $q/p$ preimages.  Uniform averages
+over the abstract group and its image consequently agree.
+
+\section{Independent verification method}
+For every constructed matrix $g$, the code computes its eigenvalues
+$\lambda_1,\ldots,\lambda_N$ numerically and obtains $h_d(\lambda)$ from
+\[
+\prod_{r=1}^N(1-\lambda_r t)^{-1}=\sum_{d\ge0}h_d(\lambda)t^d.
+\]
+It then evaluates the target directly as
+\[
+D_\tau=\frac1{|G|}\sum_{g\in G}\prod_i h_{\tau_i}(\operatorname{spec}g).
+\]
+This is the character of $\bigotimes_i\operatorname{Sym}^{\tau_i}V$ averaged
+over $G$, hence the rank of its Reynolds projector.  Only after computing
+$D_\tau$ does the program evaluate \eqref{eq:coefficient}.
+
+The $q=9$ construction uses $\F_9=\F_3[u]/(u^2+1)$ and
+$\psi(x)=\exp(2\pi i\operatorname{Tr}_{\F_9/\F_3}(x)/3)$.  Thus the test
+includes a genuine prime-power field.  The $H_3(\F_9)$ run enumerates all
+729 abstract triples, retaining the threefold central kernel rather than
+silently replacing the group by its image.
+
+\section{Representative results}
+\begin{center}
+\begin{tabular}{@{}lrrrr@{}}\toprule
+group & $\dim V$ & matrices averaged & $\tau$ & direct $=$ formula\\\midrule
+$P_{3,1}$ &3&27&$(3)$&2\\
+$P_{3,1}$ &3&27&$(3,3)$&12\\
+$P_{5,1}$ &5&125&$(4,1)$&14\\
+$P_{5,1}$ &5&125&$(5,5)$&636\\
+$P_{9,1}$ &9&243&$(3)$&5\\
+$P_{9,1}$ &9&243&$(3,3)$&345\\
+$H_3(\F_9)$ &9&729&$(2,1)$&5\\
+$H_3(\F_9)$ &9&729&$(3,3)$&345\\\bottomrule
+\end{tabular}
+\end{center}
+All 17 built-in cases pass to tolerance $2\times10^{-8}$ and round to
+nonnegative integers.  Characteristic two is intentionally excluded here:
+the displayed half-phase normalization is an odd-characteristic statement;
+the phase-extended qubit lift is handled in its own verification.
+
+\section{Reproduction}
+Run
+\begin{verbatim}
+.venv/bin/python for_this_guy/quantum_matrix_groups/
+  pauli_heisenberg/verification.py
+.venv/bin/marimo edit marimo_notebooks/pauli_heisenberg.py
+\end{verbatim}
+The line breaks after the directory slash are for display; join each command
+onto one shell line.
+\end{document}

@@ -1,0 +1,86 @@
+\documentclass[10pt]{article}
+\usepackage[margin=0.9in]{geometry}\usepackage{amsmath,amssymb,booktabs,microtype,xcolor,fancyhdr}\usepackage[hidelinks]{hyperref}
+\definecolor{navy}{RGB}{24,55,95}\pagestyle{fancy}\fancyhf{}\lhead{$F_4$ on $V_{26}$}\rhead{Proof and exact verification}\cfoot{\thepage}\setlength{\headheight}{14pt}
+\newcommand{\Sg}{\mathcal S}\newcommand{\CT}{\operatorname{CT}}
+\title{\color{navy}\textbf{The compact $F_4$ sigma-MGF on $V_{26}$}\\[1mm]\large Proof and exact low-degree matrix verification}
+\author{Computational proof companion}\date{17 July 2026}
+\begin{document}\maketitle
+\begin{abstract}
+For the trace-zero Albert module we prove the compact Molien--Weyl expression,
+construct the 26-dimensional torus matrices, and exactly verify
+$\Sg_{F_4,26}=1+h_2+h_3+O_{\ge4}$.  The one-copy Hilbert series is
+$((1-t^2)(1-t^3))^{-1}$.
+\end{abstract}
+
+\section{Formula and proof}
+The Cauchy identity followed by Haar projection gives
+\[
+ \boxed{\Sg_{K,V}=\int_K\prod_a\det(I-t_a\rho(g))^{-1}dg
+ =\sum_\lambda\dim(\mathbb S_\lambda V)^K s_\lambda(\mathbf t).}
+\]
+Equivalently, direct determinant expansion proves
+$[m_\tau]\Sg_{K,V}=\dim(\bigotimes_i\operatorname{Sym}^{\tau_i}V)^K$.
+Weyl integration turns this into
+\[
+ \frac1{|W|}\CT_z\left[\prod_{\alpha>0}(1-z^\alpha)(1-z^{-\alpha})
+ \prod_{a,\mu}(1-t_a z^\mu)^{-m(\mu)}\right].
+\]
+For $V_{26}$ the weights are the 24 short roots and zero with multiplicity two;
+$|W(F_4)|=1152$.  Therefore
+\[
+ \boxed{\Sg_{F_4,26}=\frac1{1152}\CT_z\left[D_{F_4}(z)
+ \prod_a(1-t_a)^{-2}\prod_{\beta\in\Phi_{\rm short}}
+ (1-t_a z^\beta)^{-1}\right].}
+\]
+
+\section{Invariant tensors}
+The trace-zero Albert algebra carries the restricted trace form and the
+restricted determinant.  These are respectively a unique symmetric quadratic
+and a unique symmetric cubic invariant.  No other Schur type occurs below
+degree four, so
+\[
+ \boxed{\Sg_{F_4,26}=1+h_2+h_3+O_{\ge4}.}
+\]
+The standard invariant theory of the trace-zero Albert algebra gives
+$\mathbb C[V_{26}]^{F_4}=\mathbb C[q,c]$, with generators of degrees two and
+three.  Therefore
+$\Sg(t,0,\ldots)=((1-t^2)(1-t^3))^{-1}$.  This all-degree invariant-ring
+description is an external input; the notebook verifies only the displayed
+low-degree terms.
+
+\section{Verification method and evidence}
+Starting with the $F_4$ Cartan matrix, the notebook reflects a short simple
+root to obtain 24 short roots and appends two zero weights.  It constructs
+\[
+ M(\theta)=\operatorname{diag}(e^{i\langle\mu,\theta\rangle})_{\mu}\in U(26)
+\]
+and checks the determinant integrand against its eigenvalue product.  Schur
+characters are computed independently by Jacobi--Trudi.  Their Haar integrals
+are exact: for a character $f$ invariant under $W$,
+\[
+ \frac1{|W|}\CT(D_{F_4}f)=\CT\left(f\prod_{\alpha>0}(1-z^{-\alpha})\right),
+\]
+and the Weyl-denominator identity supplies every coefficient on the right.
+The direct monomial-basis check returns
+\[
+([m_{(2)}],[m_{(1,1)}],[m_{(3)}],[m_{(2,1)}],[m_{(1,1,1)}])
+=(1,1,1,1,1).
+\]
+
+\begin{center}\small
+\begin{tabular}{@{}c|rrrrrrr@{}}\toprule
+$\lambda$&$\varnothing$&$(1)$&$(2)$&$(1,1)$&$(3)$&$(2,1)$&$(1,1,1)$\\\midrule
+proposed&1&0&1&0&1&0&0\\
+exact Weyl check&1&0&1&0&1&0&0\\\bottomrule
+\end{tabular}
+\end{center}
+The generated root count is 48, the matrix dimension is 26, the unitarity
+residual is $2.8\times10^{-16}$, and the two integrand evaluations agree to
+$1.3\times10^{-14}$.  Every degree-at-most-three coefficient passes.
+
+\paragraph{Reproducibility.} Run \texttt{marimo\_notebooks/lie\_group\_f4.py} with marimo.
+\section*{External invariant-theory source}
+See T.~A.~Springer and F.~D.~Veldkamp, \emph{Octonions, Jordan Algebras and
+Exceptional Groups}, Springer Monographs in Mathematics (2000), for the
+Albert-algebra realization and its norm invariants.
+\end{document}

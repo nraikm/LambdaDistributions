@@ -1,0 +1,113 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,booktabs,microtype}
+\usepackage{xcolor}
+\usepackage[colorlinks=true,linkcolor=blue,urlcolor=blue]{hyperref}
+\newcommand{\Sym}{\operatorname{Sym}}
+\newcommand{\cS}{\mathcal S}
+\title{Polar and Dual-Polar Schemes: Permutation Formula\\Proof and Exact Verification for $Sp_4(2)$}
+\author{Executable companion note}
+\date{17 July 2026}
+\begin{document}
+\maketitle
+\begin{abstract}
+We prove the fixed-polar-subspace version of the permutation Molien formula
+and test two nontrivial actions of the explicitly constructed matrix group
+$Sp_4(2)$: isotropic points and maximal totally isotropic $2$-spaces.  The
+latter is a rank-two dual-polar scheme.
+\end{abstract}
+
+\section{Cycle and orbit formulas}
+Let a finite isometry group $G$ act on a finite family $X$ of totally
+isotropic or singular subspaces, and put $V=\mathbb C[X]$.  If $c_\ell(g)$
+counts $\ell$-cycles on $X$, the determinant of an $\ell$-cycle block is
+$1-t^\ell$, so
+\begin{equation}\label{eq:master}
+\cS_{G,X}(\mathbf t)=\frac1{|G|}\sum_{g\in G}
+\prod_{i,\ell}(1-t_i^\ell)^{-c_\ell(g)}.
+\end{equation}
+Since the monomial basis of $\Sym^d(V)$ is indexed by $d$-multisets in $X$,
+Burnside's lemma independently gives
+\begin{equation}\label{eq:orbit}
+[m_\tau]\cS_{G,X}=\#\left(G\backslash\prod_j\Sym^{\tau_j}(X)\right).
+\end{equation}
+
+Define the geometric fixed-point count
+\begin{equation}\label{eq:fixed}
+F_r^{\rm pol}(g)=\#\{U\in X:g^rU=U\}.
+\end{equation}
+The universal relation $F_r=\sum_{\ell\mid r}\ell c_\ell$ and Möbius
+inversion yield
+\begin{equation}\label{eq:mobius}
+c_\ell^{\rm pol}(g)=\frac1\ell\sum_{d\mid\ell}
+\mu(\ell/d)F_d^{\rm pol}(g).
+\end{equation}
+Equations \eqref{eq:master}--\eqref{eq:mobius} prove the proposed formula.
+Relative to the Grassmann case, the only additional predicate in
+\eqref{eq:fixed} is total isotropy or singularity.
+
+For maximal isotropic subspaces in Witt rank $r$, pair orbits are classified
+by $r-\dim(U\cap W)$.  Consequently
+\[
+[m_{(1)}]=1,\qquad [m_{(2)}]=[m_{(1,1)}]=r+1.
+\]
+
+\section{Concrete symplectic construction}
+On $\mathbb F_2^4$ use the nondegenerate alternating form
+\[
+\langle x,y\rangle=x_1y_2+x_2y_1+x_3y_4+x_4y_3.
+\]
+The code enumerates all $20{,}160$ matrices in $GL_4(2)$ and retains exactly
+the 720 satisfying $\langle gx,gy\rangle=\langle x,y\rangle$ on basis
+vectors.  It separately enumerates reduced-row-echelon subspaces.  There are
+15 one-spaces (all isotropic for an alternating form) and 15 two-spaces on
+which the form vanishes identically.  Thus both induced representations have
+dimension 15, but their vertices are different geometric objects.
+
+For every group matrix and every needed power, the program acts on the stored
+bases and counts invariant members of $X$ directly.  Equation
+\eqref{eq:mobius} must reproduce the cycles of the separately constructed
+vertex permutation.
+
+\section{Three independent coefficient routes}
+For the actual $15\times15$ permutation matrix $P$, complete symmetric
+characters are computed without cycle data from
+\[
+d h_d(P)=\sum_{a=1}^d\operatorname{tr}(P^a)h_{d-a}(P),\qquad h_0=1.
+\]
+The matrix-group target is the average of $\prod_jh_{\tau_j}(P)$.  A second
+calculation extracts the coefficient from \eqref{eq:master}; a third explicitly
+enumerates the configuration orbits in \eqref{eq:orbit}.  Agreement of these
+routes tests the representation, the proposed formula, and its geometric
+interpretation separately.
+
+\section{Exact results}
+Values are ordered by
+$\tau=(1),(2),(1,1),(3),(2,1),(1,1,1)$.
+\begin{center}
+\begin{tabular}{@{}lrrl@{}}
+\toprule
+Action & $|G|$ & $|X|$ & common coefficient vector\\
+\midrule
+$Sp_4(2)$ on isotropic points & 720 & 15 & $(1,3,3,8,12,16)$\\
+$Sp_4(2)$ on maximal isotropic 2-spaces & 720 & 15 & $(1,3,3,8,12,16)$\\
+\bottomrule
+\end{tabular}
+\end{center}
+All 12 matrix/cycle/orbit comparisons and all geometric fixed-point
+reconstructions pass.  The dual-polar pair value is $3=r+1$ for $r=2$.  For
+the maximal action at $(t_1,t_2)=(0.037,0.061)$, both numerical averages equal
+$1.1263214575673286$ (reported error $0$).
+
+\section{Scope and reproduction}
+The exact proof applies equally to alternating, Hermitian, and quadratic
+forms.  The executable representative is symplectic because $Sp_4(2)$ is
+large enough to exhibit all rank-two pair relations while remaining fully
+enumerable and auditable.
+
+Run
+\begin{verbatim}
+marimo run marimo_notebooks/polar_scheme.py
+\end{verbatim}
+from the repository root to inspect every comparison.
+\end{document}

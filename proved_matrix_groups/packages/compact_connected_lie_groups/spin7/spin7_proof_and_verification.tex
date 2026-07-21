@@ -1,0 +1,149 @@
+\documentclass[10pt]{article}
+\usepackage[margin=0.9in]{geometry}
+\usepackage{amsmath,amssymb,booktabs,microtype,xcolor,fancyhdr}
+\usepackage[hidelinks]{hyperref}
+\definecolor{navy}{RGB}{24,55,95}
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{$\operatorname{Spin}(7)$ on $S_8$}
+\rhead{Proof and exact verification}
+\cfoot{\thepage}
+\setlength{\headheight}{14pt}
+\newcommand{\Sg}{\mathcal S}
+\newcommand{\CT}{\operatorname{CT}}
+\title{\color{navy}\textbf{The compact $\operatorname{Spin}(7)$ sigma-MGF on $S_8$}\\[1mm]
+\large Proof and exact degree-four matrix verification}
+\author{Computational proof companion}
+\date{17 July 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+For the complexification of the real eight-dimensional spin representation,
+we prove the compact Molien--Weyl formula, construct explicit maximal-torus
+matrices, and verify all coefficients through total degree four by exact
+constant terms.  In the Schur basis the answer is
+$1+h_2+h_4+s_{(2,2)}+e_4+O_{\ge6}$.  The coefficient of
+$m_{(1,1,1,1)}$ is therefore $4$, with the extra invariant supplied by the
+Cayley alternating four-form.
+\end{abstract}
+
+\section{The coefficient formula}
+Let $K$ be compact, let $V$ be a finite-dimensional unitary $K$-module, and
+write $h_d(\rho(g))$ for the complete homogeneous character of degree $d$.
+Expanding one determinant at a time gives the formal identity
+\[
+ \prod_{a\ge1}\det(I-t_a\rho(g))^{-1}
+ =\prod_{a\ge1}\sum_{d\ge0}h_d(\rho(g))t_a^d.
+\]
+The coefficient of the monomial symmetric function $m_\tau$, for
+$\tau=(\tau_1,\ldots,\tau_r)$, is consequently
+\[
+ \int_K\prod_{j=1}^r h_{\tau_j}(\rho(g))\,dg
+ =\dim\left(\bigotimes_{j=1}^r\operatorname{Sym}^{\tau_j}V\right)^K.
+\]
+This proves the proposed formula
+\[
+ \boxed{\Sg_{K,V}=\int_K\prod_a\det(I-t_a\rho(g))^{-1}\,dg
+ =\sum_\tau
+ \dim\left(\bigotimes_j\operatorname{Sym}^{\tau_j}V\right)^K m_\tau.}
+\]
+Equivalently, the Cauchy identity gives the Schur-basis expansion
+\[
+ \Sg_{K,V}=\sum_\lambda\dim(\mathbb S_\lambda V)^K s_\lambda.
+\]
+The notebook checks both bases independently.
+
+\section{Matrix model and Weyl constant term}
+Use type $B_3$ with orthonormal coordinates $e_1,e_2,e_3$.  The weights of
+$S_8$ are
+\[
+ \operatorname{Wt}(S_8)=
+ \left\{\tfrac12(\epsilon_1e_1+\epsilon_2e_2+\epsilon_3e_3):
+ \epsilon_i\in\{\pm1\}\right\}.
+\]
+For $\theta\in\mathbb R^3$ this constructs the explicit unitary matrix
+\[
+ M(\theta)=\operatorname{diag}_{\epsilon\in\{\pm1\}^3}
+ \exp\!\left(\frac{i}{2}\sum_{j=1}^3\epsilon_j\theta_j\right)\in U(8).
+\]
+These matrices form the image of a maximal torus of $\operatorname{Spin}(7)$.
+Together with the $18$ roots and $|W(B_3)|=48$, the Weyl integration formula
+turns the group integral into the exact constant term
+\[
+ \boxed{\Sg_{\operatorname{Spin}(7),8}
+ =\frac1{48}\CT_z\left[
+ \prod_{\alpha>0}(1-z^\alpha)(1-z^{-\alpha})
+ \prod_{a,\mu\in\operatorname{Wt}(S_8)}(1-t_a z^\mu)^{-1}
+ \right].}
+\]
+Thus it is unnecessary to approximate Haar measure by random matrices.
+
+\section{Predicted low-degree tensors}
+The central element $-1\in\operatorname{Spin}(7)$ acts by $-I$ on $S_8$,
+so all odd-total-degree coefficients vanish.  The tensor square is
+\[
+ S_8\otimes S_8=\mathbf1\oplus\mathbf7\oplus\mathbf{21}\oplus\mathbf{35},
+ \qquad
+ \operatorname{Sym}^2S_8=\mathbf1\oplus\mathbf{35},\quad
+ \bigwedge^2S_8=\mathbf7\oplus\mathbf{21}.
+\]
+It is multiplicity-free, hence
+\[
+ \dim(S_8^{\otimes4})^{\operatorname{Spin}(7)}
+ =\dim\operatorname{End}_{\operatorname{Spin}(7)}(S_8\otimes S_8)=4.
+\]
+Three tensors are the metric pairings.  The fourth is the Cayley form in
+$\bigwedge^4S_8^*$.  In Schur notation this yields
+\[
+ \boxed{\Sg_{\operatorname{Spin}(7),8}
+ =1+h_2+h_4+s_{(2,2)}+e_4+O_{\ge6}.}
+\]
+Changing to the monomial basis gives, through degree four,
+\[
+\begin{array}{c|rrrrrrr}
+\tau&(2)&(1,1)&(4)&(3,1)&(2,2)&(2,1,1)&(1,1,1,1)\\ \hline
+[m_\tau]&1&1&1&1&2&2&4
+\end{array}
+\]
+Every coefficient of total degree one or three is zero.
+
+\section{Independent exact verification}
+The marimo notebook generates the $B_3$ root system and the eight-weight
+orbit from the Cartan matrix.  It then performs two distinct checks.
+First, for a concrete $M(\theta)$ it compares
+\[
+ \prod_a\det(I-t_aM(\theta))^{-1}
+ \quad\text{with}\quad
+ \prod_{a,\mu}(1-t_a e^{i\langle\mu,\theta\rangle})^{-1}.
+\]
+Second, it forms the characters $h_{\tau_1}\cdots h_{\tau_r}$ directly from
+the weights and applies the one-sided Weyl-denominator identity
+\[
+ \prod_{\alpha>0}(1-z^{-\alpha})
+ =\sum_{w\in W}\det(w)z^{w\rho-\rho}.
+\]
+The resulting constant terms are exact integers and do not use the quoted
+tensor-square decomposition as input.
+
+The exact output is
+\[
+\begin{array}{c|rrrrrrr}
+\tau&(2)&(1,1)&(4)&(3,1)&(2,2)&(2,1,1)&(1,1,1,1)\\ \hline
+\text{proposed}&1&1&1&1&2&2&4\\
+\text{Weyl check}&1&1&1&1&2&2&4
+\end{array}
+\]
+with every omitted partition of degree at most four returning zero.  In the
+Schur basis the nonzero multiplicities are
+\[
+ [s_{(2)}]=[s_{(4)}]=[s_{(2,2)}]=[s_{(1,1,1,1)}]=1.
+\]
+
+\paragraph{Reproducibility.}
+Run the marimo notebook \texttt{marimo\_notebooks/lie\_group\_spin7.py}.  Its shared
+exact-arithmetic core is in the parent folder.  The test suite also executes
+this degree-four case noninteractively.
+
+\end{document}

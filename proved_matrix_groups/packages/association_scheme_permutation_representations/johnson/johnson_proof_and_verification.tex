@@ -1,0 +1,114 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,booktabs,array,microtype}
+\usepackage{xcolor}
+\usepackage[colorlinks=true,linkcolor=blue,urlcolor=blue]{hyperref}
+\newcommand{\Sym}{\operatorname{Sym}}
+\newcommand{\Fix}{\operatorname{Fix}}
+\newcommand{\Aut}{\operatorname{Aut}}
+\newcommand{\cS}{\mathcal S}
+\title{Johnson Schemes: Permutation Molien Formula\\Proof and Exact Verification}
+\author{Executable companion note}
+\date{17 July 2026}
+\begin{document}
+\maketitle
+\begin{abstract}
+For the permutation representation on the $k$-subsets of $[v]$, we prove the
+cycle-factor and orbit formulas, derive the fixed-subset formula, treat the
+middle-dimensional complementation coset, and verify all coefficients through
+total degree three in three representative finite cases.  The computation uses
+the actual permutation matrices and does not assume the desired cycle formula.
+\end{abstract}
+
+\section{Master identity}
+Let a finite group $G$ act on a finite set $X$, let $V=\mathbb C[X]$, and let
+$c_\ell(g)$ count the $\ell$-cycles of $g$ on $X$.  Then
+\begin{equation}\label{eq:master}
+ \cS_{G,X}(\mathbf t)=\frac1{|G|}\sum_{g\in G}
+ \prod_{i\ge1}\prod_{\ell\ge1}(1-t_i^\ell)^{-c_\ell(g)}.
+\end{equation}
+Indeed, the eigenvalues of an $\ell$-cycle are all the $\ell$th roots of
+unity, so $\det(I-tP_\ell)=1-t^\ell$.  Multiplication over disjoint cycles and
+the finite-group Molien average prove \eqref{eq:master}.
+
+For a partition $\tau=(\tau_1,\ldots,\tau_s)$, $\Sym^{\tau_j}(V)$ is the
+permutation module on multisets of size $\tau_j$ in $X$.  Burnside's lemma
+therefore gives the independent interpretation
+\begin{equation}\label{eq:orbit}
+ [m_\tau]\cS_{G,X}=\#\bigl(G\backslash
+ (\Sym^{\tau_1}X\times\cdots\times\Sym^{\tau_s}X)\bigr).
+\end{equation}
+
+\section{Johnson fixed points and complementation}
+Put $X=\binom{[v]}k$.  If $\sigma\in S_v$ has $a_j$ cycles of length $j$,
+then a $j$-cycle splits under $\sigma^r$ into $\gcd(j,r)$ cycles of length
+$j/\gcd(j,r)$.  A fixed subset is exactly a union of these cycles; hence
+\begin{equation}\label{eq:johnsonfixed}
+ F_r^J(\sigma)=[u^k]\prod_{j\ge1}
+ \left(1+u^{j/\gcd(j,r)}\right)^{a_j\gcd(j,r)}.
+\end{equation}
+The vertex-cycle counts follow from
+\begin{equation}\label{eq:mobius}
+ c_\ell(\sigma)=\frac1\ell\sum_{d\mid\ell}
+ \mu(\ell/d)F_d^J(\sigma).
+\end{equation}
+
+When $v=2k$ and $k>1$, complementation $T(A)=A^c$ commutes with $S_{2k}$
+and supplies the additional coset in the full Johnson-scheme automorphism
+group.  For odd $r$, a subset fixed by $\sigma^rT$ must alternate membership
+around every cycle of $\sigma^r$.  Thus
+\begin{equation}\label{eq:coset}
+F_r(\sigma T)=\begin{cases}
+F_r^J(\sigma),&r\ \text{even},\\
+2^{c(\sigma^r)},&r\ \text{odd and every cycle of $\sigma^r$ is even},\\
+0,&\text{otherwise}.
+\end{cases}
+\end{equation}
+Every alternating choice has size exactly half of $v$, so no further size
+constraint is missing.  Equations \eqref{eq:master}--\eqref{eq:coset} prove
+the claimed formula, including the middle case.
+
+\section{Verification design}
+For each group element, the code explicitly builds its $|X|\times|X|$
+permutation matrix $P$.  It computes $h_d(P)=\operatorname{tr}(\Sym^dP)$ from
+the matrix traces by Newton's recurrence
+\[
+ d h_d(P)=\sum_{r=1}^d\operatorname{tr}(P^r)h_{d-r}(P),\qquad h_0=1.
+\]
+It averages $\prod_j h_{\tau_j}(P)$ over the group.  Independently, it
+extracts the same coefficient from the cycle factors in \eqref{eq:master}
+and counts the orbits in \eqref{eq:orbit} by explicit set traversal.  Finally,
+it evaluates \eqref{eq:johnsonfixed} or \eqref{eq:coset} for every required
+power and checks that \eqref{eq:mobius} reproduces every actual cycle count.
+
+\section{Exact results}
+The entries list the common value in the order
+$\tau=(1),(2),(1,1),(3),(2,1),(1,1,1)$.
+\begin{center}
+\begin{tabular}{@{}lrrl@{}}
+\toprule
+Action & $|G|$ & $|X|$ & common coefficient vector\\
+\midrule
+$\Aut J(4,2)$ (including $T$) & 48 & 6 & $(1,3,3,5,8,11)$\\
+$S_5$ on $2$-subsets & 120 & 10 & $(1,3,3,7,11,15)$\\
+$S_5$ on $1$-subsets & 120 & 5 & $(1,2,2,3,4,5)$\\
+\bottomrule
+\end{tabular}
+\end{center}
+All 18 triple comparisons are exact, and all fixed-point reconstructions pass.
+
+At $(t_1,t_2)=(0.037,0.061)$ the direct determinant average and cycle product
+for $\Aut J(4,2)$ coincide at
+\[
+1.1237420509116285\qquad\text{(reported error $0$)}.
+\]
+The pair values also give $[m_{(2)}]=[m_{(1,1)}]=\min(k,v-k)+1$, as predicted.
+
+\section{Reproduction}
+From the repository root run
+\begin{verbatim}
+marimo run marimo_notebooks/johnson_scheme.py
+\end{verbatim}
+or run the family module directly with Python.  The notebook displays every
+matrix/cycle/orbit comparison rather than only the summary above.
+\end{document}

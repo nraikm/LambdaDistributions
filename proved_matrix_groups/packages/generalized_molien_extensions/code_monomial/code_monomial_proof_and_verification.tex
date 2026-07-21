@@ -1,0 +1,100 @@
+\documentclass[11pt]{article}
+\usepackage[margin=0.84in]{geometry}
+\usepackage{amsmath,amssymb,mathtools,booktabs,tabularx,microtype,fancyhdr,enumitem}
+\usepackage[dvipsnames]{xcolor}
+\usepackage[colorlinks=true,linkcolor=NavyBlue,urlcolor=BrickRed,hypertexnames=false]{hyperref}
+\definecolor{ink}{HTML}{172337}\definecolor{accent}{HTML}{255C73}\definecolor{pale}{HTML}{EEF5F7}\definecolor{passgreen}{HTML}{147A4A}
+\color{ink}\pagestyle{fancy}\fancyhf{}\lhead{Code--monomial groups}\rhead{Proof and verification}\cfoot{\thepage}\setlength{\headheight}{14pt}
+\newcommand{\Sym}{\operatorname{Sym}}\newcommand{\Cyc}{\operatorname{Cyc}}\newcommand{\PASS}{\textcolor{passgreen}{\textbf{PASS}}}
+\newcommand{\summarybox}[1]{\begin{center}\fcolorbox{accent}{pale}{\parbox{0.91\linewidth}{#1}}\end{center}}
+\title{\textbf{Code--Monomial Matrix Groups}\\[3pt]\large Generalized Molien formula, dual-code proof, and explicit verification}
+\author{Computational verification note}\date{17 July 2026}
+\begin{document}\maketitle
+\summarybox{\textbf{Outcome.} The proposed weighted-cycle formula and the dual-code orbit formula are correct under the stated prime-alphabet convention.  Explicit matrices for three groups of orders $8$, $24$, and $18$ were used to check all $57$ coefficients through total degree five.  All agree.  Three independent determinant evaluations agree to machine precision (maximum error $0$).}
+
+\section{Master coefficient identity}
+Let $G\leq GL(V)$ be finite and put
+\[
+ \mathfrak M_{G,V}(\mathbf t)=\frac1{|G|}\sum_{g\in G}\prod_{j\geq1}\det(I-t_jg)^{-1}.
+\]
+If $g$ has eigenvalues $\lambda_1,\dots,\lambda_n$, then
+\[
+ \det(I-tg)^{-1}=\prod_i(1-t\lambda_i)^{-1}
+ =\sum_{d\geq0}\chi_{\Sym^dV}(g)t^d.
+\]
+It follows that, for $\tau=(\tau_1,\ldots,\tau_\ell)$,
+\begin{equation}
+ [t_1^{\tau_1}\cdots t_\ell^{\tau_\ell}]\mathfrak M_{G,V}
+ =\dim\left(\bigotimes_{s=1}^{\ell}\Sym^{\tau_s}V\right)^G. \tag{1}
+\end{equation}
+Indeed the coefficient is the trace of the Reynolds projector $|G|^{-1}\sum_g g$ on the displayed tensor product.  Under the usual symmetric-function packaging this is the coefficient of $m_\tau$.
+
+\section{Code--monomial theorem}
+Let $r$ be prime, $C\leq\mathbf F_r^n$, and let
+\[
+H\leq\operatorname{Aut}_{\rm perm}(C):=
+\{\pi\in S_n:\pi(C)=C\}
+\]
+be a coordinate-permutation automorphism group.  Put
+$\zeta=e^{2\pi i/r}$ and define
+\[
+ D_c=\operatorname{diag}(\zeta^{c_1},\ldots,\zeta^{c_n}),\qquad G_C=D_C\rtimes H.
+\]
+Use $P_\pi e_i=e_{\pi(i)}$.  On a coordinate cycle $O$ of $\pi$, the weighted shift $D_cP_\pi$ returns after $|O|$ steps with scalar $\zeta^{c(O)}$, where $c(O)=\sum_{i\in O}c_i$.  Therefore
+\begin{equation}
+ \det(I-tD_cP_\pi)=\prod_{O\in\Cyc(\pi)}(1-\zeta^{c(O)}t^{|O|}). \tag{2}
+\end{equation}
+Substitution into the master average proves
+\begin{equation}
+ \boxed{\mathfrak M_{G_C,V}(\mathbf t)=\frac1{|C||H|}\sum_{\pi\in H}\sum_{c\in C}
+ \prod_{j,O}(1-\zeta^{c(O)}t_j^{|O|})^{-1}.} \tag{3}
+\end{equation}
+
+\subsection{Why the coefficient is an orbit count}
+A monomial basis of $\bigotimes_s\Sym^{\tau_s}V$ is indexed by arrays $A=(a_{si})\geq0$ with $\sum_i a_{si}=\tau_s$.  Set
+\[
+ w(A)_i=\sum_s a_{si}\pmod r.
+\]
+The diagonal matrix $D_c$ multiplies the basis vector by $\zeta^{c\cdot w(A)}$.  Character orthogonality says it survives all diagonal matrices precisely when $w(A)\in C^\perp$.  The remaining group $H$ permutes columns, so invariants in this permutation module are constant on $H$-orbits.  Hence
+\begin{equation}
+ \boxed{[m_\tau]\mathfrak M_{G_C,V}
+ =\#\bigl(H\backslash\{A:\sum_i a_{si}=\tau_s,\ w(A)\in C^\perp\}\bigr).} \tag{4}
+\end{equation}
+This also proves integrality without relying on cancellation in (3).
+
+The proof uses only coordinate permutations and therefore does not cover the
+full monomial or semilinear automorphism group of a code.  If coordinate
+scalings or field automorphisms are included, their characters must be
+incorporated into the diagonal filter and the column-orbit argument must be
+replaced by the corresponding semilinear action.  The verifier rejects an
+automorphism entry that is not a coordinate permutation.
+
+\section{Independent verification method}
+The implementation uses routes that share the group input but not the coefficient algorithm:
+\begin{enumerate}[leftmargin=*]
+\item Enumerate every complex matrix $D_cP_\pi$.  Obtain $\chi_{\Sym^dV}(g)$ from the eigenvalue series $\prod_i(1-t\lambda_i)^{-1}$ and average products of characters.
+\item Enumerate exponent arrays, impose $c\cdot w(A)=0$ for every $c\in C$, and count column-permutation orbits.  No eigenvalues occur in this route.
+\item At $(t_1,t_2)=(0.07,0.11)$ compare the direct matrix determinant average with (3), evaluated solely from weighted coordinate cycles.
+\end{enumerate}
+
+\section{Representative cases and results}
+Every partition of every total degree $0$ through $5$ was checked (19 coefficients per group).
+\begin{center}\begin{tabularx}{\linewidth}{@{}Xrrrrc@{}}\toprule
+Case & $\dim V$ & $|C|$ & $|H|$ & checks & result\\\midrule
+$W(B_2)$, full binary code &2&4&2&19&\PASS\\
+$W(D_3)$, even binary code &3&4&6&19&\PASS\\
+ternary repetition code $\rtimes S_3$ &3&3&6&19&\PASS\\\bottomrule
+\end{tabularx}\end{center}
+\begin{center}\begin{tabular}{@{}lrrrr@{}}\toprule
+Case & $(2)$ & $(3)$ & $(2,1)$ & $(1,1,1)$\\\midrule
+$W(B_2)$ &1&0&0&0\\
+$W(D_3)$ &1&1&1&1\\
+ternary repetition &0&3&4&5\\\bottomrule
+\end{tabular}\end{center}
+The numerical generalized-Molien values were respectively
+$1.025494342880870$, $1.028638382342067$, and $1.010621973731615$ by both routes.
+
+\section{Scope and reusable tool}
+For $\mathbf F_{p^f}$ with $f>1$, the notation $c\mapsto\zeta^c$ is not a faithful additive embedding of the whole additive group into one cyclic root group.  Formula (4) remains valid after replacing $C^\perp$ by the annihilator of the chosen diagonal-character group.  The reusable computational idea is to test (3) numerically while testing (4) exactly: agreement localizes errors to either the weighted-cycle determinant or the character-orthogonality filter.
+
+\end{document}

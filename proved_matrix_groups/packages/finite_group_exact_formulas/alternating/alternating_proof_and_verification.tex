@@ -1,0 +1,136 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{booktabs}
+\usepackage{xcolor}
+\usepackage[hidelinks]{hyperref}
+\usepackage{microtype}
+\usepackage{fancyhdr}
+\definecolor{navy}{RGB}{24,55,95}
+\pagestyle{fancy}
+\setlength{\headheight}{14pt}
+\fancyhf{}
+\lhead{Alternating groups}
+\rhead{Exact finite-$n$ proof and verification}
+\cfoot{\thepage}
+\newcommand{\Sym}{\operatorname{Sym}}
+\newcommand{\M}{\mathcal M}
+\title{\color{navy}\textbf{The Exact Finite-$n$ $\sigma$-MGF for $A_n$}\\[2mm]
+\large Proof, orbit splitting, and matrix verification}
+\author{Computational proof companion}
+\date{17 July 2026}
+
+\begin{document}
+\maketitle
+\begin{abstract}
+For $n\ge2$, this note proves the exact cycle-type formula for the permutation
+representation of $A_n$, derives the correction to the $S_n$ vector-partition
+count from orbit splitting, and proves equality with $S_n$ in degree at most
+$n-2$.  Explicit even permutation matrices and Reynolds projectors verify the
+formula, including a boundary case with a nonzero splitting correction.
+\end{abstract}
+
+\section{From \texorpdfstring{$S_n$}{S-n} to \texorpdfstring{$A_n$}{A-n}}
+For any class function $F$ on $S_n$, the indicator of an even permutation gives
+\[
+ \mathbb E_{A_n}[F]=\frac1{n!}\sum_{g\in S_n}(1+\operatorname{sgn}(g))F(g).
+\]
+As in the symmetric-group calculation, the coefficient of $m_\tau$ is the
+trace, hence the rank, of the Reynolds projector on
+$W_\tau=\bigotimes_b\Sym^{\tau_b}(\mathbb C^n)$.
+
+If $\lambda\vdash n$, then
+\[
+ \operatorname{sgn}(\lambda)=(-1)^{n-\ell(\lambda)},\qquad
+ z_\lambda=\prod_{d\ge1}d^{m_d(\lambda)}m_d(\lambda)!.
+\]
+Combining the sign indicator with the determinant of each permutation cycle
+proves the exact expression
+\[
+ \boxed{\M_{A_n}=\sum_{\lambda\vdash n}
+ \frac{1+(-1)^{n-\ell(\lambda)}}{z_\lambda}
+ \prod_i\prod_{d\ge1}(1-t_i^d)^{-m_d(\lambda)}.}
+\]
+Only even cycle types remain, each with coefficient $2/z_\lambda$.
+
+\section{Generating function}
+Set
+\[
+ G_+(u)=\prod_{\mathbf v\ge0}(1-ut^{\mathbf v})^{-1},\qquad
+ G_-(u)=\prod_{\mathbf v\ge0}(1+ut^{\mathbf v}).
+\]
+The first product records multisets of labels.  The second records sets of
+distinct labels and is the sign-weighted cycle-index contribution.  Hence, for
+$n\ge2$,
+\[
+ \boxed{\M_{A_n}=[u^n]\bigl(G_+(u)+G_-(u)\bigr).}
+\]
+Equivalently, applying the exponential formula to both factors gives
+\begin{align*}
+\M_{A_n}=[u^n]\Bigg[&\exp\left(\sum_{d\ge1}\frac{u^d}{d}
+ \prod_i\frac1{1-t_i^d}\right)\\
+&+\exp\left(\sum_{d\ge1}\frac{(-1)^{d-1}u^d}{d}
+ \prod_i\frac1{1-t_i^d}\right)\Bigg].
+\end{align*}
+
+\section{Exact orbit interpretation}
+An $S_n$-orbit of monomial-basis labelings is determined by multiplicities
+$(a_{\mathbf v})_{\mathbf v\ge0}$.  Its stabilizer is
+$\prod_{\mathbf v}S_{a_{\mathbf v}}$.  If some $a_{\mathbf v}\ge2$, the
+stabilizer contains the odd transposition of two equally labeled points, so the
+$S_n$-orbit remains a single $A_n$-orbit.  If every $a_{\mathbf v}$ is zero or
+one, the stabilizer lies in $A_n$, and the orbit splits into two $A_n$-orbits.
+Thus
+\begin{align*}
+[m_\tau]\M_{A_n}
+={}&\#\left\{(a_{\mathbf v})\ge0:\sum a_{\mathbf v}=n,\ 
+ \sum a_{\mathbf v}\mathbf v=\tau\right\}\\
+&+\#\left\{(a_{\mathbf v})\in\{0,1\}:\sum a_{\mathbf v}=n,\ 
+ \sum a_{\mathbf v}\mathbf v=\tau\right\}.
+\end{align*}
+The first term is the $S_n$ coefficient.  The correction counts sets of
+distinct nonzero vectors summing to $\tau$, with either $n$ such vectors or
+$n-1$ such vectors and one zero vector.
+
+\section{Stable agreement with \texorpdfstring{$S_n$}{S-n}}
+Any labeling of total degree $|\tau|$ has at most $|\tau|$ nonzero labels.  If
+$|\tau|\le n-2$, at least two labels are zero.  Their transposition is odd and
+lies in the stabilizer, so no $S_n$-orbit can split.  Therefore
+\[
+ \boxed{[m_\tau]\M_{A_n}=[m_\tau]\M_{S_n}
+ \quad\text{whenever }|\tau|\le n-2.}
+\]
+Outside that range the distinct-label term is the exact correction, not merely
+an error estimate.
+
+\section{Verification method and evidence}
+The notebook enumerates even permutations, constructs their permutation
+matrices, builds the full matrices on each symmetric tensor block, and averages
+them to obtain the $A_n$ Reynolds projector.  Its rank is compared independently
+with the character average, the even-cycle-type formula, and the $S_n$ orbit
+count plus a distinct-label dynamic-programming correction.
+
+\begin{center}
+\small
+\begin{tabular}{@{}lrrrrrr@{}}
+\toprule
+Case & $\dim W_\tau$ & rank & cycle & $S_n$ & corr. & total\\
+\midrule
+$A_3,\tau=(2)$ & 6 & 2 & 2 & 2 & 0 & 2\\
+$A_3,\tau=(3)$ & 10 & 4 & 4 & 3 & 1 & 4\\
+$A_4,\tau=(2,1)$ & 40 & 4 & 4 & 4 & 0 & 4\\
+$A_5,\tau=(2,2)$ & 225 & 9 & 9 & 9 & 0 & 9\\
+$A_5,\tau=(3,1)$ & 175 & 7 & 7 & 7 & 0 & 7\\
+\bottomrule
+\end{tabular}
+\end{center}
+The $A_3,\tau=(3)$ row deliberately lies outside the stable range and confirms
+that one $S_3$ orbit splits, increasing the invariant dimension from three to
+four.  The remaining rows test multiblock targets and larger projectors.
+Idempotence residuals are at most $1.1\times10^{-15}$.
+
+\paragraph{Conclusion.}
+The sign-weighted cycle formula and orbit-splitting formula agree exactly, and
+both match direct matrix invariant dimensions in all representative cases.
+
+\end{document}

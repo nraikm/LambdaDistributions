@@ -1,0 +1,135 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{booktabs}
+\usepackage{xcolor}
+\usepackage[hidelinks]{hyperref}
+\usepackage{microtype}
+\usepackage{fancyhdr}
+\definecolor{navy}{RGB}{24,55,95}
+\pagestyle{fancy}
+\setlength{\headheight}{14pt}
+\fancyhf{}
+\lhead{Symmetric groups}
+\rhead{Exact finite-$n$ proof and verification}
+\cfoot{\thepage}
+\newcommand{\Sym}{\operatorname{Sym}}
+\newcommand{\M}{\mathcal M}
+\title{\color{navy}\textbf{The Exact Finite-$n$ $\sigma$-MGF for $S_n$}\\[2mm]
+\large Proof, orbit interpretation, and matrix verification}
+\author{Computational proof companion}
+\date{17 July 2026}
+
+\begin{document}
+\maketitle
+\begin{abstract}
+For the permutation representation $V=\mathbb C^n$, this note proves the exact
+cycle-type formula for $\M_{S_n}$, identifies its coefficients with vector
+partitions, and explains the stable range.  The accompanying marimo notebook
+constructs all permutation matrices and compares a full Reynolds-projector
+rank with both formulas.  All representative tests passed.
+\end{abstract}
+
+\section{Molien coefficient as an invariant dimension}
+For $\tau=(\tau_1,\ldots,\tau_s)$ let
+$W_\tau=\bigotimes_b\Sym^{\tau_b}(\mathbb C^n)$.  Since
+\[
+ \det(I-tg)^{-1}=\sum_{q\ge0}\chi_{\Sym^qV}(g)t^q,
+\]
+the coefficient of $m_\tau$ in the generalized Molien series is
+\[
+ [m_\tau]\M_{S_n}=\frac1{n!}\sum_{g\in S_n}\chi_{W_\tau}(g)
+ =\operatorname{tr}\left(\frac1{n!}\sum_{g\in S_n}\rho_{W_\tau}(g)\right)
+ =\dim W_\tau^{S_n}.
+\]
+The middle operator is the Reynolds projector.
+
+\section{Exact cycle-type formula}
+Write a cycle type as $\lambda=(1^{m_1}2^{m_2}\cdots)\vdash n$ and set
+\[
+ z_\lambda=\prod_{d\ge1}d^{m_d}m_d!.
+\]
+A $d$-cycle has all $d$th roots of unity as eigenvalues, so
+$\det(I-tP_d)=1-t^d$.  A permutation of type $\lambda$ therefore contributes
+\[
+ \prod_i\prod_{d\ge1}(1-t_i^d)^{-m_d(\lambda)}.
+\]
+The conjugacy class has size $n!/z_\lambda$, proving
+\[
+ \boxed{\M_{S_n}=\sum_{\lambda\vdash n}\frac1{z_\lambda}
+ \prod_i\prod_{d\ge1}(1-t_i^d)^{-m_d(\lambda)}.}
+\]
+This statement is exact for every $n$ and in every degree; it is not a stable
+approximation.
+
+\section{Exact coefficient formula}
+A monomial-basis vector of $W_\tau$ is encoded by a labeling
+\[
+ \ell:\{1,\ldots,n\}\longrightarrow\mathbb Z_{\ge0}^s,
+ \qquad \sum_{j=1}^n\ell(j)=\tau
+\]
+coordinatewise.  Two labelings lie in the same $S_n$-orbit exactly when the
+multiplicities
+$a_{\mathbf v}=\#\{j:\ell(j)=\mathbf v\}$ agree.  Since the dimension of the
+invariant space of a permutation module equals its number of orbits,
+\[
+ \boxed{[m_\tau]\M_{S_n}=\#\left\{(a_{\mathbf v})_{\mathbf v\ge0}:
+ a_{\mathbf v}\ge0,\quad \sum_{\mathbf v}a_{\mathbf v}=n,\quad
+ \sum_{\mathbf v}a_{\mathbf v}\mathbf v=\tau\right\}.}
+\]
+Equivalently, this is the number of vector partitions of $\tau$ into at most
+$n$ nonzero parts; zero parts fill the remaining slots.
+
+Marking the number of labels with $u$ gives
+\[
+ \boxed{\sum_{n\ge0}u^n\M_{S_n}
+ =\prod_{\mathbf v\in\mathbb Z_{\ge0}^{(\mathbb N)}}(1-ut^{\mathbf v})^{-1}.}
+\]
+The exponential formula for permutation cycles gives the equivalent form
+\[
+ \sum_{n\ge0}u^n\M_{S_n}
+ =\exp\left(\sum_{d\ge1}\frac{u^d}{d}
+ \prod_i\frac1{1-t_i^d}\right).
+\]
+
+\section{Stable range}
+Separate the zero label.  Every nonzero vector has total degree at least one,
+so a vector partition of $\tau$ uses at most $|\tau|$ nonzero parts.  If
+$n\ge|\tau|$, zeros can always be added and the coefficient stabilizes:
+\[
+ [m_\tau]\M_{S_n}=[m_\tau]\prod_{\mathbf v\ne0}(1-t^{\mathbf v})^{-1}.
+\]
+When $n<|\tau|$, the exact finite-$n$ formula simply removes decompositions
+requiring too many nonzero parts.
+
+\section{Verification method and evidence}
+For each $g\in S_n$, the notebook creates its permutation matrix, compresses
+$g^{\otimes q}$ to an orthonormal occupancy basis of $\Sym^q(V)$, tensors the
+selected blocks, and averages the resulting matrices.  The projector rank is
+compared independently with the symmetric-power character average, cycle-type
+coefficient extraction, and a dynamic-programming vector-partition count.
+
+\begin{center}
+\begin{tabular}{@{}lrrrrr@{}}
+\toprule
+Case & $\dim W_\tau$ & rank & character & cycle & orbit\\
+\midrule
+$S_2,\tau=(3)$ & 4 & 2 & 2 & 2 & 2\\
+$S_3,\tau=(2,1)$ & 18 & 4 & 4 & 4 & 4\\
+$S_4,\tau=(2,2)$ & 100 & 9 & 9 & 9 & 9\\
+$S_5,\tau=(2,1)$ & 75 & 4 & 4 & 4 & 4\\
+\bottomrule
+\end{tabular}
+\end{center}
+The largest projector here is $100\times100$ and averages 24 explicitly
+constructed matrices.  Idempotence residuals range from
+$2.2\times10^{-16}$ to $1.1\times10^{-15}$.  These cases cover degree above
+the stable threshold, multiblock tensor products, and two different values of
+$n$ for the same $\tau$.
+
+\paragraph{Conclusion.}
+The cycle-index and orbit formulas are two descriptions of the same invariant
+dimension, and the explicit matrix calculations agree with both in every
+tested case.
+
+\end{document}

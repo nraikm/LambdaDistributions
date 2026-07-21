@@ -1,0 +1,107 @@
+\documentclass[10pt]{article}
+\usepackage[margin=0.9in]{geometry}
+\usepackage{amsmath,amssymb,booktabs,microtype,xcolor,fancyhdr}
+\usepackage[hidelinks]{hyperref}
+\definecolor{navy}{RGB}{24,55,95}
+\pagestyle{fancy}\fancyhf{}\lhead{$G_2$ on $V_7$}\rhead{Proof and exact verification}\cfoot{\thepage}
+\setlength{\headheight}{14pt}
+\newcommand{\Sg}{\mathcal S}
+\newcommand{\CT}{\operatorname{CT}}
+\title{\color{navy}\textbf{The compact $G_2$ sigma-MGF on $V_7$}\\[1mm]\large Proof and exact low-degree matrix verification}
+\author{Computational proof companion}\date{17 July 2026}
+\begin{document}\maketitle
+\begin{abstract}
+We prove the compact Molien--Weyl formula for the minimal seven-dimensional
+$G_2$-module, construct its maximal-torus matrices from the weights, and
+verify every Schur coefficient through degree three exactly.  The result is
+$\Sg_{G_2,7}=1+h_2+e_3+O_{\ge4}$, and the ordinary specialization is
+$(1-t^2)^{-1}$.
+\end{abstract}
+
+\section{General compact-group identity}
+For a unitary $K$-module $V$ and eigenvalues $\lambda_j(g)$, the Cauchy
+identity gives, as a formal power series,
+\[
+ \prod_{a,j}(1-t_a\lambda_j(g))^{-1}
+ =\sum_\lambda s_\lambda(\mathbf t)\,\chi_{\mathbb S_\lambda V}(g).
+\]
+Haar integration projects each representation onto its invariant subspace;
+hence
+\[
+ \boxed{\Sg_{K,V}(\mathbf t)=\int_K\prod_a\det(I-t_a\rho(g))^{-1}\,dg
+ =\sum_\lambda\dim(\mathbb S_\lambda V)^K s_\lambda(\mathbf t).}
+\]
+Expanding each determinant separately also gives the requested monomial form
+\[
+ [m_\tau]\Sg_{K,V}
+ =\dim\left(\bigotimes_i\operatorname{Sym}^{\tau_i}V\right)^K.
+\]
+If $T$ is a maximal torus, Weyl integration yields
+\[
+ \Sg_{K,V}=\frac1{|W|}\CT_z\!\left[
+ \prod_{\alpha>0}(1-z^\alpha)(1-z^{-\alpha})
+ \prod_{a,\mu}(1-t_a z^\mu)^{-m(\mu)}\right].
+\]
+This proves the proposed compact analogue of the finite Molien formula.
+
+\section{Specialization to the minimal module}
+The weights of $V_7$ are zero together with the six short roots.  Since
+$|W(G_2)|=12$,
+\[
+ \boxed{\Sg_{G_2,7}=\frac1{12}\CT_z\left[D_{G_2}(z)
+ \prod_a\left((1-t_a)^{-1}\prod_{\beta\in\Phi_{\rm short}}
+ (1-t_a z^\beta)^{-1}\right)\right].}
+\]
+The invariant metric lies in $\operatorname{Sym}^2V_7$, while the octonionic
+associative form lies in $\bigwedge^3V_7$.  Their uniqueness and the absence
+of other invariants below degree four give
+\[
+ \boxed{\Sg_{G_2,7}=1+h_2+e_3+O_{\ge4}.}
+\]
+A standard invariant-theory theorem for the minimal $G_2$ module states that
+$\mathbb C[V_7]^{G_2}=\mathbb C[q]$, where $q$ is the invariant quadratic
+norm.  Using that external theorem,
+$\Sg_{G_2,7}(t,0,\ldots)=(1-t^2)^{-1}$.  The exact Weyl computation in this
+note independently verifies the coefficients through degree three.
+
+\section{Exact matrix verification}
+The notebook generates the root system from the $G_2$ Cartan matrix and forms
+\[
+ M(\theta)=\operatorname{diag}\bigl(e^{i\langle\mu,\theta\rangle}\bigr)_{
+ \mu\in\{0\}\cup\Phi_{\rm short}}\in U(7).
+\]
+It compares $\prod_a\det(I-t_aM)^{-1}$ directly with the product over the
+seven diagonal eigenvalues.  For integration it evaluates Schur characters by
+Jacobi--Trudi and uses the one-sided Weyl denominator
+\[
+ \prod_{\alpha>0}(1-z^{-\alpha})
+ =\sum_{w\in W}\det(w)z^{w\rho-\rho}.
+\]
+Thus every coefficient is an exact integer, with no quadrature tolerance.
+In the requested monomial basis the exact degree-at-most-three signature is
+\[
+([m_{(2)}],[m_{(1,1)}],[m_{(3)}],[m_{(2,1)}],[m_{(1,1,1)}])
+=(1,1,0,0,1).
+\]
+
+\begin{center}\small
+\begin{tabular}{@{}c|rrrrrrr@{}}\toprule
+$\lambda$&$\varnothing$&$(1)$&$(2)$&$(1,1)$&$(3)$&$(2,1)$&$(1,1,1)$\\\midrule
+proposed&1&0&1&0&0&0&1\\
+exact Weyl check&1&0&1&0&0&0&1\\\bottomrule
+\end{tabular}
+\end{center}
+The sampled torus matrix has unitarity residual $3.2\times10^{-16}$ and the
+two integrand evaluations differ by less than $9\times10^{-16}$.  All seven
+coefficient checks pass.
+
+\paragraph{Reproducibility.}
+Run \texttt{marimo\_notebooks/lie\_group\_g2.py} with marimo.  The shared exact-arithmetic
+module is in the parent folder.
+
+\section*{External invariant-theory source}
+See J.~F.~Adams, \emph{Lectures on Exceptional Lie Groups}, Chicago
+Lectures in Mathematics (1996), for the minimal $G_2$ module and its invariant
+metric.  The all-degree one-copy invariant-ring statement is an external
+input; the low-degree Weyl checks above are internal to this artifact.
+\end{document}
