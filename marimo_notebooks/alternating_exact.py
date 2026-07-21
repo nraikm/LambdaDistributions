@@ -16,7 +16,7 @@ def _():
 
     import marimo as mo
 
-    root = (Path(__file__).resolve().parents[1] / "proved_matrix_groups/packages/finite_group_exact_formulas/alternating/alternating_verification.py").parents[1]
+    root = (Path(__file__).resolve().parents[1] / "lambda_distributions/proofs/finite_group_exact_formulas/alternating/alternating_verification.py").parents[1]
     if str(root) not in sys.path:
         sys.path.insert(0, str(root))
     from verification_core import (

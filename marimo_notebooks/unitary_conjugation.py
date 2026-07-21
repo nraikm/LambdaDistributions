@@ -20,7 +20,7 @@ def _():
     import marimo as mo
     import numpy as np
 
-    notebook_directory = (Path(__file__).resolve().parents[1] / "proved_matrix_groups/packages/unitary_conjugation_endomorphisms/unitary_conjugation_verification.py").parent
+    notebook_directory = (Path(__file__).resolve().parents[1] / "lambda_distributions/proofs/unitary_conjugation_endomorphisms/unitary_conjugation_verification.py").parent
     if str(notebook_directory) not in sys.path:
         sys.path.insert(0, str(notebook_directory))
 

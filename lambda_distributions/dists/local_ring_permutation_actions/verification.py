@@ -650,11 +650,11 @@ def adjoint_suite():
 @lru_cache(maxsize=None)
 def run_suite():
     try:
-        from for_this_guy.finite_lie_type_permutation_actions.verification_core import (
+        from lambda_distributions.proofs.finite_lie_type_permutation_actions.verification_core import (
             polar_suite,
         )
     except ModuleNotFoundError:  # Support direct execution by file path.
-        from proved_matrix_groups.packages.finite_lie_type_permutation_actions.verification_core import (
+        from lambda_distributions.proofs.finite_lie_type_permutation_actions.verification_core import (
             polar_suite,
         )
 

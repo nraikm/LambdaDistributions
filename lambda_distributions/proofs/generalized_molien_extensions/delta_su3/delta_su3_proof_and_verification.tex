@@ -1,0 +1,90 @@
+\documentclass[11pt]{article}
+\usepackage[margin=0.84in]{geometry}
+\usepackage{amsmath,amssymb,mathtools,booktabs,tabularx,microtype,fancyhdr,enumitem}
+\usepackage[dvipsnames]{xcolor}\usepackage[colorlinks=true,linkcolor=NavyBlue,urlcolor=BrickRed,hypertexnames=false]{hyperref}
+\definecolor{ink}{HTML}{172337}\definecolor{accent}{HTML}{594A9A}\definecolor{pale}{HTML}{F1EFF8}\definecolor{passgreen}{HTML}{147A4A}
+\color{ink}\pagestyle{fancy}\fancyhf{}\lhead{Finite $SU(3)$ Delta families}\rhead{Proof and verification}\cfoot{\thepage}\setlength{\headheight}{14pt}
+\newcommand{\Sym}{\operatorname{Sym}}\newcommand{\Exp}{\operatorname{Exp}_{\sigma}}\newcommand{\PASS}{\textcolor{passgreen}{\textbf{PASS}}}
+\newcommand{\summarybox}[1]{\begin{center}\fcolorbox{accent}{pale}{\parbox{0.91\linewidth}{#1}}\end{center}}
+\title{\textbf{$\Delta(3n^2)$ and $\Delta(6n^2)$ in $SU(3)$}\\[3pt]\large Coset formulas, coefficient proof, and matrix verification}
+\author{Computational verification note}\date{17 July 2026}
+\begin{document}\maketitle
+\summarybox{\textbf{Outcome.} Both proposed formulas are correct.  The standard $3$-dimensional matrices were built for $n=2,3,4,5$ (orders $12$--$150$).  All $240$ coefficients through total degree six agree with the exact $Q_n/R_n$ formulas.  Eight determinant-level comparisons have maximum error $8.89\times10^{-16}$.}
+
+\section{Groups and master identity}
+Put $\eta=e^{2\pi i/n}$ and
+\[
+ N_n=\{D(a,b)=\operatorname{diag}(\eta^a,\eta^b,\eta^{-a-b}):a,b\in\mathbb Z/n\}.
+\]
+For any finite matrix group, the coefficient identity
+\[
+ [t_1^{\tau_1}\cdots t_\ell^{\tau_\ell}]\frac1{|G|}\sum_g\prod_j\det(I-t_jg)^{-1}
+ =\dim(\bigotimes_s\Sym^{\tau_s}V)^G \tag{1}
+\]
+follows by expanding symmetric-power characters and taking the trace of the Reynolds projector.
+
+Let $P$ be the permutation matrix of a $3$-cycle.  Then
+$\Delta(3n^2)=N_n\rtimes\langle P\rangle$.  For $\pi\in S_3$ use the determinant-one lift $\widetilde P_\pi=\operatorname{sgn}(\pi)P_\pi$; then
+$\Delta(6n^2)=N_n\rtimes\widetilde S_3$.
+
+\section{Coset proof}
+Define
+\[
+ \mathcal A_n=\frac1{n^2}\sum_{a,b}\prod_j
+ \frac1{(1-\eta^at_j)(1-\eta^bt_j)(1-\eta^{-a-b}t_j)}. \tag{2}
+\]
+For $DP$ or $DP^2$, the three entries around the monomial $3$-cycle multiply to $\det D=1$, so $\det(I-tDP)=1-t^3$.  Therefore
+\begin{equation}
+ \boxed{\mathfrak M_{\Delta(3n^2)}=\tfrac13\mathcal A_n+\tfrac23\Exp(p_3).} \tag{3}
+\end{equation}
+
+For a transposition coset in the determinant-one lift, let $\alpha$ be the product around the $2$-cycle and $\beta$ the fixed-coordinate entry.  Since the underlying permutation has determinant $-1$, $-\alpha\beta=1$ and $\beta=-\alpha^{-1}$.  Thus
+\[
+ \det(I-tg)=(1-\alpha t^2)(1+\alpha^{-1}t).
+\]
+As $D(a,b)$ varies, $\alpha$ is uniform in $\mu_n$.  Put
+\[
+ \mathcal B_n=\frac1n\sum_{a\bmod n}\prod_j
+ \frac1{(1-\eta^at_j^2)(1+\eta^{-a}t_j)}. \tag{4}
+\]
+The identity, $3$-cycle, and transposition proportions in $S_3$ are $1/6$, $1/3$, and $1/2$.  Hence
+\begin{equation}
+ \boxed{\mathfrak M_{\Delta(6n^2)}=\tfrac16\mathcal A_n+\tfrac13\Exp(p_3)+\tfrac12\mathcal B_n.} \tag{5}
+\end{equation}
+
+\section{Exact coefficient formulas}
+For $\tau=(\tau_1,\ldots,\tau_\ell)$, let $Q_n(\tau)$ count rows
+$(x_s,y_s,z_s)$ with $x_s+y_s+z_s=\tau_s$ and
+$\sum_sx_s\equiv\sum_sy_s\equiv\sum_sz_s\pmod n$.  Root-of-unity orthogonality gives $[m_\tau]\mathcal A_n=Q_n(\tau)$.
+
+Let
+\[
+ R_n(\tau)=\sum_{\substack{x_s+2y_s=\tau_s\\ \sum y_s\equiv\sum x_s\ (n)}}(-1)^{\sum x_s}.
+\]
+This follows by expanding $(1+\alpha^{-1}t)^{-1}$ and $(1-\alpha t^2)^{-1}$.  Finally, $[m_\tau]\Exp(p_3)$ is $1$ exactly when every $\tau_s$ is divisible by $3$.  Therefore
+\begin{align}
+ [m_\tau]\mathfrak M_{\Delta(3n^2)}&=\tfrac13Q_n(\tau)+\tfrac23\mathbf1_{3\mid\tau_s\ \forall s}, \tag{6}\\
+ [m_\tau]\mathfrak M_{\Delta(6n^2)}&=\tfrac16Q_n(\tau)+\tfrac13\mathbf1_{3\mid\tau_s\ \forall s}+\tfrac12R_n(\tau). \tag{7}
+\end{align}
+Their integrality is automatic from (1), even though (6)--(7) display rational weights.
+
+\section{Verification design and results}
+For each $n$, all matrices $D(a,b)P^k$ and $D(a,b)\widetilde P_\pi$ are constructed.  The code checks group size and determinant one.  It then compares: (i) eigenvalue-based symmetric-power character averages; (ii) exact enumeration of $Q_n$ and $R_n$; and (iii) the direct determinant average at $(0.07,0.11)$ against (3) or (5).
+\begin{center}\begin{tabular}{@{}rrrrrrc@{}}\toprule
+$n$ & $|\Delta(3n^2)|$ & $|\Delta(6n^2)|$ & degree & checks/family & max. error & result\\\midrule
+2&12&24&$0$--$6$&30&$4.45\times10^{-16}$&\PASS\\
+3&27&54&$0$--$6$&30&$6.67\times10^{-16}$&\PASS\\
+4&48&96&$0$--$6$&30&$6.67\times10^{-16}$&\PASS\\
+5&75&150&$0$--$6$&30&$8.89\times10^{-16}$&\PASS\\\bottomrule
+\end{tabular}\end{center}
+There are two families for each row, hence $2\cdot4\cdot30=240$ exact coefficient checks.  As useful spot checks, for $n=2$ the coefficients at $\tau=(3),(2,1),(1,1,1)$ are $(1,1,2)$ for $\Delta(12)$ and $(0,0,1)$ for $\Delta(24)$.
+
+\section{Novel diagnostic}
+The coset decomposition is also a debugging tool.  A mismatch isolated to $\mathcal B_n$ almost always signals the missed minus sign in the determinant-one lift of a transposition.  A mismatch isolated to $\Exp(p_3)$ signals an incorrect monomial-cycle product.  This three-channel comparison is stronger than a single ordinary Molien specialization.
+
+\section*{Reproduction}
+\begin{verbatim}
+.venv/bin/python -m \
+  lambda_distributions.proofs.generalized_molien_extensions.delta_su3.verification
+\end{verbatim}
+\end{document}

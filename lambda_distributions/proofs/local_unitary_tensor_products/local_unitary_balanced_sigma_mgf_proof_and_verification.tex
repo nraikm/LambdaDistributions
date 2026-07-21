@@ -1,0 +1,331 @@
+\documentclass[11pt]{article}
+\usepackage[margin=0.82in]{geometry}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{booktabs,tabularx,array}
+\usepackage[dvipsnames]{xcolor}
+\usepackage[colorlinks=true,linkcolor=NavyBlue,urlcolor=BrickRed,citecolor=NavyBlue]{hyperref}
+\usepackage{microtype}
+\usepackage{fancyhdr}
+\usepackage{enumitem}
+
+\definecolor{ink}{HTML}{17212B}
+\definecolor{accent}{HTML}{315B7D}
+\definecolor{pale}{HTML}{EDF4F8}
+\definecolor{passgreen}{HTML}{16794A}
+\color{ink}
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{Tensor-product local unitary groups}
+\rhead{Proof and verification}
+\cfoot{\thepage}
+\setlength{\headheight}{14pt}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt}
+\newcommand{\Sym}{\operatorname{Sym}}
+\newcommand{\End}{\operatorname{End}}
+\newcommand{\Tr}{\operatorname{Tr}}
+\newcommand{\Hom}{\operatorname{Hom}}
+\newcommand{\Exp}{\operatorname{Exp}_{\sigma}}
+\newcommand{\SMG}{\operatorname{SMG}}
+\newcommand{\PASS}{\textcolor{passgreen}{\textbf{PASS}}}
+\newcommand{\summarybox}[1]{\begin{center}\fcolorbox{accent}{pale}{\parbox{0.91\linewidth}{#1}}\end{center}}
+
+\title{\textbf{Balanced Sigma-MGFs for Tensor-Product Local Unitary Groups}\\[3pt]
+\large Proof, exact formulas, and direct matrix verification}
+\author{Reproducibility note}
+\date{17 July 2026}
+
+\begin{document}
+\maketitle
+
+\summarybox{\textbf{Outcome.} For
+$G=\prod_{a=1}^kU(d_a)$ on $V=\bigotimes_{a=1}^k\mathbb C^{d_a}$,
+the ordinary one-sided sigma-MGF is exactly $1$. The nontrivial object is the
+balanced two-sided series involving both $V$ and $V^*$. Its stable power-sum
+coefficient is $z_\lambda^{k-2}$, its bipartite single-state coefficient is a
+restricted partition number, and its multilinear coefficient is an exact
+product of Schur--Weyl centralizer dimensions. A reproducible marimo notebook
+constructs the Kronecker-product matrices and compares direct Haar estimates
+with these formulas. All 46 numerical comparisons, 4 construction checks, and
+5 scalar-center witnesses pass.}
+
+\section{Representation and the correction at the outset}
+
+Put $V_a=\mathbb C^{d_a}$ and
+\[
+ G=U(d_1)\times\cdots\times U(d_k),\qquad
+ V=V_1\otimes\cdots\otimes V_k.
+\]
+The representation is the concrete matrix homomorphism
+\begin{equation}
+ \rho(g_1,\ldots,g_k)=g_1\otimes\cdots\otimes g_k
+ \in U(D),\qquad D=\prod_{a=1}^kd_a.
+\end{equation}
+For a partition $\tau=(\tau_1,\ldots,\tau_\ell)$, write
+\[
+ \Sym^\tau V=\bigotimes_{j=1}^{\ell}\Sym^{\tau_j}V,
+ \qquad |\tau|=\sum_j\tau_j.
+\]
+The ordinary coefficient is
+\[
+ [m_\tau]\SMG_{G,V}=\dim(\Sym^\tau V)^G.
+\]
+
+\textbf{Proposition 1 (one-sided collapse).}
+\begin{equation}
+ \boxed{\SMG_{G,V}=1.}
+\end{equation}
+
+\textit{Proof.}
+For $z\in U(1)$ the group contains
+$(zI_{d_1},I_{d_2},\ldots,I_{d_k})$, whose matrix in (1) is $zI_V$.
+It acts on $\Sym^\tau V$ as $z^{|\tau|}I$. If $|\tau|>0$, one can choose
+$z$ with $z^{|\tau|}\ne1$, so a fixed vector must be zero. Only degree zero
+remains. \hfill$\square$
+
+The same center explains why local-unitary entanglement invariants use a state
+$\psi$ and its conjugate $\bar\psi$: the weights $z$ and $z^{-1}$ cancel only
+when the two total degrees agree.
+
+\section{The balanced series and Molien formula}
+
+Introduce independent alphabets $\mathbf s$ and $\mathbf t$ and define
+\begin{equation}
+ \mathcal B_{G,V}(\mathbf s,\mathbf t)
+ =\int_G \Exp\!\left(X_V(g)h_1(\mathbf s)\right)
+          \Exp\!\left(X_{V^*}(g)h_1(\mathbf t)\right)\,dg.
+\end{equation}
+Coefficient extraction gives
+\begin{align}
+ \mathcal B_{G,V}
+ &=\sum_{\alpha,\beta}b_{\alpha,\beta}
+          m_\alpha(\mathbf s)m_\beta(\mathbf t),\\
+ b_{\alpha,\beta}
+ &=\dim\left(\Sym^\alpha V\otimes\Sym^\beta V^*\right)^G
+  =\dim\Hom_G(\Sym^\beta V,\Sym^\alpha V).
+\end{align}
+The center now gives the balanced selection rule
+\begin{equation}
+ \boxed{b_{\alpha,\beta}=0\quad\text{unless}\quad
+ |\alpha|=|\beta|.}
+\end{equation}
+
+For finitely many variables, (3) is the balanced Molien integral
+\begin{equation}
+ \mathcal B_{G,V}
+ =\int_G\prod_i\det(I-s_i\rho(g))^{-1}
+         \prod_j\det(I-t_j\rho(g)^{-1})^{-1}\,dg.
+\end{equation}
+If $x^{(a)}_1,\ldots,x^{(a)}_{d_a}$ are the eigenvalues of $g_a$, then the
+eigenvalues of $\rho(g)$ are $x^{(1)}_{i_1}\cdots x^{(k)}_{i_k}$.
+Consequently (7), together with the Weyl integration formula for each local
+factor, is an exact constant-term prescription in every dimension.
+
+\section{Stable power-sum formula}
+
+For every positive integer $r$, Kronecker products satisfy the directly
+testable identity
+\begin{equation}
+ \Tr(\rho(g)^r)=\prod_{a=1}^k\Tr(g_a^r).
+\end{equation}
+Thus, for a partition $\lambda$,
+$p_\lambda(\rho(g))=\prod_a p_\lambda(g_a)$, and product Haar measure gives
+\begin{equation}
+ \mathbb E_G\!\left[p_\lambda(\rho(g))
+ \overline{p_\mu(\rho(g))}\right]
+ =\prod_{a=1}^k\mathbb E_{U(d_a)}
+ \left[p_\lambda(g_a)\overline{p_\mu(g_a)}\right].
+\end{equation}
+Let $z_\lambda=\prod_i i^{m_i(\lambda)}m_i(\lambda)!$. Schur orthogonality,
+or equivalently the stable Hall inner product, gives
+\begin{equation}
+ \mathbb E_{U(d)}[p_\lambda(U)\overline{p_\mu(U)}]
+ =\delta_{\lambda\mu}z_\lambda
+ \quad\text{when }d\ge |\lambda|,|\mu|.
+\end{equation}
+Combining (9) and (10), if $N\le\min_a d_a$ then
+\begin{equation}
+ \mathbb E_G[p_\lambda(\rho)\overline{p_\mu(\rho)}]
+ =\delta_{\lambda\mu}z_\lambda^k
+ \quad (|\lambda|,|\mu|\le N).
+\end{equation}
+Each determinant exponential contributes a factor $p_\lambda/z_\lambda$.
+Therefore through bidegree $(N,N)$,
+\begin{equation}
+ \boxed{\mathcal B_{G,V}\equiv
+ \sum_{|\lambda|\le N}z_\lambda^{k-2}
+ p_\lambda(\mathbf s)p_\lambda(\mathbf t).}
+\end{equation}
+For $k=1,2,3$, the coefficients are respectively
+$z_\lambda^{-1},1,z_\lambda$.
+
+\section{Exact single-state coefficients}
+
+For partitions $\lambda^{(1)},\ldots,\lambda^{(k)}\vdash m$, define the
+generalized Kronecker coefficient
+\[
+ g(\lambda^{(1)},\ldots,\lambda^{(k)})
+ =\dim\left([\lambda^{(1)}]\otimes\cdots\otimes[\lambda^{(k)}]\right)^{S_m}.
+\]
+Applying Schur--Weyl duality to each $V_a^{\otimes m}$ and then taking
+diagonal $S_m$-invariants proves
+\begin{equation}
+ \Sym^m(V_1\otimes\cdots\otimes V_k)
+ \cong\bigoplus_{\lambda^{(1)},\ldots,\lambda^{(k)}\vdash m}
+ g(\lambda^{(1)},\ldots,\lambda^{(k)})
+ \bigotimes_{a=1}^kS_{\lambda^{(a)}}V_a,
+\end{equation}
+where terms with $\ell(\lambda^{(a)})>d_a$ vanish. Schur orthogonality now
+gives the all-dimensional identity
+\begin{equation}
+ \boxed{b_{(m),(m)}=
+ \sum_{\substack{\lambda^{(a)}\vdash m\\
+                  \ell(\lambda^{(a)})\le d_a}}
+ g(\lambda^{(1)},\ldots,\lambda^{(k)})^2.}
+\end{equation}
+
+For $k=2$, $g(\lambda,\mu)=\delta_{\lambda\mu}$. Hence
+\begin{equation}
+ \boxed{b_{(m),(m)}=
+ \#\{\lambda\vdash m:\ell(\lambda)\le\min(d_1,d_2)\}.}
+\end{equation}
+This is $p(m)$ when both dimensions are at least $m$. In stable range, setting
+each alphabet in (12) to one variable yields the equivalent formula
+\begin{equation}
+ \boxed{b_{(m),(m)}=\sum_{\lambda\vdash m}z_\lambda^{k-2}.}
+\end{equation}
+
+For completeness, general $b_{\alpha,\beta}$ also has an exact finite formula.
+Decompose each $\Sym^{\alpha_j}V$ by (13), then combine local Schur functors
+with Littlewood--Richardson coefficients. If the resulting multiplicity of
+$\bigotimes_aS_{\mu^{(a)}}V_a$ is $M_\alpha(\mu^{(1)},\ldots,\mu^{(k)})$,
+then
+\begin{equation}
+ b_{\alpha,\beta}=\sum_{\substack{\mu^{(1)},\ldots,\mu^{(k)}\\
+                          \ell(\mu^{(a)})\le d_a}}
+ M_\alpha(\mu^{(1)},\ldots,\mu^{(k)})
+ M_\beta(\mu^{(1)},\ldots,\mu^{(k)}).
+\end{equation}
+This separates the two combinatorial ingredients: generalized Kronecker
+coefficients enter the symmetric powers of a tensor product, while
+Littlewood--Richardson coefficients enter products of symmetric powers.
+
+\section{Exact multilinear coefficients}
+
+For $\alpha=\beta=(1^r)$, $\Sym^{(1^r)}V=V^{\otimes r}$, so
+\begin{equation}
+ b_{(1^r),(1^r)}=\dim\End_G(V^{\otimes r}).
+\end{equation}
+Because the local factors act independently,
+\[
+ \End_G(V^{\otimes r})\cong
+ \bigotimes_{a=1}^k\End_{U(d_a)}(V_a^{\otimes r}).
+\]
+If $f^\lambda$ is the number of standard Young tableaux of shape $\lambda$,
+Schur--Weyl duality and the hook-length formula give
+\begin{equation}
+ \boxed{b_{(1^r),(1^r)}=
+ \prod_{a=1}^k\sum_{\substack{\lambda\vdash r\\
+                    \ell(\lambda)\le d_a}}(f^\lambda)^2.}
+\end{equation}
+When every $d_a\ge r$, the inner sum is $|S_r|=r!$, and therefore
+\begin{equation}
+ \boxed{b_{(1^r),(1^r)}=(r!)^k.}
+\end{equation}
+This is the dimension of the stable family of contraction diagrams indexed by
+$k$ independent permutations in $S_r$.
+
+\section{Verification design}
+
+The accompanying implementation uses two independent routes.
+
+\textbf{Exact route.}
+Integer partitions are generated recursively. The hook-length formula computes
+$f^\lambda$, which is substituted into (19). Equation (15) is evaluated by
+restricted partition counting, and (16) by direct computation of $z_\lambda$.
+No sampled matrices enter these tables.
+
+\textbf{Direct matrix route.}
+For every local factor, a complex Gaussian matrix $Z$ is QR-factorized and the
+diagonal phases of $R$ are removed. The resulting $Q$ is Haar distributed on
+$U(d_a)$. The code explicitly forms
+$\rho=Q_1\otimes\cdots\otimes Q_k$, checks $\rho^*\rho=I$, and evaluates its
+power traces. Newton's recurrence
+\begin{equation}
+ mh_m(\rho)=\sum_{j=1}^m\Tr(\rho^j)h_{m-j}(\rho)
+\end{equation}
+then produces characters of $\Sym^mV$ directly. The sampled target quantities
+are
+\begin{align*}
+ &\mathbb E\prod_jh_{\tau_j}(\rho) &&\text{(ordinary one-sided)},\\
+ &\mathbb E[p_\lambda(\rho)\overline{p_\mu(\rho)}]
+     &&\text{(balanced power-sum)},\\
+ &\mathbb E|h_m(\rho)|^2 &&\text{(single-state)},\\
+ &\mathbb E|\Tr\rho|^{2r} &&\text{(multilinear)}.
+\end{align*}
+The last two are character inner products, hence exactly the invariant
+multiplicities in (14) and (19). Numerical integration is corroboration, not a
+replacement for the proofs above.
+
+\clearpage
+\section{Results}
+
+Each case used 6,000 deterministic-seed Haar samples. A numerical row passes
+when the absolute error is at most six empirical standard errors plus a small
+fixed rounding margin. Matrix unitarity and trace factorization were also
+checked at tolerance $10^{-11}$.
+
+\begin{center}
+\begin{tabularx}{\linewidth}{@{}Xlrrrr@{}}
+\toprule
+Representation & Target & Direct estimate & Formula & Std. error & Result\\
+\midrule
+$U(3)$ & $|h_3|^2$ & 1.0367 & 1 & 0.0253 & \PASS\\
+$U(3)$ & $|\Tr\rho|^4$ & 2.0318 & 2 & 0.0593 & \PASS\\
+$U(2)\times U(3)$ & $|h_2|^2$ & 1.9533 & 2 & 0.0546 & \PASS\\
+$U(2)\times U(3)$ & $|p_{(2)}|^2$ & 3.8911 & 4 & 0.0638 & \PASS\\
+$U(2)\times U(2)$ & $|h_3|^2$ & 2.0797 & 2 & 0.1219 & \PASS\\
+$U(2)^3$ & $|h_2|^2$ & 4.0815 & 4 & 0.1641 & \PASS\\
+$U(2)^3$ & $|\Tr\rho|^4$ & 8.2364 & 8 & 0.6379 & \PASS\\
+$U(2)^3$ & $p_{(2)}\overline{p_{(1,1)}}$ & $0.0032$ & 0 & 0.0284 & \PASS\\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+The exact calculations make the stable-range boundary visible:
+\begin{center}
+\begin{tabular}{@{}llrrl@{}}
+\toprule
+Dimensions & Sector & Degree & Exact & Stable expression\\
+\midrule
+$(2,2)$ & single-state & 3 & 2 & $p(3)=3$ (not applicable)\\
+$(2,2)$ & multilinear & 3 & 25 & $(3!)^2=36$ (not applicable)\\
+$(2,3)$ & multilinear & 3 & 30 & $(3!)^2=36$ (not applicable)\\
+$(2,2,2)$ & multilinear & 3 & 125 & $(3!)^3=216$ (not applicable)\\
+\bottomrule
+\end{tabular}
+\end{center}
+Thus the dimension restrictions are not cosmetic: applying a stable formula
+outside $r,m\le\min_a d_a$ produces wrong answers.
+
+The scalar-center test separately constructs, for each degree $1\le n\le5$,
+$z=e^{2\pi i/(n+1)}$ and the group matrix
+$\rho(zI_2,I_3)=zI_6$. Its action on degree $n$ is $z^n\ne1$ in every case,
+giving five direct matrix witnesses for Proposition~1.
+
+\section{Reproduction and scope}
+
+The folder \texttt{lambda\_distributions/proofs/local\_unitary\_tensor\_products} contains:
+\begin{itemize}[leftmargin=1.5em]
+ \item \texttt{marimo_notebooks/local_unitary_tensor_products.py}, the interactive marimo report;
+ \item \texttt{verification.py}, the direct and exact implementation;
+ \item \texttt{test\_verification.py}, deterministic regression tests;
+ \item this \LaTeX{} source and its compiled PDF.
+\end{itemize}
+The notebook exposes the sample count and reports every tested coefficient, not
+only the representative rows printed here. Its global $U(3)$ case is explicitly
+labeled as a comparator; it is not conflated with the local tensor-product
+groups. All local-unitary cases remain grouped in this single family because
+they are specializations of the same representation (1) and the same proof.
+
+\end{document}

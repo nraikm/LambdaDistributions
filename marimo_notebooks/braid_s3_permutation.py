@@ -18,7 +18,7 @@ def _():
 
     source_directory = (
         Path(__file__).resolve().parents[1]
-        / "proved_matrix_groups/packages/finite_braid_images/s3_permutation"
+        / "lambda_distributions/proofs/finite_braid_images/s3_permutation"
     )
     if str(source_directory) not in sys.path:
         sys.path.insert(0, str(source_directory))

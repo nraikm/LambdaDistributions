@@ -14,7 +14,7 @@ def _():
     from pathlib import Path
     import marimo as mo
     import numpy as np
-    sys.path.insert(0, str((Path(__file__).resolve().parents[1] / "proved_matrix_groups/packages/compact_connected_lie_groups/su_adjoint/su_adjoint_verification.py").parents[1]))
+    sys.path.insert(0, str((Path(__file__).resolve().parents[1] / "lambda_distributions/proofs/compact_connected_lie_groups/su_adjoint/su_adjoint_verification.py").parents[1]))
     from verification_core import su_adjoint, verify_expected
     return mo, np, su_adjoint, verify_expected
 

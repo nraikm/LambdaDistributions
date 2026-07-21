@@ -18,7 +18,7 @@
   ],
   "rank_tolerance_rule": "2e-8 times max(1, largest Gram eigenvalue); every reported gap ratio must be at least 1e4",
   "m24_aggregated_table_sha256": "103ba576555f01bea74df73f8e2f788b02bee4e8b20df3ed198eb005d16de044",
-  "m24_software_data_file": "packages/sporadic_matrix_groups/common.py",
+  "m24_software_data_file": "lambda_distributions/proofs/sporadic_matrix_groups/common.py",
   "m24_software_data_file_sha256": "3fbc8e5cde4ac5670696ecc1c5f692a2afb2065469a83ce486aa8b28d046d579",
   "result_file": "verification_results.xml",
   "result_file_sha256": "42441e8a918a6fe149dbb5c262332457d48044db0e3d77e776d249f73567eaa5"

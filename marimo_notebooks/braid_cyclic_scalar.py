@@ -15,7 +15,7 @@ def _():
     from pathlib import Path
     import marimo as mo
 
-    root = (Path(__file__).resolve().parents[1] / "proved_matrix_groups/packages/finite_braid_images/cyclic_scalar/notebook.py").parents[1]
+    root = (Path(__file__).resolve().parents[1] / "lambda_distributions/proofs/finite_braid_images/cyclic_scalar/notebook.py").parents[1]
     if str(root) not in sys.path:
         sys.path.insert(0, str(root))
     from core import braid_diagnostics, cyclic_scalar_braid_image, verify_case

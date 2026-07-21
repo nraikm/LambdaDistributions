@@ -16,17 +16,17 @@ def _():
 
     import marimo as mo
 
-    repository = (Path(__file__).resolve().parents[1] / "proved_matrix_groups/packages/generalized_molien_extensions/notebook.py").parents[2]
+    repository = (Path(__file__).resolve().parents[1] / "lambda_distributions/proofs/generalized_molien_extensions/notebook.py").parents[2]
     if str(repository) not in sys.path:
         sys.path.insert(0, str(repository))
 
-    from for_this_guy.generalized_molien_extensions.code_monomial.verification import (
+    from lambda_distributions.proofs.generalized_molien_extensions.code_monomial.verification import (
         run_suite as run_code,
     )
-    from for_this_guy.generalized_molien_extensions.delta_su3.verification import (
+    from lambda_distributions.proofs.generalized_molien_extensions.delta_su3.verification import (
         run_suite as run_delta,
     )
-    from for_this_guy.generalized_molien_extensions.psl2_projective_line.verification import (
+    from lambda_distributions.proofs.generalized_molien_extensions.psl2_projective_line.verification import (
         run_suite as run_psl2,
     )
 

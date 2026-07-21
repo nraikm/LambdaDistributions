@@ -1,0 +1,119 @@
+\documentclass[11pt]{article}
+\usepackage[margin=0.84in]{geometry}
+\usepackage{amsmath,amssymb,mathtools,booktabs,microtype,xcolor,fancyhdr,hyperref}
+\definecolor{navy}{HTML}{17365D}\definecolor{teal}{HTML}{147D78}
+\hypersetup{colorlinks=true,linkcolor=navy,urlcolor=teal}
+\pagestyle{fancy}\setlength{\headheight}{14pt}\fancyhf{}
+\lhead{$S_n$ on $k$-subsets}\rhead{Proof and exhaustive verification}\cfoot{\thepage}
+\newcommand{\Fix}{\operatorname{Fix}}
+\newcommand{\SMG}{\operatorname{SMG}}
+\title{\color{navy}\bfseries The Non-Poisson $\Lambda$-Limit for $k$-Subsets\\
+\large Exact matrix formula, proof, and exhaustive small-rank checks}
+\author{Computational verification note}\date{17 July 2026}
+\begin{document}\maketitle
+
+\begin{abstract}
+For fixed $k$, we prove the joint limit of all power traces of the permutation
+representation of $S_n$ on $k$-subsets.  The limit is an explicit functional
+of independent $Z_j\sim\mathrm{Poisson}(1/j)$ variables and is non-Poisson for
+$k\ge2$.  An independent program constructs 1,584 representation matrices in
+dimensions $6,10,15,20$ and performs 6,336 exact power-trace comparisons.
+\end{abstract}
+
+\section{The representation and exact formula}
+Let $\Omega_{n,k}=\binom{[n]}k$ and let $\rho_{n,k}$ permute its standard
+basis.  Since the trace of a permutation matrix counts fixed basis vectors,
+\[
+ p_r(X_{\rho}(\sigma))=\operatorname{Tr}(\rho(\sigma)^r)
+ =|\Fix_{\Omega_{n,k}}(\sigma^r)|.
+\]
+Write $A_j(\sigma)$ for the number of $j$-cycles of $\sigma$.  A $j$-cycle
+splits under the $r$th power into $d=\gcd(j,r)$ cycles of length $j/d$.
+An invariant subset independently includes or excludes each resulting cycle,
+so
+\begin{equation}\label{eq:fixed}
+\boxed{F_{k,r}(\sigma)=[u^k]\prod_{j=1}^{kr}
+\left(1+u^{j/\gcd(j,r)}\right)^{\gcd(j,r)A_j(\sigma)}.}
+\end{equation}
+The cutoff is valid: if $j>kr$, then $j/\gcd(j,r)>k$.
+
+For a partition $\lambda$, direct averaging therefore gives
+\begin{equation}\label{eq:smg}
+\SMG_{n,k}=\sum_\lambda\frac{\mathbb E_{S_n}
+[\prod_aF_{k,\lambda_a}(\sigma)]}{z_\lambda}p_\lambda.
+\end{equation}
+
+\section{Coefficientwise limit}
+Fix a finite set of exponents.  Every variable in \eqref{eq:fixed} is a
+polynomial in finitely many cycle counts.  We use the following elementary
+factorial-moment lemma.  For fixed nonnegative integers $r_1,\ldots,r_R$,
+\[
+\mathbb E\prod_{j=1}^R(A_j)_{r_j}=\prod_{j=1}^Rj^{-r_j}
+\quad\text{whenever}\quad n\geq\sum_{j=1}^Rjr_j.
+\]
+Indeed, the falling-factorial product counts ordered selections of pairwise
+disjoint distinguished cycles, with $r_j$ cycles of length $j$.  Choosing
+their supports and cyclic orders and then permuting the remaining labels gives
+$n!\prod_jj^{-r_j}/n!$.  These are exactly the joint factorial moments of
+independent $Z_j\sim\operatorname{Poisson}(1/j)$.  Hence the finite vector of
+cycle counts converges jointly, and every factorial moment required by a fixed
+coefficient is eventually equal to its limiting value.  Thus
+\[
+(A_1,\ldots,A_R)\Longrightarrow(Z_1,\ldots,Z_R),\qquad
+Z_j\ \text{independent},\quad Z_j\sim\mathrm{Poisson}(1/j).
+\]
+Thus
+\[
+F_{k,r}(\sigma)\Longrightarrow F^{(\infty)}_{k,r}:=
+[u^k]\prod_{j=1}^{kr}
+(1+u^{j/\gcd(j,r)})^{\gcd(j,r)Z_j},
+\]
+jointly for every finite collection of $r$'s.  Moment stabilization permits
+expectations in \eqref{eq:smg} to pass to the limit, proving the coefficientwise
+$\Lambda$-limit
+\[
+\boxed{\SMG^{(k)}_\infty=\sum_\lambda
+\frac{\mathbb E[\prod_aF^{(\infty)}_{k,\lambda_a}]}{z_\lambda}p_\lambda.}
+\]
+For $r=1$, $F^{(\infty)}_{k,1}$ has mean one.  The action has rank $k+1$
+once $n\ge2k$, hence its limiting second moment is $k+1$ and its variance is
+$k$.  A Poisson variable of mean one has variance one; consequently the limit
+is non-Poisson for $k\ge2$.  For example
+\[
+F^{(\infty)}_{2,1}=\binom{Z_1}{2}+Z_2.
+\]
+
+\section{Exact finite formula checks}
+For each $(n,k)=(4,2),(5,2),(6,2),(6,3)$, the verifier enumerates all $n!$
+permutations, induces their action on lexicographically ordered $k$-subsets,
+and materializes the corresponding zero-one matrix.  Distinct byte keys prove
+that the constructed matrices form a faithful copy of $S_n$.  It then compares
+the integer matrix traces $\operatorname{Tr}(M^r)$, $1\le r\le4$, with
+\eqref{eq:fixed}.  Six joint products indexed by
+$(1),(2),(3),(1,1),(2,1),(1,1,1)$ are averaged independently on both sides.
+
+\begin{center}
+\begin{tabular}{@{}rrrrrr@{}}\toprule
+$n$&$k$&dimension&matrices&trace checks&$(\mathbb E F,\operatorname{Var}F)$\\\midrule
+4&2&6&24&96&$(1,2)$\\
+5&2&10&120&480&$(1,2)$\\
+6&2&15&720&2880&$(1,2)$\\
+6&3&20&720&2880&$(1,3)$\\\bottomrule
+\end{tabular}
+\end{center}
+All 6,336 trace comparisons and all 24 joint-average comparisons pass exactly.
+These exhaustive matrices verify the finite fixed-point identity, not the
+asymptotic convergence; convergence is proved by the factorial-moment lemma
+above.
+
+\section{Reproduction and reference}
+\begin{verbatim}
+.venv/bin/python lambda_distributions/proofs/limiting_lambda_claims/
+  symmetric_k_subsets/verification.py
+.venv/bin/marimo edit marimo_notebooks/symmetric_k_subsets.py
+\end{verbatim}
+Join each wrapped command onto one line.  For the fixed-point and moment
+background, see P.~Diaconis, J.~Fulman, and R.~Guralnick,
+\emph{On fixed points of permutations},
+\url{https://arxiv.org/abs/0708.2643}.
+\end{document}

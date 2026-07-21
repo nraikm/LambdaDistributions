@@ -1,0 +1,176 @@
+\documentclass[11pt]{article}
+\usepackage[margin=0.82in]{geometry}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{booktabs,tabularx}
+\usepackage[dvipsnames]{xcolor}
+\usepackage[colorlinks=true,linkcolor=NavyBlue,urlcolor=BrickRed,hypertexnames=false]{hyperref}
+\usepackage{microtype}
+\usepackage{fancyhdr}
+\usepackage{enumitem}
+
+\definecolor{ink}{HTML}{25213A}
+\definecolor{accent}{HTML}{7A3E65}
+\definecolor{pale}{HTML}{F8EFF5}
+\definecolor{passgreen}{HTML}{16794A}
+\color{ink}
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{$A_5$ representations}
+\rhead{Proof and verification}
+\cfoot{\thepage}
+\setlength{\headheight}{14pt}
+\newcommand{\Sfun}{\mathcal S}
+\newcommand{\Sym}{\operatorname{Sym}}
+\newcommand{\PASS}{\textcolor{passgreen}{\textbf{PASS}}}
+\newcommand{\summarybox}[1]{\begin{center}\fcolorbox{accent}{pale}{\parbox{0.91\linewidth}{#1}}\end{center}}
+
+\title{\textbf{Three Representations Associated with $A_5$}\\[3pt]
+\large Class spectra, invariant multiplicities, and direct matrix tests}
+\author{Computational verification note}
+\date{17 July 2026}
+
+\begin{document}
+\maketitle
+
+\summarybox{\textbf{Outcome.} All 45 multivariate coefficients indexed by
+partitions through total degree seven agree in each of the five-dimensional
+permutation, four-dimensional deleted permutation, and three-dimensional
+rotation representations.  The explicit groups all have order 60.  Separate
+Reynolds projectors confirm the low-degree invariant dimensions.}
+
+\section{The identity being tested}
+
+For a finite matrix group $G\leq GL(V)$, put
+\begin{equation}
+\Sfun_{G,V}(\mathbf t)=\frac1{|G|}\sum_{g\in G}
+\prod_{a\geq1}\det(I-t_ag)^{-1}.                            \tag{1}
+\end{equation}
+If $g$ has eigenvalues $\lambda_1,\ldots,\lambda_n$, then
+\[
+\det(I-tg)^{-1}=\prod_i(1-t\lambda_i)^{-1}
+=\sum_{d\geq0}h_d(\lambda_1,\ldots,\lambda_n)t^d,
+\]
+and $h_d(\lambda(g))=\chi_{\Sym^dV}(g)$.  Hence
+\begin{align}
+[t_1^{\tau_1}\cdots t_\ell^{\tau_\ell}]\Sfun_{G,V}
+&=\frac1{|G|}\sum_{g\in G}\prod_a\chi_{\Sym^{\tau_a}V}(g)\notag\\
+&=\dim\left(\bigotimes_a\Sym^{\tau_a}V\right)^G.          \tag{2}
+\end{align}
+The last equality follows because the group average on the tensor product is
+the Reynolds projector.  Equations (1)--(2) also prove that grouping elements
+with the same spectrum is exact in every degree.
+
+\section{Three class-spectrum formulas}
+
+Write $F_{(\lambda_1,\ldots,\lambda_n)}(\mathbf t)
+=\prod_{a,i}(1-\lambda_i t_a)^{-1}$,
+$\omega=e^{2\pi i/3}$, and $\xi=e^{2\pi i/5}$.  The formulas tested are
+\begin{align}
+\Sfun_{\rm perm}=\frac1{60}\big[&F_{(1,1,1,1,1)}
++15F_{(1,1,1,-1,-1)}+20F_{(1,1,1,\omega,\omega^{-1})}\notag\\
+&+24F_{(1,\xi,\xi^2,\xi^3,\xi^4)}\big],                  \tag{3}\\
+\Sfun_{\rm del}=\frac1{60}\big[&F_{(1,1,1,1)}
++15F_{(1,1,-1,-1)}+20F_{(1,1,\omega,\omega^{-1})}\notag\\
+&+24F_{(\xi,\xi^2,\xi^3,\xi^4)}\big],                   \tag{4}\\
+\Sfun_{\rm rot}=\frac1{60}\big[&F_{(1,1,1)}
++15F_{(1,-1,-1)}+20F_{(1,\omega,\omega^{-1})}\notag\\
+&+12F_{(1,\xi,\xi^{-1})}+12F_{(1,\xi^2,\xi^{-2})}\big]. \tag{5}
+\end{align}
+
+For (3), a permutation of cycle type $(1^5)$, $(2^2,1)$, $(3,1^2)$,
+or $(5)$ has precisely the displayed roots of unity as eigenvalues.  Removing
+the always-fixed all-ones line deletes one eigenvalue $1$ and proves (4).
+For (5), a rotation through angle $\theta$ has spectrum
+$(1,e^{i\theta},e^{-i\theta})$; the rotation counts are
+$1,15,20,12,12$ for angles $0,\pi,2\pi/3,2\pi/5,4\pi/5$.
+
+The split of the fifth turns is essential in (5): the two classes have
+different 3D spectra.  They may be combined in (3)--(4) because a 5-cycle and
+its nontrivial powers have the same full permutation spectrum.
+
+\section{Independent matrix construction}
+
+For the first representation, all 60 even permutations of five symbols are
+converted directly to $5\times5$ permutation matrices.  For the deleted
+representation, let $B$ be an orthonormal basis for
+\[
+\{x\in\mathbb C^5:x_1+\cdots+x_5=0\};
+\]
+the matrices are $B^*P_\pi B$.  Neither route uses the spectral tables above.
+
+For the rotation representation, start from the twelve icosahedron vertices
+\[
+(0,\pm1,\pm\varphi),\quad(\pm1,\pm\varphi,0),\quad
+(\pm\varphi,0,\pm1),\qquad \varphi=(1+\sqrt5)/2.
+\]
+Mapping a fixed independent vertex frame to every compatible target frame and
+retaining the orientation-preserving isometries reconstructs 60 distinct
+$3\times3$ matrices.
+
+\section{Verification protocol}
+
+For every partition $\tau$ through total degree seven, the direct route
+computes $h_{\tau_a}$ recursively from the eigenvalues of every explicit
+matrix and averages $\prod_a h_{\tau_a}$.  The formula route uses only the
+weighted spectra in (3), (4), or (5).  It never receives the matrices.
+
+As a third route, the code explicitly constructs each $\Sym^2(V)$ inside
+$V^{\otimes2}$ using normalized occupancy states, averages the resulting
+matrices, and checks projector rank, trace, and idempotence.  The same check is
+also performed on $V\otimes V$.
+
+\section{Results}
+
+\begin{center}
+\begin{tabularx}{\linewidth}{@{}Xrrrrc@{}}
+\toprule
+Representation & $|G|$ & $\dim V$ & degree & checks & result\\
+\midrule
+$A_5$ permutation & 60 & 5 & $0$--$7$ & 45 & \PASS\\
+$A_5$ deleted permutation & 60 & 4 & $0$--$7$ & 45 & \PASS\\
+$A_5$ rotation & 60 & 3 & $0$--$7$ & 45 & \PASS\\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\begin{center}
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+Representation & $[m_{(1)}]$ & $[m_{(2)}]$ & $[m_{(1,1)}]$ & $[m_{(1,1,1)}]$\\
+\midrule
+permutation & 1 & 2 & 2 & 5\\
+deleted permutation & 0 & 1 & 1 & 1\\
+rotation & 0 & 1 & 1 & 1\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The symmetric-square projector ranks are respectively $2,1,1$.  Their traces
+agree with those integers to $3\times10^{-16}$, and the largest idempotence
+error is $3.27\times10^{-16}$.  These checks recover the claims that the
+permutation representation has a fixed line while the deleted and rotation
+representations do not.
+
+The value $[m_{(1,1,1)}]=1$ in the rotation case is the invariant orientation
+tensor in $V^{\otimes3}$.  This is not contradicted by the absence of an
+invariant cubic in $\Sym^3(V)$: $(1,1,1)$ denotes three separate degree-one
+factors, not the partition $(3)$.
+
+\section{Reproducibility and scope}
+
+Run the command-line suite from the repository root:
+{\scriptsize
+\begin{verbatim}
+.venv/bin/python -m lambda_distributions.proofs.matrix_group_formula_verification.a5_representations.verification
+\end{verbatim}
+}
+Open \texttt{marimo\_notebooks/a5\_representations.py} with marimo to change the
+degree bound and inspect every row.
+
+The finite computation is a transcription and convention test, not the source
+of the all-degree theorem.  All-degree validity follows from (1)--(2) and the
+complete class spectra; the numerical suite checks the matrix constructions,
+class sizes, fifth-root choices, and coefficient extraction in representative
+small dimensions.
+
+\end{document}

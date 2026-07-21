@@ -1,0 +1,165 @@
+\documentclass[11pt]{article}
+\usepackage[margin=0.82in]{geometry}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{booktabs,tabularx}
+\usepackage[dvipsnames]{xcolor}
+\usepackage[colorlinks=true,linkcolor=NavyBlue,urlcolor=BrickRed,hypertexnames=false]{hyperref}
+\usepackage{microtype,fancyhdr,enumitem}
+\definecolor{ink}{HTML}{252E43}
+\definecolor{accent}{HTML}{4B63B7}
+\definecolor{pale}{HTML}{EFF2FF}
+\definecolor{passgreen}{HTML}{16794A}
+\color{ink}
+\pagestyle{fancy}\fancyhf{}
+\lhead{Symmetric groups}\rhead{Nonuniform permutation measures}\cfoot{\thepage}
+\setlength{\headheight}{14pt}
+\newcommand{\Sfun}{\mathcal S}
+\newcommand{\Tr}{\operatorname{Tr}}
+\newcommand{\PASS}{\textcolor{passgreen}{\textbf{PASS}}}
+\newcommand{\summarybox}[1]{\begin{center}\fcolorbox{accent}{pale}{\parbox{0.91\linewidth}{#1}}\end{center}}
+\title{\textbf{Nonuniform $\Lambda$-Distributions on Symmetric Groups}\\[3pt]
+\large Cycle transforms, shuffles, and Fourier operators}
+\author{Proof and computational verification note}
+\date{17 July 2026}
+
+\begin{document}
+\maketitle
+\summarybox{\textbf{Outcome.}  Explicit permutation matrices for
+$S_3,S_4,S_5$ were compared with the cycle-count formula under six families
+of nonuniform measures.  A separate $S_3$ calculation decomposes every tested
+tensor-symmetric character into all three irreducibles and verifies both
+central and noncentral Fourier operators.  All \textbf{267} checks pass; the
+maximum absolute error is $4.45\times10^{-15}$.}
+
+\section{Permutation matrices and the cycle transform}
+For the defining permutation representation $V=\mathbb C^n$, a $d$-cycle
+contributes all $d$th roots of unity.  Consequently
+\begin{equation}
+\det(I-tP_\pi)=\prod_{d\geq1}(1-t^d)^{C_d(\pi)}.            \tag{1}
+\end{equation}
+With
+\begin{equation}
+Q_d(\mathbf t)=\prod_a(1-t_a^d)^{-1},                      \tag{2}
+\end{equation}
+direct substitution in the determinant definition proves
+\begin{equation}
+\Sfun_{\nu,n}(\mathbf t)=
+\mathbb E_\nu\!\left[\prod_{d\geq1}Q_d(\mathbf t)^{C_d(\pi)}\right]. \tag{3}
+\end{equation}
+This identity is valid for every probability measure, whether or not it is a
+class measure.  It is the joint cycle-count probability-generating function
+evaluated at the transformed variables $Q_d$.
+
+For coefficient extraction, each factor is expanded using
+\begin{equation}
+(1-t^d)^{-c}=\sum_{j\geq0}\binom{c+j-1}{j}t^{dj}.           \tag{4}
+\end{equation}
+The verification uses integer dynamic programming for (4), separately for
+every permutation.  This route does not diagonalize a matrix.
+
+\section{Measures tested}
+All probabilities are constructed on the fully enumerated group:
+\begin{enumerate}[leftmargin=*,itemsep=3pt]
+\item the lazy random-transposition walk with
+$\kappa=0.35\delta_e+0.65\operatorname{Unif}(C_2)$, after three steps;
+\item the lazy random $3$-cycle walk with laziness $0.4$, after two steps;
+\item the lazy adjacent-transposition walk with laziness $0.25$, after four steps;
+\item the inverse $2$-riffle law
+\begin{equation}
+\mathbb P(\pi)=2^{-n}\binom{n+1-d(\pi)}{n},                \tag{5}
+\end{equation}
+where $d(\pi)$ is the number of descents;
+\item Ewens measure with $\theta=1.7$,
+$\mathbb P(\pi)\propto\theta^{K(\pi)}$;
+\item the general cycle weight
+$\mathbb P(\pi)\propto1.2^{C_1}0.7^{C_2}1.6^{C_3}$.
+\end{enumerate}
+For $S_3,S_4,S_5$ and every partition through total degree four, the direct
+route averages characters computed from the explicit matrices using Newton's
+identities.  The cycle route applies (4) to the cycle structure.  Thus the two
+routes share the probability law but not the spectral computation.
+
+The normalizing generating-function formulas follow immediately from the
+exponential formula for labeled cycles.  For example,
+\begin{equation}
+\Sfun_{n,\theta}^{\mathrm{Ewens}}=
+\frac{[z^n]\exp\!\left(\theta\sum_{d\geq1}Q_dz^d/d\right)}
+{[z^n]\exp\!\left(\theta\sum_{d\geq1}z^d/d\right)}.        \tag{6}
+\end{equation}
+Equation (6) records the corrected typography: the normalization is
+$(\theta)_n$, and the summation index is $d\geq1$.
+
+\section{Fourier proof and an independent \texorpdfstring{$S_3$}{S3} test}
+Decompose
+\begin{equation}
+W_\tau=\bigotimes_a\operatorname{Sym}^{\tau_a}V
+\cong\bigoplus_{\lambda\vdash n}M_{\tau,\lambda}\otimes V_\lambda,
+\qquad m_{\tau,\lambda}=\dim M_{\tau,\lambda}.            \tag{7}
+\end{equation}
+Linearity of trace gives, for an arbitrary measure,
+\begin{equation}
+[\mathbf t^\tau]\Sfun_{\nu,n}
+=\sum_{\lambda\vdash n}m_{\tau,\lambda}
+\Tr\widehat\nu(\lambda),
+\qquad
+\widehat\nu(\lambda)=\sum_\pi\nu(\pi)\rho_\lambda(\pi). \tag{8}
+\end{equation}
+For a convolution walk, $\widehat{\kappa^{*r}}(\lambda)
+=\widehat\kappa(\lambda)^r$.  If $\kappa$ is central, Schur's lemma makes
+this operator scalar.  In the lazy transposition case,
+\begin{equation}
+\widehat\kappa(\lambda)=\beta_\lambda I,
+\qquad
+\beta_\lambda=a+(1-a)\frac{\chi^\lambda((12))}{d_\lambda}. \tag{9}
+\end{equation}
+For adjacent transpositions the full matrix power must be retained.
+
+The $S_3$ test constructs the trivial, sign, and two-dimensional standard
+matrices explicitly.  Multiplicities in (7) are obtained independently by
+the uniform character inner product, then (8) is evaluated for an arbitrary
+law, lazy central and adjacent walks, and the riffle law.  For laziness
+$a=0.35$, the central scalars on $(\mathbf1,\mathrm{sgn},\mathrm{std})$ are
+\begin{equation}
+(1,-0.3,0.35).                                               \tag{10}
+\end{equation}
+The adjacent operator on the standard representation instead has two distinct
+eigenvalues $0.025$ and $0.675$, directly exposing the claimed matrix-valued
+behavior.
+
+\section{Results}
+There are 12 partitions through total degree four.  The cycle calculation
+therefore contributes $3\cdot6\cdot12=216$ comparisons.  The four $S_3$
+Fourier laws contribute 48 more, and the three irreducible operator checks
+bring the total to 267.
+\begin{center}
+\begin{tabularx}{\linewidth}{@{}lXrrc@{}}
+\toprule
+Case & coefficient & matrix/direct & proposed formula & result\\
+\midrule
+$S_3$, inverse $2$-riffle & $(3)$ & $5.750000$ & $5.750000$ & \PASS\\
+$S_4$, Ewens $\theta=1.7$ & $(2,1)$ & $7.429557$ & $7.429557$ & \PASS\\
+$S_5$, transposition walk & $(2,2)$ & $39.683180$ & $39.683180$ & \PASS\\
+$S_3$, arbitrary Fourier law & $(2,1)$ & $1.904762$ & $1.904762$ & \PASS\\
+$S_3$, adjacent walk Fourier law & $(2,2)$ & $9.671793$ & $9.671793$ & \PASS\\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\section{Warnings, corrections, and scope}
+Without laziness, a transposition walk alternates parity and does not converge
+to uniform measure on $S_n$.  A walk on odd-length cycles stays in $A_n$.
+These are support obstructions, not failures of (3) or (8).
+
+The supplied continuous-time class-walk expressions contained a stray comma
+in the exponential; the intended factor is
+$\exp(t(r_\lambda-1))$.  Continuous-time graph interchange processes were not
+numerically tested here, but their operator formula follows from replacing
+matrix powers in (8) by the matrix exponential of the generator.
+
+Run
+\begin{verbatim}
+.venv/bin/python -m \
+  lambda_distributions.proofs.nonuniform_lambda_distributions.symmetric_groups.verification
+\end{verbatim}
+or open \path{marimo_notebooks/nonuniform_symmetric.py} in marimo.
+\end{document}

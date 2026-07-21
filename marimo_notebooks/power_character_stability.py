@@ -11,10 +11,10 @@ def _():
 
     import marimo as mo
 
-    repo_root = str((Path(__file__).resolve().parents[1] / "proved_matrix_groups/packages/power_character_bounded_flag_stability/notebook.py").parents[3])
+    repo_root = str((Path(__file__).resolve().parents[1] / "lambda_distributions/proofs/power_character_bounded_flag_stability/notebook.py").parents[3])
     if repo_root not in sys.path:
         sys.path.insert(0, repo_root)
-    from proved_matrix_groups.packages.power_character_bounded_flag_stability.verification import (
+    from lambda_distributions.proofs.power_character_bounded_flag_stability.verification import (
         run_suite,
     )
 

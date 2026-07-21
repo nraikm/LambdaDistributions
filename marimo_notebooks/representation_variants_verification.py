@@ -16,7 +16,7 @@ def _():
 
     import marimo as mo
 
-    folder = (Path(__file__).resolve().parents[1] / "proved_matrix_groups/packages/matrix_group_formula_verification/representation_variants/representation_variants_verification.py").parent
+    folder = (Path(__file__).resolve().parents[1] / "lambda_distributions/proofs/matrix_group_formula_verification/representation_variants/representation_variants_verification.py").parent
     shared = folder.parent
     repository_root = folder.parents[2]
     for path in (repository_root, shared, folder):

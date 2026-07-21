@@ -1,0 +1,253 @@
+\documentclass[11pt]{article}
+\usepackage[margin=0.82in]{geometry}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{booktabs,tabularx,array}
+\usepackage[dvipsnames]{xcolor}
+\usepackage[colorlinks=true,linkcolor=NavyBlue,urlcolor=BrickRed,hypertexnames=false]{hyperref}
+\usepackage{microtype}
+\usepackage{fancyhdr}
+\usepackage{enumitem}
+
+\definecolor{ink}{HTML}{162235}
+\definecolor{accent}{HTML}{245B78}
+\definecolor{pale}{HTML}{EEF5F7}
+\definecolor{passgreen}{HTML}{16794A}
+\color{ink}
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{Restricted monomial groups}
+\rhead{Proof and verification}
+\cfoot{\thepage}
+\setlength{\headheight}{14pt}
+\newcommand{\Sfun}{\mathcal S}
+\newcommand{\Cyc}{\operatorname{Cyc}}
+\newcommand{\Sym}{\operatorname{Sym}}
+\newcommand{\PASS}{\textcolor{passgreen}{\textbf{PASS}}}
+\newcommand{\summarybox}[1]{\begin{center}\fcolorbox{accent}{pale}{\parbox{0.91\linewidth}{#1}}\end{center}}
+
+\title{\textbf{Restricted Monomial Groups}\\[3pt]
+\large Exact sigma--Molien formulas, proof, and matrix verification}
+\author{Computational verification note}
+\date{17 July 2026}
+
+\begin{document}
+\maketitle
+
+\summarybox{\textbf{Outcome.}  The general dual-code formula and the specialized
+$G(r,p,n)$ coefficient formula were compared with explicit matrix averages in
+six representative cases.  All 180 coefficients through total degree six
+agree.  A direct Reynolds projector for $G(2,2,3)$ on
+$\Sym^2(V)\otimes V$ has rank and trace $1$, with idempotence error
+$3.21\times10^{-16}$.}
+
+\section{Statement of the problem}
+
+Let $G$ be a finite group and $\rho:G\to GL(V)$ a complex representation.
+For independent degree markers $\mathbf t=(t_1,t_2,\ldots)$ define
+\begin{equation}
+\Sfun_{G,V}(\mathbf t)
+=\frac1{|G|}\sum_{g\in G}\prod_{a\geq1}
+\det(I-t_a\rho(g))^{-1}.                                      \tag{1}
+\end{equation}
+The coefficient of $t_1^{\tau_1}\cdots t_\ell^{\tau_\ell}$ is claimed to be
+\begin{equation}
+\dim\left(\bigotimes_{a=1}^{\ell}\Sym^{\tau_a}V\right)^G.   \tag{2}
+\end{equation}
+We prove this master identity, specialize it to code-constrained monomial
+groups, and independently test the resulting formulas on explicitly
+constructed matrices.
+
+\section{The master identity}
+
+Suppose $g$ has eigenvalues $\lambda_1,\ldots,\lambda_n$.  The generating
+function for complete homogeneous symmetric polynomials gives
+\[
+\det(I-tg)^{-1}=\prod_{i=1}^n(1-t\lambda_i)^{-1}
+=\sum_{d\geq0}h_d(\lambda_1,\ldots,\lambda_n)t^d.
+\]
+But $h_d(\lambda_1,\ldots,\lambda_n)$ is the character of $\Sym^dV$ at $g$.
+Consequently, the requested coefficient of (1) is
+\[
+\frac1{|G|}\sum_{g\in G}\prod_a\chi_{\Sym^{\tau_a}V}(g)
+=\operatorname{tr}\left(\frac1{|G|}\sum_{g\in G}
+g\ \middle|\ \bigotimes_a\Sym^{\tau_a}V\right).
+\]
+The averaged operator is the Reynolds projector onto the invariant subspace.
+Its trace is its rank, proving (2).  This proof also explains the three
+computational routes used below: determinant coefficients, character averages,
+and projector ranks must agree.
+
+\section{Code-constrained monomial groups}
+
+Fix $\zeta=e^{2\pi i/r}$, an $H$-stable additive code
+$A\leq(\mathbb Z/r\mathbb Z)^n$, and
+\[
+G(A,H)=D(A)\rtimes H,\qquad
+D(A)=\{\operatorname{diag}(\zeta^{x_1},\ldots,\zeta^{x_n}):x\in A\}.
+\]
+We use the convention $g=D(x)P_\pi$.  If $C$ is a cycle of $\pi$, the
+restriction of $g$ to its coordinate subspace is a weighted cyclic shift.
+Only the full traversal contributes to its characteristic polynomial, hence
+\begin{equation}
+\det(I-tg)=\prod_{C\in\Cyc(\pi)}
+\left(1-\zeta^{x_C}t^{|C|}\right),\qquad
+x_C=\sum_{i\in C}x_i.                                         \tag{3}
+\end{equation}
+Substitution in (1) proves the finite exact formula
+\begin{equation}
+\Sfun_{A,H}(\mathbf t)=\frac1{|H||A|}
+\sum_{\pi\in H}\sum_{x\in A}
+\prod_{a,C}\left(1-\zeta^{x_C}t_a^{|C|}\right)^{-1}.         \tag{4}
+\end{equation}
+
+\subsection{The dual-code filter}
+
+Expand each factor geometrically and let $m_{C,a}\geq0$ be its selected
+multiplicity.  Put $M_C=\sum_am_{C,a}$ and set $e_i=M_C$ for $i\in C$.  The
+phase of a term is $\zeta^{x\cdot e}$.  For
+\[
+A^\perp=\{e\in(\mathbb Z/r)^n:x\cdot e=0\pmod r\text{ for all }x\in A\},
+\]
+finite character orthogonality gives
+\[
+\frac1{|A|}\sum_{x\in A}\zeta^{x\cdot e}=\mathbf1_{e\in A^\perp}.
+\]
+Therefore the coefficient indexed by $\tau=(\tau_1,\ldots,\tau_\ell)$ is
+\begin{equation}
+\frac1{|H|}\sum_{\pi\in H}
+\#\left\{(m_{C,a}):
+\begin{array}{l}
+\sum_C|C|m_{C,a}=\tau_a\quad\text{for every }a,\\
+e(\pi,m)\in A^\perp
+\end{array}\right\}.                                        \tag{5}
+\end{equation}
+Equation (5) is the implemented general formula.  Notice that it contains no
+matrix eigenvalue computation and no average over diagonal matrices.
+
+For a residue $s\in\mathbb Z/r$, the equivalent root-of-unity filter is
+\[
+\Phi_{d,s}(\mathbf t)=\frac1r\sum_{\ell=0}^{r-1}
+\zeta^{-\ell s}\prod_a(1-\zeta^\ell t_a^d)^{-1}.
+\]
+It collects those monomials for which $\sum_am_a\equiv s\pmod r$.
+
+\section{Specialization to $G(r,p,n)$}
+
+Assume $p\mid r$ and
+\[
+A_{r,p,n}=\{x\in(\mathbb Z/r)^n:\sum_i x_i=0\pmod p\}.
+\]
+The vectors $e_i-e_j\in A_{r,p,n}$ force a dual vector to have equal
+coordinates.  The vectors $p e_i\in A_{r,p,n}$ then force the common coordinate
+to be a multiple of $r/p$.  Thus
+\begin{equation}
+A_{r,p,n}^\perp
+=\{q(r/p)(1,\ldots,1):0\leq q<p\}.                            \tag{6}
+\end{equation}
+The cycle-index theorem now yields
+\begin{equation}
+\Sfun_{G(r,p,n)}(\mathbf t)
+=\sum_{q=0}^{p-1}[u^n]\exp\left(
+\sum_{d\geq1}\frac{u^d}{d}\Phi_{d,qr/p}(\mathbf t)\right).  \tag{7}
+\end{equation}
+An equivalent coefficient algorithm regards each coordinate as carrying a
+label $(m_1,\ldots,m_\ell)$ whose coordinate sum has residue $qr/p$.  An
+$S_n$-orbit is a multiset of $n$ labels.  Bounded dynamic programming over
+label multiplicities extracts exactly the coefficient of (7); this is the
+second independent formula route in the software.
+
+With only $t_1=t$ nonzero, coefficient extraction reduces to
+\begin{equation}
+\Sfun_{G(r,p,n)}(t,0,\ldots)=
+\frac1{(1-t^{nr/p})\prod_{j=1}^{n-1}(1-t^{rj})}.              \tag{8}
+\end{equation}
+For $W(D_n)=G(2,2,n)$, the second residue sector requires every coordinate to
+carry odd total multiplicity.  It cannot occur below degree $n$.  In
+particular, it does not create a degree-one fixed vector; this is the key
+zero-coordinate correction in the proposed discussion.
+
+\section{Independent verification design}
+
+\begin{enumerate}[leftmargin=*,itemsep=3pt]
+\item Construct every matrix $D(x)P_\pi$.  Check the predicted order
+$r^n n!/p$ in the $G(r,p,n)$ cases.
+\item For every partition $\tau$ of every total degree from $0$ through $6$,
+compute $h_{\tau_a}$ recursively from the eigenvalues of each matrix and
+average $\prod_a h_{\tau_a}$ over the group.
+\item Independently evaluate (5) for a general code case or the multiset
+coefficient of (7) for $G(r,p,n)$.
+\item For a selected target, explicitly embed normalized occupancy bases of
+symmetric powers in tensor powers, form the full Reynolds matrix, and compare
+its numerical rank and trace with the coefficient.
+\end{enumerate}
+
+These routes share only the mathematical input $(r,p,n)$ or $(A,H)$.  The
+formula route does not call the matrix-average code.
+
+\section{Representative cases and results}
+
+There are 30 partitions through total degree six.  The following suite includes
+an $H=C_3$ code group not covered by the full symmetric-group specialization,
+the unrestricted wreath products, the $D_n$ parity sector, and two different
+nontrivial divisors $p$ of $r$.
+
+\begin{center}
+\begin{tabularx}{\linewidth}{@{}Xrrrrc@{}}
+\toprule
+Case & $|G|$ & $\dim V$ & degree & checks & result\\
+\midrule
+even-sign code $\rtimes C_3$ & 12 & 3 & $0$--$6$ & 30 & \PASS\\
+$G(2,1,2)$ & 8 & 2 & $0$--$6$ & 30 & \PASS\\
+$G(2,2,3)=W(D_3)$ & 24 & 3 & $0$--$6$ & 30 & \PASS\\
+$G(3,1,2)$ & 18 & 2 & $0$--$6$ & 30 & \PASS\\
+$G(4,2,2)$ & 16 & 2 & $0$--$6$ & 30 & \PASS\\
+$G(4,4,2)$ & 8 & 2 & $0$--$6$ & 30 & \PASS\\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+Selected matched dimensions illustrate that the test is multivariate, not only
+the ordinary Molien specialization.
+\begin{center}
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+Case & $(2)$ & $(3)$ & $(2,1)$ & $(3,2)$\\
+\midrule
+even-sign code $\rtimes C_3$ & 1 & 1 & 1 & 4\\
+$G(2,1,2)$ & 1 & 0 & 0 & 0\\
+$G(2,2,3)$ & 1 & 1 & 1 & 3\\
+$G(3,1,2)$ & 0 & 1 & 1 & 0\\
+$G(4,2,2)$ & 0 & 0 & 0 & 0\\
+$G(4,4,2)$ & 1 & 0 & 0 & 0\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+For $G(2,2,3)$ and $\tau=(2,1)$, the target dimension is
+$\binom{4}{2}\binom{3}{1}=18$.  Direct averaging of the eighteen-dimensional
+target matrices produced
+\[
+\operatorname{rank}P=1,\qquad \operatorname{tr}P=0.9999999999999998,
+\qquad\|P^2-P\|_F=3.21\times10^{-16}.
+\]
+This agrees with both coefficient routes.
+
+\section{Reproducibility and interpretation}
+
+Run the command-line suite from the repository root with
+{\scriptsize
+\begin{verbatim}
+.venv/bin/python -m lambda_distributions.proofs.matrix_group_formula_verification.restricted_monomial.verification
+\end{verbatim}
+}
+or open \texttt{marimo\_notebooks/restricted\_monomial\_verification.py} with marimo.  Matrix
+averages are accepted only when their imaginary part and distance from the
+nearest integer are below $3\times10^{-7}$.  The observed residuals are much
+smaller; the displayed projector error is at machine precision.
+
+Finite tests do not replace the preceding proof.  Their role is to detect
+indexing errors, wrong permutation conventions, missing residue sectors, and
+incorrect treatment of zero-labeled coordinates.  Within the stated small
+dimensions, no such discrepancy remains.
+
+\end{document}

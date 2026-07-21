@@ -18,7 +18,7 @@ def _():
 
     import marimo as mo
 
-    source_directory = (Path(__file__).resolve().parents[1] / "proved_matrix_groups/packages/generalized_molien_affine_wreath/wreath_products/notebook.py").parent
+    source_directory = (Path(__file__).resolve().parents[1] / "lambda_distributions/proofs/generalized_molien_affine_wreath/wreath_products/notebook.py").parent
     if str(source_directory) not in sys.path:
         sys.path.insert(0, str(source_directory))
     from verification import BASE_GROUPS, verify_case, verify_cycle_product_lemma, wreath_group

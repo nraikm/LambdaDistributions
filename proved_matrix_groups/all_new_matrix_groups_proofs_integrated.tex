@@ -1301,7 +1301,7 @@ This agrees with both coefficient routes.
 Run the command-line suite from the repository root with
 {\scriptsize
 \begin{verbatim}
-.venv/bin/python -m for_this_guy.matrix_group_formula_verification.restricted_monomial.verification
+.venv/bin/python -m lambda_distributions.proofs.matrix_group_formula_verification.restricted_monomial.verification
 \end{verbatim}
 }
 or open
@@ -3445,9 +3445,9 @@ projector residuals are at machine precision.
 
 Run from the repository root:
 \begin{verbatim}
-PYTHONPATH=for_this_guy/matrix_group_formula_verification \
+PYTHONPATH=lambda_distributions/proofs/matrix_group_formula_verification \
   .venv/bin/python \
-  for_this_guy/matrix_group_formula_verification/\
+  lambda_distributions/proofs/matrix_group_formula_verification/\
   representation_variants/verification.py
 \end{verbatim}
 The marimo notebook allows the maximum degree to be changed interactively and
@@ -6500,7 +6500,7 @@ rest on the proofs above.}
 
 From the repository root, run
 \begin{verbatim}
-python3 -m for_this_guy.power_character_bounded_flag_stability.verification
+python3 -m lambda_distributions.proofs.power_character_bounded_flag_stability.verification
 .venv/bin/marimo run marimo_notebooks/power_character_stability.py
 \end{verbatim}
 
@@ -7720,7 +7720,7 @@ The coset decomposition is also a debugging tool.  A mismatch isolated to $\math
 \subsection*{Reproduction}
 \begin{verbatim}
 .venv/bin/python -m \
-  for_this_guy.generalized_molien_extensions.delta_su3.verification
+  lambda_distributions.proofs.generalized_molien_extensions.delta_su3.verification
 \end{verbatim}
 \endgroup
 
@@ -8287,7 +8287,7 @@ $6\times10^{-15}$.
 \subsection{Reproduction and scope}
 From the repository root run
 \begin{verbatim}
-.venv/bin/python for_this_guy/finite_braid_images/
+.venv/bin/python lambda_distributions/proofs/finite_braid_images/
   cyclic_scalar/verification.py
 .venv/bin/marimo edit marimo_notebooks/braid_cyclic_scalar.py
 \end{verbatim}
@@ -8385,7 +8385,7 @@ are recovered, and the largest projector error is below $8\times10^{-16}$.
 \subsection{Reproduction}
 From the repository root run
 \begin{verbatim}
-.venv/bin/python for_this_guy/finite_braid_images/
+.venv/bin/python lambda_distributions/proofs/finite_braid_images/
   s3_permutation/verification.py
 .venv/bin/marimo edit marimo_notebooks/braid_s3_permutation.py
 \end{verbatim}
@@ -8495,7 +8495,7 @@ largest projector error is below $4\times10^{-15}$.
 \subsection{Reproduction and interpretation}
 Run
 \begin{verbatim}
-.venv/bin/python for_this_guy/finite_braid_images/
+.venv/bin/python lambda_distributions/proofs/finite_braid_images/
   ising_clifford/verification.py
 .venv/bin/marimo edit marimo_notebooks/braid_ising_clifford.py
 \end{verbatim}
@@ -9885,7 +9885,7 @@ the phase-extended qubit lift is handled in its own verification.
 \subsection{Reproduction}
 Run
 \begin{verbatim}
-.venv/bin/python for_this_guy/quantum_matrix_groups/
+.venv/bin/python lambda_distributions/proofs/quantum_matrix_groups/
   pauli_heisenberg/verification.py
 .venv/bin/marimo edit marimo_notebooks/pauli_heisenberg.py
 \end{verbatim}
@@ -9991,7 +9991,7 @@ rule, while $(3,1)$ and $(5,1)$ test mixed symmetric powers.
 
 \subsection{Reproduction}
 \begin{verbatim}
-.venv/bin/python for_this_guy/quantum_matrix_groups/
+.venv/bin/python lambda_distributions/proofs/quantum_matrix_groups/
   scalar_extended_pauli/verification.py
 .venv/bin/marimo edit marimo_notebooks/scalar_extended_pauli.py
 \end{verbatim}
@@ -10094,7 +10094,7 @@ sectors were collapsed.  All 20 built-in cases pass to $2\times10^{-8}$.
 
 \subsection{Reproduction}
 \begin{verbatim}
-.venv/bin/python for_this_guy/quantum_matrix_groups/
+.venv/bin/python lambda_distributions/proofs/quantum_matrix_groups/
   extraspecial_groups/verification.py
 .venv/bin/marimo edit marimo_notebooks/extraspecial_groups.py
 \end{verbatim}
@@ -10252,7 +10252,7 @@ rule $8\mid|\tau|$.
 \subsection{Reproduction and scope}
 Run
 \begin{verbatim}
-.venv/bin/python for_this_guy/quantum_matrix_groups/
+.venv/bin/python lambda_distributions/proofs/quantum_matrix_groups/
   clifford_groups/verification.py
 .venv/bin/marimo edit marimo_notebooks/clifford_groups.py
 \end{verbatim}
@@ -10367,7 +10367,7 @@ All 24 pass.
 
 \subsection{Reproduction}
 \begin{verbatim}
-.venv/bin/python for_this_guy/barnes_wall_lattice_automorphism_groups/
+.venv/bin/python lambda_distributions/proofs/barnes_wall_lattice_automorphism_groups/
   extraspecial_real_pauli/verification.py
 .venv/bin/marimo edit marimo_notebooks/
   extraspecial_real_pauli.py
@@ -10482,7 +10482,7 @@ are applied only when $m\geq k-1$; all 16 rows pass.
 
 \subsection{Reproduction and references}
 \begin{verbatim}
-.venv/bin/python for_this_guy/barnes_wall_lattice_automorphism_groups/
+.venv/bin/python lambda_distributions/proofs/barnes_wall_lattice_automorphism_groups/
   real_clifford/verification.py
 .venv/bin/marimo edit marimo_notebooks/
   real_clifford.py
@@ -10602,7 +10602,7 @@ index-two statement.  Ranks $m\geq4$ are covered algebraically by
 \eqref{barnes-wall-proof-and-verification:eq:twist}, but exhaustive closure is not a reasonable verification
 strategy because the groups grow rapidly.
 \begin{verbatim}
-.venv/bin/python for_this_guy/barnes_wall_lattice_automorphism_groups/
+.venv/bin/python lambda_distributions/proofs/barnes_wall_lattice_automorphism_groups/
   barnes_wall/verification.py
 .venv/bin/marimo edit marimo_notebooks/barnes_wall.py
 \end{verbatim}
@@ -11290,8 +11290,8 @@ $M=2D\max_{j,k}|(w_j)_k|+1$, so the no-aliasing lemma applies.
 From the repository root, run the following modules with \texttt{python3 -m}:
 \begin{itemize}
 \small
-\item \path{for_this_guy.matrix_group_formula_verification.classical_compact.verification}
-\item \path{for_this_guy.matrix_group_formula_verification.tori.verification}
+\item \path{lambda_distributions.proofs.matrix_group_formula_verification.classical_compact.verification}
+\item \path{lambda_distributions.proofs.matrix_group_formula_verification.tori.verification}
 \end{itemize}
 Open the corresponding \path{marimo_notebooks/classical_compact.py} and
 \path{marimo_notebooks/tori.py} files with \texttt{marimo edit} for the interactive
@@ -12556,7 +12556,7 @@ The seeded $U(8)$ Haar run uses 1,200 matrices. It estimates $\mathbb E\chi_{(2)
 
 \subsection{Scope and reproducibility}
 The exact trace formula holds whenever $S_\lambda(\mathbb C^n)$ is defined ($\ell(\lambda)\le n$). Coefficient stabilization is a separate assertion: the balanced unitary threshold is $n\geq d|\alpha|=d|\beta|$, while the orthogonal/symplectic Brauer bound is stated in their respective notes.  Unitary holomorphic vanishing is exact for every allowed $n$. Run the verification module below from the repository root, or open \path{marimo_notebooks/schur_unitary.py} with marimo.
-\begin{center}\footnotesize\texttt{python -m for\_this\_guy.schur\_functor\_classical\_groups.unitary.verification}\end{center}
+\begin{center}\footnotesize\texttt{python -m lambda\_distributions.proofs.schur\_functor\_classical\_groups.unitary.verification}\end{center}
 
 \subsection*{References}
 S. Howe, \href{https://arxiv.org/abs/2412.19295}{\emph{Random matrix statistics and zeroes of $L$-functions via probability in $\lambda$-rings}}.\\
@@ -12653,7 +12653,7 @@ The seeded Haar diagnostic uses 1,200 matrices in $O(9)$. It gives means $0.9979
 
 \subsection{Reproducibility and interpretation}
 Run the module below from the repository root, or open \path{marimo_notebooks/schur_orthogonal.py} with marimo. Exact rows are the proof-driven regression test. Haar rows are seeded numerical diagnostics and are reported with standard errors; they are not presented as proofs of convergence.
-\begin{center}\footnotesize\texttt{python -m for\_this\_guy.schur\_functor\_classical\_groups.orthogonal.verification}\end{center}
+\begin{center}\footnotesize\texttt{python -m lambda\_distributions.proofs.schur\_functor\_classical\_groups.orthogonal.verification}\end{center}
 
 \subsection*{References}
 S. Howe, \href{https://arxiv.org/abs/2412.19295}{\emph{Random matrix statistics and zeroes of $L$-functions via probability in $\lambda$-rings}}.\\
@@ -12753,7 +12753,7 @@ The seeded Haar diagnostic uses 1,200 matrices in $USp(8)$. It estimates means $
 
 \subsection{Reproducibility and interpretation}
 Run the module below from the repository root, or open \path{marimo_notebooks/schur_symplectic.py} with marimo. The exact matrix/character identities certify the finite trace formula.  The seeded Haar rows are diagnostics only; they neither prove Haar integration identities nor the $n\to\infty$ convergence theorem.
-\begin{center}\footnotesize\texttt{python -m for\_this\_guy.schur\_functor\_classical\_groups.symplectic.verification}\end{center}
+\begin{center}\footnotesize\texttt{python -m lambda\_distributions.proofs.schur\_functor\_classical\_groups.symplectic.verification}\end{center}
 
 \subsection*{References}
 S. Howe, \href{https://arxiv.org/abs/2412.19295}{\emph{Random matrix statistics and zeroes of $L$-functions via probability in $\lambda$-rings}}.\\
@@ -13068,7 +13068,7 @@ giving five direct matrix witnesses for Proposition~1.
 
 \subsection{Reproduction and scope}
 
-The folder \texttt{for\_this\_guy/local\_unitary\_tensor\_products} contains:
+The folder \texttt{lambda\_distributions/proofs/local\_unitary\_tensor\_products} contains:
 \begin{itemize}[leftmargin=1.5em]
  \item \path{marimo_notebooks/local_unitary_tensor_products.py}, the interactive marimo report;
  \item \texttt{verification.py}, the direct and exact implementation;
@@ -13345,12 +13345,12 @@ by both orbit enumeration and necklace coefficient extraction.
 \subsection{Reproduction and scope}
 
 The noninteractive companion files are grouped under
-\path{proved_matrix_groups/packages/unitary_conjugation_endomorphisms/}.
+\path{lambda_distributions/proofs/unitary_conjugation_endomorphisms/}.
 From the repository root, run
 \begin{verbatim}
-python3 proved_matrix_groups/packages/unitary_conjugation_endomorphisms/
+python3 lambda_distributions/proofs/unitary_conjugation_endomorphisms/
   unitary_conjugation_core.py
-python3 -m pytest proved_matrix_groups/packages/
+python3 -m pytest lambda_distributions/proofs/
   unitary_conjugation_endomorphisms/test_verification.py
 marimo edit marimo_notebooks/
   unitary_conjugation.py
@@ -13692,7 +13692,7 @@ nonexistent Reynolds average.
 From the repository root, run
 \begin{verbatim}
 .venv/bin/python \
-  for_this_guy/proctor_odd_symplectic_group/verification.py
+  lambda_distributions/proofs/proctor_odd_symplectic_group/verification.py
 \end{verbatim}
 and open the interactive report with
 \begin{verbatim}
@@ -13856,9 +13856,9 @@ $\Sym^2$ of the six-dimensional regular $S_3$ representation.
 From the repository root, run these modules with \texttt{python3 -m}:
 \begin{itemize}
 \small
-\item \path{for_this_guy.matrix_group_formula_verification.h3_reflection.verification}
-\item \path{for_this_guy.matrix_group_formula_verification.restricted_monomial.verification}
-\item \path{for_this_guy.matrix_group_formula_verification.representation_variants.verification}
+\item \path{lambda_distributions.proofs.matrix_group_formula_verification.h3_reflection.verification}
+\item \path{lambda_distributions.proofs.matrix_group_formula_verification.restricted_monomial.verification}
+\item \path{lambda_distributions.proofs.matrix_group_formula_verification.representation_variants.verification}
 \end{itemize}
 Their canonical marimo apps are cataloged in
 \path{marimo_notebooks/README.md}.  The verification establishes the formulas for the displayed finite cases and
@@ -14004,7 +14004,7 @@ factors, not the partition $(3)$.
 Run the command-line suite from the repository root:
 {\scriptsize
 \begin{verbatim}
-.venv/bin/python -m for_this_guy.matrix_group_formula_verification.a5_representations.verification
+.venv/bin/python -m lambda_distributions.proofs.matrix_group_formula_verification.a5_representations.verification
 \end{verbatim}
 }
 Open \texttt{marimo\_notebooks/a5\_representations.py} with marimo to change the
@@ -14162,7 +14162,7 @@ recovers the proposed low-degree distinction
 Run from the repository root:
 {\scriptsize
 \begin{verbatim}
-.venv/bin/python -m for_this_guy.matrix_group_formula_verification.binary_polyhedral.verification
+.venv/bin/python -m lambda_distributions.proofs.matrix_group_formula_verification.binary_polyhedral.verification
 \end{verbatim}
 }
 Open
@@ -15042,7 +15042,7 @@ The invariant is the expected quadratic form.
 Run from the repository root:
 {\small
 \begin{verbatim}
-.venv/bin/python -m for_this_guy.matrix_group_formula_verification.h3_reflection.verification
+.venv/bin/python -m lambda_distributions.proofs.matrix_group_formula_verification.h3_reflection.verification
 \end{verbatim}
 }
 The companion marimo notebook exposes the maximum tested degree and displays
@@ -15184,7 +15184,7 @@ $203$.
 \subsection{Reproduction and provenance}
 Run
 \begin{verbatim}
-.venv/bin/python for_this_guy/sporadic_matrix_groups/
+.venv/bin/python lambda_distributions/proofs/sporadic_matrix_groups/
   m24_permutation/verification.py
 .venv/bin/marimo edit marimo_notebooks/m24_permutation.py
 \end{verbatim}
@@ -15363,7 +15363,7 @@ table, which is deliberately not reconstructed from partial data.
 
 Run
 \begin{verbatim}
-.venv/bin/python for_this_guy/sporadic_matrix_groups/
+.venv/bin/python lambda_distributions/proofs/sporadic_matrix_groups/
   co0_leech/verification.py
 .venv/bin/marimo edit marimo_notebooks/co0_leech.py
 \end{verbatim}
@@ -15963,7 +15963,7 @@ matrix powers in (8) by the matrix exponential of the generator.
 Run
 \begin{verbatim}
 .venv/bin/python -m \
-  for_this_guy.nonuniform_lambda_distributions.symmetric_groups.verification
+  lambda_distributions.proofs.nonuniform_lambda_distributions.symmetric_groups.verification
 \end{verbatim}
 or open \path{marimo_notebooks/nonuniform_symmetric.py} in marimo.
 \endgroup
@@ -16716,7 +16716,7 @@ above.
 
 \subsection{Reproduction and reference}
 \begin{verbatim}
-.venv/bin/python for_this_guy/limiting_lambda_claims/
+.venv/bin/python lambda_distributions/proofs/limiting_lambda_claims/
   symmetric_k_subsets/verification.py
 .venv/bin/marimo edit marimo_notebooks/symmetric_k_subsets.py
 \end{verbatim}
@@ -16828,7 +16828,7 @@ claim.
 
 \subsection{Reproduction and reference}
 \begin{verbatim}
-.venv/bin/python for_this_guy/limiting_lambda_claims/
+.venv/bin/python lambda_distributions/proofs/limiting_lambda_claims/
   rooted_tree_automorphisms/verification.py
 .venv/bin/marimo edit marimo_notebooks/rooted_tree_automorphisms.py
 \end{verbatim}

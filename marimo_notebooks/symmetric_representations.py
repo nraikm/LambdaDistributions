@@ -16,10 +16,10 @@ def _():
 
     import marimo as mo
 
-    root = (Path(__file__).resolve().parents[1] / "proved_matrix_groups/packages/finite_group_sigma_mgf/symmetric_group_representations/notebook.py").parents[3]
+    root = (Path(__file__).resolve().parents[1] / "lambda_distributions/proofs/finite_group_sigma_mgf/symmetric_group_representations/notebook.py").parents[3]
     if str(root) not in sys.path:
         sys.path.insert(0, str(root))
-    from for_this_guy.finite_group_sigma_mgf.verification_core import (
+    from lambda_distributions.proofs.finite_group_sigma_mgf.verification_core import (
         derived_character_errors,
         induced_s3_from_c3,
         induced_verification_row,

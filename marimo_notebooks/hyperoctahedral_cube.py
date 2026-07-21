@@ -17,11 +17,11 @@ def _():
 
     import marimo as mo
 
-    root = (Path(__file__).resolve().parents[1] / "proved_matrix_groups/packages/finite_group_sigma_mgf/hyperoctahedral_cube/notebook.py").parents[3]
+    root = (Path(__file__).resolve().parents[1] / "lambda_distributions/proofs/finite_group_sigma_mgf/hyperoctahedral_cube/notebook.py").parents[3]
     if str(root) not in sys.path:
         sys.path.insert(0, str(root))
 
-    from for_this_guy.finite_group_sigma_mgf.hyperoctahedral_cube.verification import (
+    from lambda_distributions.proofs.finite_group_sigma_mgf.hyperoctahedral_cube.verification import (
         action_cycle_counts,
         action_permutation,
         group_elements,

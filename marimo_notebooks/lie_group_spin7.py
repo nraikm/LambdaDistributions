@@ -16,7 +16,7 @@ def _():
     import marimo as mo
     import numpy as np
 
-    sys.path.insert(0, str((Path(__file__).resolve().parents[1] / "proved_matrix_groups/packages/compact_connected_lie_groups/spin7/spin7_verification.py").parents[1]))
+    sys.path.insert(0, str((Path(__file__).resolve().parents[1] / "lambda_distributions/proofs/compact_connected_lie_groups/spin7/spin7_verification.py").parents[1]))
     from verification_core import (
         exceptional_representations,
         verify_expected,

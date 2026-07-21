@@ -16,10 +16,10 @@ def _():
 
     import marimo as mo
 
-    repository = (Path(__file__).resolve().parents[1] / "proved_matrix_groups/packages/matrix_group_formula_verification/a5_representations/a5_representations_verification.py").parents[3]
+    repository = (Path(__file__).resolve().parents[1] / "lambda_distributions/proofs/matrix_group_formula_verification/a5_representations/a5_representations_verification.py").parents[3]
     if str(repository) not in sys.path:
         sys.path.insert(0, str(repository))
-    from for_this_guy.matrix_group_formula_verification.a5_representations.verification import (
+    from lambda_distributions.proofs.matrix_group_formula_verification.a5_representations.verification import (
         run_suite,
     )
 

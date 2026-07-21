@@ -13,10 +13,10 @@ def _():
     import sys
     from pathlib import Path
     import marimo as mo
-    root = (Path(__file__).resolve().parents[1] / "proved_matrix_groups/packages/association_scheme_permutation_representations/polar/notebook.py").parents[3]
+    root = (Path(__file__).resolve().parents[1] / "lambda_distributions/proofs/association_scheme_permutation_representations/polar/notebook.py").parents[3]
     if str(root) not in sys.path:
         sys.path.insert(0, str(root))
-    from for_this_guy.association_scheme_permutation_representations.polar.verification import run_suite
+    from lambda_distributions.proofs.association_scheme_permutation_representations.polar.verification import run_suite
     return mo, run_suite
 
 

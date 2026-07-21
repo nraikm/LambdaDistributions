@@ -2,11 +2,14 @@
 
 ## Overall result
 
-All proved matrix-group work is now consolidated under
-`proved_matrix_groups/`: source packages are in `packages/`, editable proof
-sources are in `documents/`, and the complete proof anthology is
-`all_new_matrix_groups_proofs.pdf`. The cross-family formula index is
-`all_new_matrix_groups_formulas.tex` (with a compiled PDF beside it).
+All proved matrix-group work is now consolidated across two homes: the
+executable verification backends, regression suites, and standalone proof
+sources live in the library under `lambda_distributions/proofs/` (new-dist
+families under `lambda_distributions/dists/`), the interactive notebooks live
+in `marimo_notebooks/`, and the consolidated documents live in
+`proved_matrix_groups/`. The complete proof anthology is
+`all_new_matrix_groups_proofs_integrated.pdf`. The cross-family formula index
+is `all_new_matrix_groups_formulas.tex` (with a compiled PDF beside it).
 
 The regression suites were rerun independently on 18 July 2026 to avoid
 pytest module-name collisions between packages. **All 78 tests passed:** 64
@@ -108,12 +111,15 @@ in `all_new_matrix_groups_formulas.pdf`.
 
 ## Organization
 
-- `packages/`: canonical executable sources, notebooks, and verification code.
-- `documents/`: editable group-specific proof sources; compiled standalone
-  proof notes are consolidated into `all_new_matrix_groups_proofs.pdf`.
-- `all_new_matrix_groups_proofs.pdf`: the single consolidated proof anthology;
-  `all_new_matrix_groups_proofs.tex` retains its layout and include manifest.
+- `lambda_distributions/proofs/`: executable verification backends, regression
+  suites, shared modules, and standalone proof sources for the proved
+  matrix-group families.
+- `lambda_distributions/dists/`: the same for the new-distribution families,
+  including the compact Spin/Pin checks.
+- `marimo_notebooks/`: every interactive verification and laboratory notebook,
+  named after its group or family.
+- `all_new_matrix_groups_proofs_integrated.pdf`: the single consolidated proof
+  anthology; `all_new_matrix_groups_proofs_integrated.tex` is the standalone
+  monolithic source.
 - `all_new_matrix_groups_formulas.tex` and `.pdf`: cross-family theorem and
   formula compendium.
-- `for_this_guy/` and `output/pdf/for_this_guy/`: compatibility links only;
-  they preserve existing references without duplicating or scattering files.

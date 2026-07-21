@@ -16,7 +16,7 @@ def _():
 
     import marimo as mo
 
-    folder = (Path(__file__).resolve().parents[1] / "proved_matrix_groups/packages/proctor_odd_symplectic_group/notebook.py").parent
+    folder = (Path(__file__).resolve().parents[1] / "lambda_distributions/proofs/proctor_odd_symplectic_group/notebook.py").parent
     if str(folder) not in sys.path:
         sys.path.insert(0, str(folder))
     from verification import DEFAULT_CASES, FiniteCase, run_all

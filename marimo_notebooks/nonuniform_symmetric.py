@@ -10,10 +10,10 @@ def _():
     from pathlib import Path
     import sys
 
-    root = str((Path(__file__).resolve().parents[1] / "proved_matrix_groups/packages/nonuniform_lambda_distributions/symmetric_groups/notebook.py").parents[3])
+    root = str((Path(__file__).resolve().parents[1] / "lambda_distributions/proofs/nonuniform_lambda_distributions/symmetric_groups/notebook.py").parents[3])
     if root not in sys.path:
         sys.path.insert(0, root)
-    from for_this_guy.nonuniform_lambda_distributions.symmetric_groups.verification import run_suite
+    from lambda_distributions.proofs.nonuniform_lambda_distributions.symmetric_groups.verification import run_suite
     return mo, run_suite
 
 

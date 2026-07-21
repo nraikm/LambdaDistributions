@@ -1,28 +1,25 @@
 # Proved matrix groups
 
-This is the canonical home for the completed matrix-group proof and
-verification work in this workspace.
+This is the canonical home for the consolidated matrix-group proof documents
+in this workspace.
 
-- [`all_new_matrix_groups_proofs.pdf`](all_new_matrix_groups_proofs.pdf) is the
-  single consolidated proof anthology. It contains each canonical proof once.
-- [`packages/`](packages/) contains executable sources: verification code,
-  marimo notebooks, LaTeX, and tests.
-- [`documents/`](documents/) retains the unique editable proof sources that do
-  not already live in a source package; standalone proof PDFs have been
-  removed in favor of the anthology.
-- [`RESULTS_SUMMARY.md`](RESULTS_SUMMARY.md) summarizes the mathematical and
-  computational outcomes and records the latest regression run.
+- [`all_new_matrix_groups_proofs_integrated.pdf`](all_new_matrix_groups_proofs_integrated.pdf)
+  is the single consolidated proof anthology. It contains each canonical proof
+  once, including the power-character and bounded-support stability theorem.
+  [`all_new_matrix_groups_proofs_integrated.tex`](all_new_matrix_groups_proofs_integrated.tex)
+  is its standalone monolithic source: all proof bodies are physically inlined,
+  and it contains no `input`, `include`, or embedded-PDF dependency.
 - [`all_new_matrix_groups_formulas.tex`](all_new_matrix_groups_formulas.tex)
   and its compiled PDF form the cross-family formula compendium.
+- [`RESULTS_SUMMARY.md`](RESULTS_SUMMARY.md) summarizes the mathematical and
+  computational outcomes and records the latest regression run.
 
-`all_new_matrix_groups_proofs.tex` is a standalone monolithic source: all proof
-bodies are physically inlined, and it contains no `input`, `include`, or
-embedded-PDF dependency. `all_new_matrix_groups_proofs.pdf` is the verified
-canonical build of that source, including the power-character and
-bounded-support stability theorem. Its table of contents lists proof-level
-sections only; numbered internal headings are omitted from the table of
-contents.
+Executable sources live in the library and the notebook collection:
 
-The legacy paths `for_this_guy/` and `output/pdf/for_this_guy/` are retained as
-compatibility links. Existing imports, notebooks, and older task references
-therefore continue to work, while the real files now live here.
+- `lambda_distributions/proofs/` holds the per-family verification backends,
+  regression suites, shared modules, and (for now) the standalone
+  proof-and-verification tex/pdf sources for each proved group family.
+- `lambda_distributions/dists/` holds the same for the new-distribution
+  families, including the compact Spin/Pin checks.
+- `marimo_notebooks/` holds every interactive verification and laboratory
+  notebook, named after its group or family.

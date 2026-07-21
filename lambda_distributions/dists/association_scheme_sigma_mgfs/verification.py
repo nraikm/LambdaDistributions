@@ -13,27 +13,27 @@ from functools import lru_cache
 from itertools import combinations, permutations, product
 from math import prod
 
-from proved_matrix_groups.packages.association_scheme_permutation_representations.finite_field import (
+from lambda_distributions.proofs.association_scheme_permutation_representations.finite_field import (
     general_linear_group,
     mat_mul,
     mat_vec,
     move_subspace,
     subspaces,
 )
-from proved_matrix_groups.packages.association_scheme_permutation_representations.grassmann.verification import (
+from lambda_distributions.proofs.association_scheme_permutation_representations.grassmann.verification import (
     run_suite as run_grassmann,
 )
-from proved_matrix_groups.packages.association_scheme_permutation_representations.hamming.verification import (
+from lambda_distributions.proofs.association_scheme_permutation_representations.hamming.verification import (
     hamming_action,
     run_suite as run_hamming,
 )
-from proved_matrix_groups.packages.association_scheme_permutation_representations.johnson.verification import (
+from lambda_distributions.proofs.association_scheme_permutation_representations.johnson.verification import (
     run_suite as run_johnson,
 )
-from proved_matrix_groups.packages.association_scheme_permutation_representations.polar.verification import (
+from lambda_distributions.proofs.association_scheme_permutation_representations.polar.verification import (
     run_suite as run_polar,
 )
-from proved_matrix_groups.packages.association_scheme_permutation_representations.shared import (
+from lambda_distributions.proofs.association_scheme_permutation_representations.shared import (
     complete_from_cycles,
     cycle_counts,
     cycle_formula_coefficient,

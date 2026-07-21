@@ -1,0 +1,114 @@
+\documentclass[11pt]{article}
+\usepackage[margin=0.84in]{geometry}
+\usepackage{amsmath,amssymb,mathtools,booktabs,microtype,xcolor,fancyhdr,hyperref}
+\definecolor{navy}{HTML}{17365D}\definecolor{teal}{HTML}{147D78}
+\hypersetup{colorlinks=true,linkcolor=navy,urlcolor=teal}
+\pagestyle{fancy}\setlength{\headheight}{14pt}\fancyhf{}
+\lhead{Barnes--Wall family II}\rhead{Real Clifford normalizer}\cfoot{\thepage}
+\newcommand{\MGF}{\mathfrak M}
+\title{\color{navy}\bfseries The Real Clifford Layer of Barnes--Wall Symmetry\\
+\large Coset reduction, code invariants, and explicit normalizer checks}
+\author{Computational verification note}\date{17 July 2026}
+\begin{document}\maketitle
+
+\begin{abstract}
+We prove the exact reduction of the real Clifford sigma--MGF to coset
+averages over $O^+(2m,2)$ and state precisely what the self-dual-code theorem
+does and does not imply for mixed coefficients.  Exhaustive matrix closures
+in dimensions $2$ and $4$ recover group orders $16$ and $2304$, quotient
+orders $2$ and $72$, lift independence, and 16 direct coefficient matches.
+\end{abstract}
+
+\section{Exact quotient formula}
+Let $E_m\triangleleft\mathcal C_m=N_{O(V_m)}(E_m)$, with
+\[
+ \mathcal C_m/E_m\cong O^+(2m,2).
+\]
+For $A$ in the quotient and any lift $\widetilde A$, define
+\[
+ \Phi_m(A;\mathbf t)=\frac1{|E_m|}\sum_{e\in E_m}
+ \prod_j\det(I-t_je\widetilde A)^{-1}.
+\]
+Replacing $\widetilde A$ by $e_0\widetilde A$ permutes $E_m$, so $\Phi_m$
+is well defined.  Partitioning $\mathcal C_m$ into right cosets proves
+\begin{equation}\label{eq:coset}
+\boxed{\MGF_{\mathcal C_m,m}(\mathbf t)=
+\frac1{|O^+(2m,2)|}\sum_{A\in O^+(2m,2)}\Phi_m(A;\mathbf t).}
+\end{equation}
+Coefficient extraction gives
+\[
+[m_\tau]\MGF_{\mathcal C_m,m}=
+\dim\left(\bigotimes_i\operatorname{Sym}^{\tau_i}V_m\right)^{\mathcal C_m}.
+\]
+
+\section{One-row code theorem and its boundary}
+For a binary self-dual code $C\leq\mathbb F_2^{2k}$, its genus-$m$
+complete weight enumerator is
+\[
+ \operatorname{cwe}_m(C)=\sum_{(c^{(1)},\ldots,c^{(m)})\in C^m}
+ \prod_{j=1}^{2k}x_{(c_j^{(1)},\ldots,c_j^{(m)})}.
+\]
+The Clifford invariant theorem identifies the degree-$2k$ invariant space
+with the span of these enumerators.  In the stable range $m\geq k-1$, they
+are independent and therefore
+\begin{equation}\label{eq:codes}
+ [m_{(2k)}]\MGF_{\mathcal C_m,m}
+ =\#\{\text{binary self-dual codes of length }2k\}/\!\cong.
+\end{equation}
+Consequently the stable values in degrees $2,4,6,8$ are $1,1,1,2$.
+The identification with genus-$m$ complete weight enumerators and their
+independence in this range are external inputs from the
+Nebe--Rains--Sloane invariant theorem cited below.  This note proves the coset
+formula and verifies low-rank examples; it does not reprove that theorem.
+The degree-eight value is guaranteed by \eqref{eq:codes} only for $m\geq3$;
+our smaller closures also happen to give two, but we report that as a direct
+low-rank computation rather than misuse the stable-range hypothesis.
+
+For a general partition $\tau$, block-symmetrizing the full code tensor
+produces explicit invariants.  The ordinary invariant-ring theorem does not
+by itself show that these span every mixed fixed space.  Thus \eqref{eq:coset}
+is exact for all $\tau$, while a code-indexed equality for all mixed $\tau$
+would require a separate multigraded theorem.
+
+\section{Explicit matrices and exhaustive checks}
+We generate the real Pauli matrices together with tensor placements of
+\[
+ H=2^{-1/2}\begin{pmatrix}1&1\\1&-1\end{pmatrix}
+\]
+and, for $m=2$, CNOT.  Breadth-first closure yields
+\[
+|\mathcal C_1|=16=8\cdot2,
+\qquad |\mathcal C_2|=2304=32\cdot72.
+\]
+Every closed matrix is checked to be real orthogonal.  Conjugation by every
+selected coset representative sends the Pauli group to itself.  The program
+then partitions the closed group into Pauli cosets, averages each coset, and
+compares \eqref{eq:coset} with an independent direct average.  Each lift is
+also multiplied by a varying Pauli matrix, and every corresponding pair of
+coset contributions is compared before the quotient average is taken.
+
+\begin{center}
+\begin{tabular}{@{}cccrrr@{}}\toprule
+$m$&$|\mathcal C_m|$&$|O^+|$&$\tau$&direct&coset\\\midrule
+1&16&2&$(2)$&1&1\\
+1&16&2&$(8)$&2&2\\
+1&16&2&$(2,2)$&2&2\\
+2&2304&72&$(4)$&1&1\\
+2&2304&72&$(8)$&2&2\\
+2&2304&72&$(4,2)$&2&2\\\bottomrule
+\end{tabular}
+\end{center}
+The full sweep tests eight partitions at each rank.  Stable-code references
+are applied only when $m\geq k-1$; all 16 rows pass.
+
+\section{Reproduction and references}
+\begin{verbatim}
+.venv/bin/python lambda_distributions/proofs/barnes_wall_lattice_automorphism_groups/
+  real_clifford/verification.py
+.venv/bin/marimo edit marimo_notebooks/real_clifford.py
+\end{verbatim}
+Join wrapped commands onto one line.  For the invariant theorem, see
+G.~Nebe, E.~Rains, and N.~J.~A.~Sloane,
+\emph{The invariants of the Clifford groups},
+\url{https://arxiv.org/abs/math/0001038}.
+\end{document}

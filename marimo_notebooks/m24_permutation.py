@@ -15,7 +15,7 @@ def _():
     from pathlib import Path
     import marimo as mo
 
-    here = (Path(__file__).resolve().parents[1] / "proved_matrix_groups/packages/sporadic_matrix_groups/m24_permutation/notebook.py").parent
+    here = (Path(__file__).resolve().parents[1] / "lambda_distributions/proofs/sporadic_matrix_groups/m24_permutation/notebook.py").parent
     if str(here) not in sys.path:
         sys.path.insert(0, str(here))
     from verification import run_sweep

@@ -9,10 +9,10 @@ def _():
     import marimo as mo
     from pathlib import Path
     import sys
-    repo_root = str((Path(__file__).resolve().parents[1] / "proved_matrix_groups/packages/matrix_group_formula_verification/h3_reflection/notebook.py").parents[3])
+    repo_root = str((Path(__file__).resolve().parents[1] / "lambda_distributions/proofs/matrix_group_formula_verification/h3_reflection/notebook.py").parents[3])
     if repo_root not in sys.path:
         sys.path.insert(0, repo_root)
-    from for_this_guy.matrix_group_formula_verification.h3_reflection.verification import (
+    from lambda_distributions.proofs.matrix_group_formula_verification.h3_reflection.verification import (
         run_polyhedral_suite,
         run_suite,
     )

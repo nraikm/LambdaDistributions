@@ -14,10 +14,10 @@ def _():
     from pathlib import Path
     import sys
     import marimo as mo
-    repo = str((Path(__file__).resolve().parents[1] / "proved_matrix_groups/packages/schur_functor_classical_groups/unitary/notebook.py").parents[4])
+    repo = str((Path(__file__).resolve().parents[1] / "lambda_distributions/proofs/schur_functor_classical_groups/unitary/notebook.py").parents[4])
     if repo not in sys.path:
         sys.path.insert(0, repo)
-    from for_this_guy.schur_functor_classical_groups.unitary.verification import run_suite
+    from lambda_distributions.proofs.schur_functor_classical_groups.unitary.verification import run_suite
     return mo, run_suite
 
 

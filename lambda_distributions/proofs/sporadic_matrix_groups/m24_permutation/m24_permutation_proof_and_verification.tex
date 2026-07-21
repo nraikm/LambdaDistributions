@@ -1,0 +1,174 @@
+\documentclass[11pt]{article}
+\usepackage[margin=0.82in]{geometry}
+\usepackage{amsmath,amssymb,booktabs,microtype,xcolor,fancyhdr,hyperref,array}
+\definecolor{navy}{HTML}{17365D}\definecolor{teal}{HTML}{147D78}
+\hypersetup{colorlinks=true,linkcolor=navy,urlcolor=teal}
+\pagestyle{fancy}\setlength{\headheight}{14pt}\fancyhf{}
+\lhead{$M_{24}$ permutation action}\rhead{Proof and verification}\cfoot{\thepage}
+\newcommand{\Sgm}{\mathcal S}
+\title{\color{navy}\bfseries The $M_{24}$ Permutation Sigma--MGF\\
+\large Exact class formula, orbit proof, and the degree-six boundary}
+\author{Computational verification note}\date{17 July 2026}
+\begin{document}\maketitle
+
+\begin{abstract}
+We prove the cycle-shape formula for the sigma--MGF of the natural
+$24$-dimensional permutation representation of $M_{24}$.  Two published
+ATLAS permutations are converted into $24\times24$ matrices.  Independent
+generator-orbit enumeration is compared with a full conjugacy-class sum.
+Agreement holds in every tested case.  The computation also sharpens the
+5-transitivity statement: equality with $S_{24}$ holds through total degree
+five, while $[m_{(6)}]$ is $12$ rather than $11$ and
+$[m_{(1^6)}]$ is $204$ rather than $203$.
+\end{abstract}
+
+\section{Exact formula}
+Let $g$ have cycle shape $\prod_{r\geq1}r^{c_r(g)}$.  On an $r$-cycle the
+eigenvalues are all $r$th roots of unity, so
+\[
+\det(I-tP_r)=\prod_{j=0}^{r-1}(1-t\zeta_r^j)=1-t^r.
+\]
+Multiplying over cycles and averaging the generalized Molien integrand gives
+\begin{equation}\label{eq:molien}
+\boxed{
+\Sgm_{M_{24},\mathrm{perm}}(\mathbf t)
+=\sum_C\frac{|C|}{|M_{24}|}
+\prod_{i\geq1}\prod_{r\geq1}(1-t_i^r)^{-c_r(C)}.}
+\end{equation}
+This is an all-degree identity, not an asymptotic expansion.
+
+The coefficient of $m_\tau$ is
+\[
+\dim\left(\bigotimes_j\operatorname{Sym}^{\tau_j}\mathbb C^{24}\right)^{M_{24}}.
+\]
+Each symmetric power has a basis indexed by multisets.  A permutation-group
+fixed vector is constant on each orbit of the resulting basis.  Therefore
+\begin{equation}\label{eq:orbits}
+[m_\tau]\Sgm_{M_{24},\mathrm{perm}}
+=\#\left(M_{24}\backslash\prod_j
+\operatorname{MSet}_{\tau_j}(\{1,\ldots,24\})\right).
+\end{equation}
+Equations \eqref{eq:molien} and \eqref{eq:orbits} are mathematically
+equivalent, but they produce genuinely different algorithms: weighted class
+expansion versus graph traversal under generators.  Their agreement is the
+central cross-check.
+
+\section{Why equality with $S_{24}$ stops after degree five}
+An $S_{24}$ orbit of a product of multisets is determined by the multiplicity
+profile carried by its support points.  If $|\tau|\leq5$, that support has at
+most five points.  The 5-transitivity of $M_{24}$ maps any ordered listing of
+one support to the corresponding listing of another, so every $S_{24}$ orbit
+remains a single $M_{24}$ orbit.  Consequently
+\[
+\Sgm_{M_{24},\mathrm{perm}}\equiv
+\Sgm_{S_{24},\mathrm{perm}}\pmod{\deg>5}.
+\]
+For one symmetric power, the $S_{24}$ coefficient is the partition number
+$p(k)$; for $(1^k)$ it is the Bell number $B_k$ (provided $k\leq24$).
+The claim is not extended above degree five.  Indeed, generator traversal
+finds two orbits on six-element subsets.  This splits the all-distinct
+equality pattern and creates the first extra orbit.
+
+\section{Constructed matrices and checks}
+The verifier uses the ATLAS standard generators
+\begin{align*}
+a={}&(1,4)(2,7)(3,17)(5,13)(6,9)(8,15)(10,19)(11,18)\\
+&\quad(12,21)(14,16)(20,24)(22,23),\\
+b={}&(1,4,6)(2,21,14)(3,9,15)(5,18,10)(13,17,16)(19,24,23).
+\end{align*}
+They are converted to permutation matrices by $P_ge_j=e_{g(j)}$.  The code
+asserts the standard-generator fingerprints
+\[
+o(a)=2,\quad o(b)=3,\quad o(ab)=23,\quad
+o(abababbababbabb)=4,
+\]
+and checks that the aggregated class sizes sum to
+$|M_{24}|=244{,}823{,}040$.
+
+For a class shape, the coefficient of $t^k$ in
+$\prod_r(1-t^r)^{-c_r}$ is obtained with exact integer convolution.  In
+parallel, breadth-first traversal acts with $a^{\pm1},b^{\pm1}$ on every
+multiset through degree six and every ordered tuple through degree four.  At
+degree six the tensor calculation uses equality patterns together with the
+directly enumerated two orbits of six-element subsets.
+
+\begin{center}
+\begin{tabular}{@{}lrrr@{}}\toprule
+coefficient & direct orbits & class formula & $S_{24}$\\\midrule
+$m_{(1)}$&1&1&1\\
+$m_{(2)}$&2&2&2\\
+$m_{(3)}$&3&3&3\\
+$m_{(4)}$&5&5&5\\
+$m_{(5)}$&7&7&7\\
+$m_{(6)}$&12&12&11\\\addlinespace
+$m_{(1^2)}$&2&2&2\\
+$m_{(1^3)}$&5&5&5\\
+$m_{(1^4)}$&15&15&15\\
+$m_{(1^6)}$&204&204&203\\\bottomrule
+\end{tabular}
+\end{center}
+
+The degree-one invariant is the all-ones line.  The degree-six discrepancies
+are a useful regression test: a program that silently substitutes
+5-transitivity beyond its valid range returns the wrong values $11$ and
+$203$.
+
+\section{Reproduction and provenance}
+Run
+\begin{verbatim}
+.venv/bin/python lambda_distributions/proofs/sporadic_matrix_groups/
+  m24_permutation/verification.py
+.venv/bin/marimo edit marimo_notebooks/m24_permutation.py
+\end{verbatim}
+after joining wrapped lines.  The full cycle-shape/class-size table is stored
+as exact integers in \path{sporadic_matrix_groups/common.py}; classes with
+the same permutation cycle shape are aggregated because \eqref{eq:molien}
+cannot distinguish them.
+
+\begin{center}\scriptsize
+\begin{tabular}{@{}lrl@{}}\toprule
+class & aggregated size & permutation cycle shape\\\midrule
+$1A$&1&$1^{24}$\\
+$2A$&11,385&$1^8 2^8$\\
+$2B$&31,878&$2^{12}$\\
+$3A$&226,688&$1^6 3^6$\\
+$3B$&485,760&$3^8$\\
+$4A$&637,560&$2^4 4^4$\\
+$4B$&1,912,680&$1^4 2^2 4^4$\\
+$4C$&2,550,240&$4^6$\\
+$5A$&4,080,384&$1^4 5^4$\\
+$6A$&10,200,960&$1^2 2^2 3^2 6^2$\\
+$6B$&10,200,960&$6^4$\\
+$7AB$&11,658,240&$1^3 7^3$\\
+$8A$&15,301,440&$1^2 2 4 8^2$\\
+$10A$&12,241,152&$2^2 10^2$\\
+$11A$&22,256,640&$1^2 11^2$\\
+$12A$&20,401,920&$2 4 6 12$\\
+$12B$&20,401,920&$12^2$\\
+$14AB$&34,974,720&$1 2 7 14$\\
+$15AB$&32,643,072&$1 3 5 15$\\
+$21AB$&23,316,480&$3 21$\\
+$23AB$&21,288,960&$1 23$\\\bottomrule
+\end{tabular}
+\end{center}
+The sizes sum to $244{,}823{,}040$.  Source: Online ATLAS of Finite Group
+Representations, retrieved 18 July 2026.  The SHA-256 of the canonical
+serialized table is
+\begin{center}\footnotesize
+\texttt{103ba576555f01bea74df73f8e2f788b02bee4e8b20df3ed198eb005d16de044}.
+\end{center}
+The SHA-256 of the software data file is
+\begin{center}\footnotesize
+\texttt{3fbc8e5cde4ac5670696ecc1c5f692a2afb2065469a83ce486aa8b28d046d579}.
+\end{center}
+
+Generator-orbit enumeration is independent of the class table.  The class-sum
+calculation is an exact cross-check conditional on the externally supplied
+ATLAS data; the complete table and checksums make that input auditable from
+this PDF.
+
+Generator data and the group order are from the online ATLAS of Finite Group
+Representations, \url{https://brauer.maths.qmul.ac.uk/Atlas/spor/M24/}.
+The calculation verifies the stated representation and coefficients without
+enumerating all $244$ million group elements.
+\end{document}

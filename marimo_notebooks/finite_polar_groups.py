@@ -16,10 +16,10 @@ def _():
 
     import marimo as mo
 
-    root = (Path(__file__).resolve().parents[1] / "proved_matrix_groups/packages/finite_lie_type_permutation_actions/polar_groups_verification.py").parents[2]
+    root = (Path(__file__).resolve().parents[1] / "lambda_distributions/proofs/finite_lie_type_permutation_actions/polar_groups_verification.py").parents[2]
     if str(root) not in sys.path:
         sys.path.insert(0, str(root))
-    from for_this_guy.finite_lie_type_permutation_actions.verification_core import polar_suite
+    from lambda_distributions.proofs.finite_lie_type_permutation_actions.verification_core import polar_suite
 
     return mo, polar_suite
 
